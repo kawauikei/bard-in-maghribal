@@ -12,52 +12,70 @@ vocal_dir = base_dir
 
 tracks = []
 
-# Load metadata and prompt content from index.csv
-csv_path = os.path.join(prompt_dir, "index.csv")
-if os.path.exists(csv_path):
-    with open(csv_path, "r", encoding="utf-8-sig", newline="") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            track_id = (row.get("id") or row.get("song_id") or "").strip()
-            title = (row.get("title") or "").strip()
-            file_rel = (row.get("file") or "").strip()
+# Load metadata and prompt content by scanning song_*.txt files directly
+if os.path.exists(prompt_dir):
+    import glob
+    txt_files = glob.glob(os.path.join(prompt_dir, "song_*.txt"))
+    for pf_path in txt_files:
+        try:
+            with open(pf_path, "r", encoding="utf-8") as pf:
+                prompt_content = pf.read()
+        except OSError:
+            continue
 
-            if not track_id or not title:
-                continue
+        filename = os.path.basename(pf_path)
+        id_match = re.search(r"^ID:\s*(song_[0-9_]+|[a-zA-Z0-9_]+)", prompt_content, re.MULTILINE)
+        if id_match:
+            track_id = id_match.group(1).strip()
+        else:
+            match_fn = re.match(r"^song_([0-9]+)_([0-9]+)_([0-9]+)", filename)
+            if match_fn:
+                track_id = f"song_{match_fn.group(1)}_{match_fn.group(2)}_{match_fn.group(3)}"
+            else:
+                track_id = os.path.splitext(filename)[0]
 
-            prompt_file = os.path.basename(file_rel) if file_rel else f"{track_id}__{title}.txt"
-            prompt_path = os.path.join(prompt_dir, prompt_file)
+        title_match = re.search(r"^タイトル:\s*(.+)$", prompt_content, re.MULTILINE)
+        title = title_match.group(1).strip() if title_match else os.path.splitext(filename)[0]
 
-            try:
-                with open(prompt_path, "r", encoding="utf-8") as pf:
-                    prompt_content = pf.read()
-            except OSError:
-                prompt_content = ""
+        inst_match = re.search(r"^楽器:\s*(.+)$", prompt_content, re.MULTILINE)
+        instrument = inst_match.group(1).strip() if inst_match else ""
 
-            pattern      = (row.get("pattern") or "").strip()           # theme / region
-            region_code  = (row.get("region_code") or "").strip()       # 0, 1..9, A, B, C
-            region       = (row.get("region") or "").strip()            # 地域名
-            instrument   = (row.get("instrument") or "").strip()
-            song_type    = (row.get("song_type") or "").strip()
-            main_theme   = (row.get("main_theme") or "").strip()
-            support_theme = (row.get("support_theme") or "").strip()
-            lyrics       = (row.get("lyrics") or "").strip()
+        song_type_match = re.search(r"^曲調:\s*(.+)$", prompt_content, re.MULTILINE)
+        song_type = song_type_match.group(1).strip() if song_type_match else ""
 
-            tracks.append({
-                "id":           track_id,
-                "pattern":      pattern,
-                "regionCode":   region_code,
-                "region":       region,
-                "title":        title,
-                "instrument":   instrument,
-                "songType":     song_type,
-                "mainTheme":    main_theme,
-                "supportTheme": support_theme,
-                "lyrics":       lyrics,
-                "promptFile":   os.path.join("public", "prompts", "vocal", prompt_file).replace(os.sep, "/"),
-                "promptContent": prompt_content,
-                "generated":    None,
-            })
+        theme_match = re.search(r"^主題:\s*(.+)$", prompt_content, re.MULTILINE)
+        main_theme = theme_match.group(1).strip() if theme_match else ""
+
+        lyrics = ""
+        lyrics_match = re.search(r"ひらがな歌詞:\s*\n([\s\S]+)$", prompt_content)
+        if lyrics_match:
+            raw_lyric_lines = [line.strip() for line in lyrics_match.group(1).split("\n") if line.strip()]
+            lyrics = " / ".join(raw_lyric_lines)
+
+        pattern = "theme"
+        region_code = "0"
+        region = ""
+        support_theme = ""
+
+        # Check if the filename or ID matches the structure to infer region
+        # e.g., if there's any regional naming
+        # Let's keep it simple or parse further if needed
+        tracks.append({
+            "id":           track_id,
+            "pattern":      pattern,
+            "regionCode":   region_code,
+            "region":       region,
+            "title":        title,
+            "instrument":   instrument,
+            "songType":     song_type,
+            "mainTheme":    main_theme,
+            "supportTheme": support_theme,
+            "lyrics":       lyrics,
+            "promptFile":   os.path.join("public", "prompts", "vocal", filename).replace(os.sep, "/"),
+            "promptContent": prompt_content,
+            "generated":    None,
+        })
+
 
 # Scan generated audio files in this directory
 if os.path.exists(vocal_dir):
