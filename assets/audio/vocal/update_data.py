@@ -6,7 +6,6 @@ import re
 # Get the directory where this script is located
 base_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Relative paths from this script
 # From public/assets/audio/vocal/ to public/prompts/vocal/
 prompt_dir = os.path.normpath(os.path.join(base_dir, "..", "..", "..", "prompts", "vocal"))
 vocal_dir = base_dir
@@ -19,7 +18,7 @@ if os.path.exists(csv_path):
     with open(csv_path, "r", encoding="utf-8-sig", newline="") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            track_id = (row.get("song_id") or row.get("id") or "").strip()
+            track_id = (row.get("id") or row.get("song_id") or "").strip()
             title = (row.get("title") or "").strip()
             file_rel = (row.get("file") or "").strip()
 
@@ -35,58 +34,50 @@ if os.path.exists(csv_path):
             except OSError:
                 prompt_content = ""
 
-            side = (row.get("side") or "").strip()
-            main_axis = (row.get("main_axis") or row.get("minigame_axis") or row.get("pattern") or "").strip()
-            instrument_code = (row.get("instrument_code") or "").strip()
-            song_type_code = (row.get("song_type_code") or "").strip()
-            theme_code = (row.get("theme_code") or "").strip()
-            instrument = (row.get("instrument") or "").strip()
-            song_type = (row.get("song_type") or "").strip()
-            theme = (row.get("theme") or "").strip()
-            event_summary = (row.get("event_summary") or row.get("premise") or "").strip()
+            pattern      = (row.get("pattern") or "").strip()           # theme / region
+            region_code  = (row.get("region_code") or "").strip()       # 0, 1..9, A, B, C
+            region       = (row.get("region") or "").strip()            # 地域名
+            instrument   = (row.get("instrument") or "").strip()
+            song_type    = (row.get("song_type") or "").strip()
+            main_theme   = (row.get("main_theme") or "").strip()
+            support_theme = (row.get("support_theme") or "").strip()
+            lyrics       = (row.get("lyrics") or "").strip()
 
             tracks.append({
-                "id": track_id,
-                "attribute": " / ".join(x for x in [side, main_axis] if x),
-                "side": side,
-                "mainAxis": main_axis,
-                "instrumentCode": instrument_code,
-                "songTypeCode": song_type_code,
-                "themeCode": theme_code,
-                "instrument": f"{instrument_code} {instrument}".strip(),
-                "rhythm": f"{song_type_code} {song_type}".strip(),
-                "theme": f"{theme_code} {theme}".strip(),
-                "target": theme,
-                "scene": event_summary,
-                "promptFile": os.path.join("public", "prompts", "vocal", prompt_file).replace(os.sep, "/"),
+                "id":           track_id,
+                "pattern":      pattern,
+                "regionCode":   region_code,
+                "region":       region,
+                "title":        title,
+                "instrument":   instrument,
+                "songType":     song_type,
+                "mainTheme":    main_theme,
+                "supportTheme": support_theme,
+                "lyrics":       lyrics,
+                "promptFile":   os.path.join("public", "prompts", "vocal", prompt_file).replace(os.sep, "/"),
                 "promptContent": prompt_content,
-                "generated": None,
-                "title": title
+                "generated":    None,
             })
 
-# Scan generated audio files. New files should start with song_000_000_000.
-# The old 6-character rule is kept so archived generated files still show up.
+# Scan generated audio files in this directory
 if os.path.exists(vocal_dir):
     audio_files = [f for f in os.listdir(vocal_dir) if f.endswith(".mp4") or f.endswith(".mp3")]
     for f in audio_files:
-        match = re.match(r"^(song_[0-9]{3}_[0-9]{3}_[0-9]{3})(?:__|_)?(.+)\.(mp4|mp3)$", f)
+        # New naming: 113110__砂の手紙.mp4  or  11611A__苔の石段・朝.mp4
+        match = re.match(r"^([0-9A-Za-z]{5,7})__(.+)\.(mp4|mp3)$", f)
         if not match:
-            match = re.match(r"^([0-9A-Z]{6})_?(.+)\.(mp4|mp3)$", f)
+            # Old naming: song_101_211_321__*.mp4
+            match = re.match(r"^(song_[0-9]{3}_[0-9]{3}_[0-9]{3})__(.+)\.(mp4|mp3)$", f)
         if not match:
             continue
 
         track_id = match.group(1)
-        audio_title = match.group(2).strip("_ ")
-
         for track in tracks:
             if track["id"] != track_id:
                 continue
-
             current_gen = track["generated"]
             if not current_gen or (current_gen.endswith(".mp3") and f.endswith(".mp4")):
                 track["generated"] = f
-                if audio_title:
-                    track["title"] = audio_title
 
 tracks.sort(key=lambda x: x["id"])
 
@@ -104,7 +95,6 @@ if os.path.exists(html_path):
     end_idx = content.find(end_tag, start_idx)
 
     if start_idx != -1 and end_idx != -1:
-        # Align indentation with the original html structure (8 spaces)
         indented_lines = []
         for i, line in enumerate(json_data.split("\n")):
             if i == 0:
@@ -118,6 +108,6 @@ if os.path.exists(html_path):
             f.write(new_content)
         print(f"Sync complete: {len(tracks)} tracks updated.")
     else:
-        print("Could not find data injection point in index.html")
+        print("Could not find 'const tracks = [' injection point in index.html")
 else:
     print(f"index.html not found at {html_path}")
