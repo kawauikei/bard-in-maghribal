@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-30T07:56:21.599Z",
+  "updatedAt": "2026-05-30T11:03:14.944Z",
   "assets": [
     "audio/bgm/bgm_collection_01_Maps_of_Yesterday.mp3",
     "audio/bgm/bgm_collection_01_Maps_of_Yesterday.mp4",
@@ -45,6 +45,9 @@
     "images/icon/D_REGION_EVENT_64_2.webp",
     "images/icon/E_MINIGAME_64_1.webp",
     "images/icon/E_MINIGAME_64_2.webp",
+    "images/icon/icon_sheet_01_minigame_ui.webp",
+    "images/icon/icon_sheet_02_card_event_code.webp",
+    "images/icon/icon_sheet_03_resource_collection.webp",
     "images/icon/list.txt",
     "images/icon/rune_tablet_mystic_core_4x4.webp",
     "images/icon/ui_chip_friend_dancer_4x4.webp",
