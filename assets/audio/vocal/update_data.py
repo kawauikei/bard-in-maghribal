@@ -36,14 +36,14 @@ if os.path.exists(csv_path):
                 prompt_content = ""
 
             side = (row.get("side") or "").strip()
-            main_axis = (row.get("main_axis") or row.get("pattern") or "").strip()
+            main_axis = (row.get("main_axis") or row.get("minigame_axis") or row.get("pattern") or "").strip()
             instrument_code = (row.get("instrument_code") or "").strip()
             song_type_code = (row.get("song_type_code") or "").strip()
             theme_code = (row.get("theme_code") or "").strip()
             instrument = (row.get("instrument") or "").strip()
             song_type = (row.get("song_type") or "").strip()
             theme = (row.get("theme") or "").strip()
-            event_summary = (row.get("event_summary") or "").strip()
+            event_summary = (row.get("event_summary") or row.get("premise") or "").strip()
 
             tracks.append({
                 "id": track_id,
