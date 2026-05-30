@@ -1,0 +1,1960 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Bard in Maghribal / Portrait Frame Tester</title>
+  <style>
+    :root {
+      --bg: #15110e;
+      --panel: #241d18;
+      --panel2: #332920;
+      --line: #5e4b3a;
+      --text: #f4eadb;
+      --muted: #b9aa96;
+      --accent: #d6aa54;
+      --danger: #c9685f;
+      --ok: #84c490;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 18% 0%, rgba(214,170,84,0.16), transparent 34rem),
+        radial-gradient(circle at 90% 10%, rgba(67,120,116,0.18), transparent 34rem),
+        var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    header {
+      padding: 14px 18px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.28);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    header h1 {
+      margin: 0 0 5px;
+      font-size: 18px;
+      letter-spacing: 0.04em;
+    }
+
+    header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: 350px 1fr 370px;
+      gap: 12px;
+      padding: 12px;
+    }
+
+    .panel {
+      background: rgba(36,29,24,0.94);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.24);
+      overflow: hidden;
+    }
+
+    .panel h2 {
+      margin: 0;
+      padding: 11px 13px;
+      font-size: 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.18);
+    }
+
+    .section {
+      padding: 12px 13px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .section:last-child { border-bottom: none; }
+
+    /* Accordion styles */
+    details.panel-section {
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    details.panel-section:last-child {
+      border-bottom: none;
+    }
+    details.panel-section summary {
+      padding: 12px 13px;
+      font-size: 13px;
+      font-weight: bold;
+      color: #f0d9a5;
+      cursor: pointer;
+      user-select: none;
+      outline: none;
+      transition: background 0.2s;
+    }
+    details.panel-section summary:hover {
+      background: rgba(255,255,255,0.03);
+    }
+    details.panel-section .section-content {
+      padding: 4px 13px 14px;
+    }
+
+    /* Icon Tab styles */
+    .tab-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 8px;
+    }
+    .tab-btn {
+      flex: 1;
+      min-width: 50px;
+      padding: 4px 2px;
+      font-size: 11px;
+      text-align: center;
+      background: #2b211a;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      cursor: pointer;
+      color: var(--muted);
+      transition: all 0.2s;
+    }
+    .tab-btn:hover {
+      background: #3a2e24;
+      color: var(--text);
+    }
+    .tab-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #15110e;
+      font-weight: bold;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+
+    h3 {
+      margin: 0 0 10px;
+      font-size: 13px;
+      color: #f0d9a5;
+    }
+
+    label {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin: 0 0 5px;
+    }
+
+    select,
+    input[type="number"],
+    input[type="range"],
+    input[type="text"],
+    textarea {
+      width: 100%;
+      background: #18130f;
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 7px 8px;
+      font: inherit;
+      font-size: 13px;
+    }
+
+    input[type="range"] {
+      padding: 0;
+      accent-color: var(--accent);
+    }
+
+    textarea {
+      min-height: 112px;
+      resize: vertical;
+      line-height: 1.45;
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 12px;
+    }
+
+    code {
+      color: #f2c979;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 9px;
+    }
+
+    .row3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 9px;
+    }
+
+    .row4 {
+      display: grid;
+      grid-template-columns: 0.8fr 1fr 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 8px;
+      align-items: end;
+    }
+
+    .checkline {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      margin: 8px 0;
+    }
+
+    .buttonrow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    button {
+      border: 1px solid rgba(255,255,255,0.12);
+      background: #3a2d22;
+      color: var(--text);
+      border-radius: 8px;
+      padding: 8px 10px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    button:hover { background: #4a392b; }
+
+    button.primary {
+      background: #886526;
+      border-color: #c89b45;
+    }
+
+    button.danger {
+      background: #663331;
+      border-color: #9d5550;
+    }
+
+    .stagePanel {
+      min-height: calc(100vh - 100px);
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+    }
+
+    .stageBar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* Stage Toolbar styles */
+    .stageToolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      padding: 10px 14px;
+      background: rgba(0, 0, 0, 0.18);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 12px;
+    }
+    .stageToolbar .tool-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .stageToolbar .tool-group label {
+      margin: 0;
+      white-space: nowrap;
+    }
+    .stageToolbar .tool-group input[type="range"] {
+      width: 110px;
+    }
+    .stageToolbar .check-group {
+      display: flex;
+      gap: 12px;
+    }
+    .stageToolbar .check-group label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      color: var(--muted);
+    }
+    .stageToolbar .check-group input {
+      margin: 0;
+    }
+
+    .stageWrap {
+      display: grid;
+      place-items: start center;
+      padding: 32px;
+      overflow: auto;
+      background-color: #181411;
+      background-image: 
+        linear-gradient(45deg, rgba(255,255,255,0.03) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.03) 75%, rgba(255,255,255,0.03)), 
+        linear-gradient(45deg, rgba(255,255,255,0.03) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.03) 75%, rgba(255,255,255,0.03));
+      background-size: 20px 20px;
+      background-position: 0 0, 10px 10px;
+    }
+
+    .cardStage {
+      position: relative;
+      width: 420px;
+      height: 420px;
+      background: transparent;
+      border: 1px dashed rgba(255,255,255,0.18);
+      transform-origin: center;
+    }
+
+    .tileLayer {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      pointer-events: none;
+      user-select: none;
+      transform-origin: center;
+    }
+
+    .extensionLayer { z-index: 0; }
+    .portraitLayer { z-index: 2; }
+    .frameLayer { z-index: 4; }
+    .iconLayer { 
+      z-index: 6; 
+      pointer-events: auto;
+      cursor: move;
+      filter: 
+        drop-shadow(1px 0 0 #fff) 
+        drop-shadow(-1px 0 0 #fff) 
+        drop-shadow(0 1px 0 #fff) 
+        drop-shadow(0 -1px 0 #fff);
+    }
+
+    .safeGuide,
+    .centerGuide,
+    .thirdGuide {
+      position: absolute;
+      inset: 0;
+      z-index: 12;
+      pointer-events: none;
+    }
+
+    .safeGuide::before {
+      content: "";
+      position: absolute;
+      inset: 42px;
+      border: 1px dashed rgba(255,255,255,0.26);
+    }
+
+    .centerGuide::before,
+    .centerGuide::after,
+    .thirdGuide::before,
+    .thirdGuide::after {
+      content: "";
+      position: absolute;
+      background: rgba(255,255,255,0.22);
+    }
+
+    .centerGuide::before {
+      left: 50%;
+      top: 0;
+      width: 1px;
+      height: 100%;
+    }
+
+    .centerGuide::after {
+      top: 50%;
+      left: 0;
+      height: 1px;
+      width: 100%;
+    }
+
+    .thirdGuide::before {
+      top: 33.333%;
+      left: 0;
+      height: 1px;
+      width: 100%;
+    }
+
+    .thirdGuide::after {
+      top: 66.666%;
+      left: 0;
+      height: 1px;
+      width: 100%;
+    }
+
+    .strip {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      align-items: start;
+      gap: 4px;
+      max-height: 220px;
+      overflow: auto;
+      padding-right: 4px;
+      margin-top: 8px;
+    }
+
+    .thumb {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1 / 1;
+      border: 1px solid rgba(255,255,255,0.16);
+      background-repeat: no-repeat;
+      cursor: pointer;
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+      background-color: rgba(0,0,0,0.25);
+    }
+
+    .thumb.selected {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
+    }
+
+    /* CSS 9-Slice Emulator styles */
+    .ns-grid {
+      display: grid;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .ns-cell {
+      background-repeat: no-repeat;
+      pointer-events: none;
+    }
+
+    .thumb span {
+      position: absolute;
+      left: 3px;
+      top: 3px;
+      padding: 1px 4px;
+      border-radius: 3px;
+      background: rgba(0,0,0,0.55);
+      font-size: 10px;
+      color: #fff;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .status {
+      color: var(--ok);
+      font-size: 12px;
+      min-height: 18px;
+      margin-top: 8px;
+      white-space: pre-wrap;
+    }
+
+    .error {
+      color: var(--danger);
+    }
+
+    .iconSlotBox {
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.12);
+      border-radius: 10px;
+      padding: 9px;
+      margin-bottom: 0px;
+    }
+
+    .iconSlotHeader {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 8px;
+      color: #f0d9a5;
+      font-size: 13px;
+    }
+
+    @media (max-width: 1240px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+      .stagePanel {
+        min-height: 680px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Bard in Maghribal / Portrait Frame Tester</h1>
+    <p>
+      <code>public/assets/images/portrait/</code> の 4x4 ポートレート・6x6 フレームを組み合わせ、
+      倍率、上下拡張、パラメタ/タグ用アイコンの配置を調整する開発用HTML。
+    </p>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>素材選択</h2>
+
+      <div class="section">
+        <h3>キャラ画像</h3>
+        <label>ポートレートシート</label>
+        <select id="portraitSheet">
+          <option value="../assets/images/portrait/portrait_core_A_4x4.webp">portrait_core_A_4x4.webp</option>
+          <option value="../assets/images/portrait/portrait_core_B_4x4.webp">portrait_core_B_4x4.webp</option>
+          <option value="../assets/images/portrait/portrait_candidates_A1_4x4.webp">portrait_candidates_A1_4x4.webp</option>
+          <option value="../assets/images/portrait/portrait_candidates_A2_4x4.webp">portrait_candidates_A2_4x4.webp</option>
+          <option value="../assets/images/portrait/portrait_candidates_B1_4x4.webp">portrait_candidates_B1_4x4.webp</option>
+          <option value="../assets/images/portrait/portrait_candidates_B2_4x4.webp">portrait_candidates_B2_4x4.webp</option>
+          <option value="../assets/images/portrait/portrait_candidates_generic_A_4x4.webp">portrait_candidates_generic_A_4x4.webp</option>
+          <option value="../assets/images/portrait/portrait_candidates_generic_B_4x4.webp">portrait_candidates_generic_B_4x4.webp</option>
+          <option value="../assets/images/portrait/portrait_expression_main_A_4x4.webp">portrait_expression_main_A_4x4.webp</option>
+          <option value="../assets/images/portrait/portrait_expression_main_B_4x4.webp">portrait_expression_main_B_4x4.webp</option>
+          <option value="../assets/images/portrait/portrait_audience_A_4x4.webp">portrait_audience_A_4x4.webp</option>
+          <option value="../assets/images/portrait/portrait_audience_B_4x4.webp">portrait_audience_B_4x4.webp</option>
+          <option value="../assets/images/portrait/portrait_enemy_human_A_4x4.webp">portrait_enemy_human_A_4x4.webp</option>
+          <option value="../assets/images/portrait/portrait_enemy_human_B_4x4.webp">portrait_enemy_human_B_4x4.webp</option>
+          <option value="../assets/images/portrait/portrait_enemy_monster_A_4x4.webp">portrait_enemy_monster_A_4x4.webp</option>
+          <option value="../assets/images/portrait/portrait_enemy_monster_B_4x4.webp">portrait_enemy_monster_B_4x4.webp</option>
+          <option value="../assets/images/portrait/portrait_requester_A_4x4.webp">portrait_requester_A_4x4.webp</option>
+          <option value="../assets/images/portrait/portrait_requester_B_4x4.webp">portrait_requester_B_4x4.webp</option>
+          <option value="../assets/images/portrait/portrait_special_A_4x4.webp">portrait_special_A_4x4.webp</option>
+          <option value="../assets/images/portrait/portrait_special_B_4x4.webp">portrait_special_B_4x4.webp</option>
+        </select>
+
+        <div class="row" style="margin-top:10px;">
+          <div>
+            <label>列数</label>
+            <input id="portraitCols" type="number" min="1" max="12" value="4" />
+          </div>
+          <div>
+            <label>行数</label>
+            <input id="portraitRows" type="number" min="1" max="12" value="4" />
+          </div>
+        </div>
+
+        <div id="portraitThumbs" class="strip"></div>
+      </div>
+
+      <div class="section">
+        <h3>フレーム</h3>
+        <label>フレームシート</label>
+        <select id="frameSheet">
+          <option value="../assets/images/portrait/frame.webp">frame.webp</option>
+        </select>
+
+        <div class="row" style="margin-top:10px;">
+          <div>
+            <label>列数</label>
+            <input id="frameCols" type="number" min="1" max="12" value="6" />
+          </div>
+          <div>
+            <label>行数</label>
+            <input id="frameRows" type="number" min="1" max="12" value="6" />
+          </div>
+        </div>
+
+        <div id="frameThumbs" class="strip"></div>
+      </div>
+
+      <div class="section">
+        <div class="buttonrow">
+          <button id="prevPortrait">前キャラ</button>
+          <button id="nextPortrait">次キャラ</button>
+          <button id="prevFrame">前枠</button>
+          <button id="nextFrame">次枠</button>
+        </div>
+        <p class="note">
+          背景透過済みの <code>frame.webp</code> を配置すると、重ね合わせ状態を確認しやすい。
+        </p>
+      </div>
+    </section>
+
+    <section class="panel stagePanel">
+      <div class="stageBar">
+        <span id="currentInfo">未読込</span>
+        <span>正方形1:1カード / 上下拡張 / アイコン配置</span>
+      </div>
+      <div class="stageToolbar">
+        <div class="tool-group">
+          <label>表示倍率</label>
+          <input id="stageZoom" type="range" min="0.55" max="2.2" step="0.05" value="1" />
+          <span id="zoomVal" style="min-width: 32px; text-align: right;">100%</span>
+        </div>
+        <div class="tool-group">
+          <label>サイズ(px)</label>
+          <input id="cardSize" type="number" min="160" max="820" value="420" style="width: 76px;" />
+        </div>
+        <div class="tool-group check-group">
+          <label><input id="showSafe" type="checkbox" checked /> 安全域</label>
+          <label><input id="showCenter" type="checkbox" /> 中央線</label>
+          <label><input id="showThird" type="checkbox" checked /> 上下1/3</label>
+        </div>
+        <div class="tool-group" style="gap: 6px;">
+          <label>全体背景</label>
+          <input id="stageBgColor" type="color" value="#181411" style="width: 36px; height: 22px; padding: 0; border: 1px solid var(--line); border-radius: 4px; cursor: pointer; background: none;" />
+        </div>
+        <div class="tool-group" style="gap: 6px;">
+          <label>拡張背景</label>
+          <input id="extensionBgColor" type="color" value="#241e19" style="width: 36px; height: 22px; padding: 0; border: 1px solid var(--line); border-radius: 4px; cursor: pointer; background: none;" />
+          <button id="autoColorBtn" type="button" style="padding: 2px 6px; font-size: 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.15); background: #3a2d22; color: #fff; cursor: pointer;">自動</button>
+        </div>
+        <div class="tool-group check-group">
+          <label><input id="stageChecker" type="checkbox" checked /> 格子</label>
+        </div>
+      </div>
+      <div class="stageWrap">
+        <div id="cardStage" class="cardStage">
+          <div id="extensionTopLayer" class="tileLayer extensionLayer">
+            <div id="extTopBg" class="ext-bg" style="position:absolute; display:none; pointer-events:none; z-index:-1;"></div>
+            <div id="nineSliceGridTop" class="ns-grid" style="display:none;">
+              <div class="ns-cell ns-tl"></div><div class="ns-cell ns-t"></div><div class="ns-cell ns-tr"></div>
+              <div class="ns-cell ns-l"></div><div class="ns-cell ns-c"></div><div class="ns-cell ns-r"></div>
+              <div class="ns-cell ns-bl"></div><div class="ns-cell ns-b"></div><div class="ns-cell ns-br"></div>
+            </div>
+          </div>
+          <div id="extensionBottomLayer" class="tileLayer extensionLayer">
+            <div id="extBottomBg" class="ext-bg" style="position:absolute; display:none; pointer-events:none; z-index:-1;"></div>
+            <div id="nineSliceGridBottom" class="ns-grid" style="display:none;">
+              <div class="ns-cell ns-tl"></div><div class="ns-cell ns-t"></div><div class="ns-cell ns-tr"></div>
+              <div class="ns-cell ns-l"></div><div class="ns-cell ns-c"></div><div class="ns-cell ns-r"></div>
+              <div class="ns-cell ns-bl"></div><div class="ns-cell ns-b"></div><div class="ns-cell ns-br"></div>
+            </div>
+          </div>
+          <div id="portraitLayer" class="tileLayer portraitLayer"></div>
+          <div id="frameLayer" class="tileLayer frameLayer">
+            <div id="nineSliceGrid" class="ns-grid" style="display:none;">
+              <div class="ns-cell ns-tl"></div><div class="ns-cell ns-t"></div><div class="ns-cell ns-tr"></div>
+              <div class="ns-cell ns-l"></div><div class="ns-cell ns-c"></div><div class="ns-cell ns-r"></div>
+              <div class="ns-cell ns-bl"></div><div class="ns-cell ns-b"></div><div class="ns-cell ns-br"></div>
+            </div>
+          </div>
+
+          <div id="iconLayer1" class="tileLayer iconLayer"></div>
+          <div id="iconLayer2" class="tileLayer iconLayer"></div>
+          <div id="iconLayer3" class="tileLayer iconLayer"></div>
+          <div id="iconLayer4" class="tileLayer iconLayer"></div>
+          <div id="iconLayer5" class="tileLayer iconLayer"></div>
+          <div id="iconLayer6" class="tileLayer iconLayer"></div>
+
+          <div id="safeGuide" class="safeGuide"></div>
+          <div id="centerGuide" class="centerGuide"></div>
+          <div id="thirdGuide" class="thirdGuide"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>配置調整</h2>
+
+      <details class="panel-section" open>
+        <summary>キャラ画像</summary>
+        <div class="section-content">
+          <div style="margin-bottom: 9px;">
+            <label>倍率</label>
+            <input id="portraitScale" type="number" value="1" step="0.01" />
+          </div>
+          <div class="row">
+            <div>
+              <label>不透明度</label>
+              <input id="portraitOpacity" type="range" min="0" max="1" step="0.01" value="1" />
+            </div>
+            <div>
+              <label>Blend</label>
+              <select id="portraitBlend">
+                <option value="normal">normal</option>
+                <option value="multiply">multiply</option>
+                <option value="screen">screen</option>
+                <option value="overlay">overlay</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="panel-section" open>
+        <summary>枠 (9-Slice)</summary>
+        <div class="section-content">
+          <div class="checkline">
+            <input id="frameNineSlice" type="checkbox" checked />
+            <span>9-Slice 有効 (中央揃え固定)</span>
+          </div>
+
+          <div id="frameNormalControls" style="display:none;">
+            <div class="row3">
+              <div>
+                <label>X</label>
+                <input id="frameX" type="number" value="0" step="1" />
+              </div>
+              <div>
+                <label>Y</label>
+                <input id="frameY" type="number" value="0" step="1" />
+              </div>
+              <div>
+                <label>倍率</label>
+                <input id="frameScale" type="number" value="1" step="0.01" />
+              </div>
+            </div>
+          </div>
+
+          <div id="frameNineSliceControls">
+            <div class="row" style="margin-bottom: 4px;">
+              <div>
+                <label>スライス (Slice px)</label>
+                <input id="frameSliceAll" type="range" min="0" max="128" step="1" value="24" />
+              </div>
+              <div>
+                <label>ボーダー幅 (Width px)</label>
+                <input id="frameWidthAll" type="range" min="0" max="128" step="1" value="24" />
+              </div>
+            </div>
+            <div class="row4" style="margin-top: 4px; margin-bottom: 4px;">
+              <div><span style="font-size:11px; color:var(--muted)">Slice:</span></div>
+              <div><label>上</label><input id="frameSliceT" type="number" min="0" value="24" /></div>
+              <div><label>下</label><input id="frameSliceB" type="number" min="0" value="24" /></div>
+              <div><label>左/右</label><input id="frameSliceL" type="number" min="0" value="24" /></div>
+            </div>
+            <div class="row4" style="margin-top: 4px; margin-bottom: 8px;">
+              <div><span style="font-size:11px; color:var(--muted)">Width:</span></div>
+              <div><label>上</label><input id="frameWidthT" type="number" min="0" value="24" /></div>
+              <div><label>下</label><input id="frameWidthB" type="number" min="0" value="24" /></div>
+              <div><label>左/右</label><input id="frameWidthL" type="number" min="0" value="24" /></div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>不透明度</label>
+              <input id="frameOpacity" type="range" min="0" max="1" step="0.01" value="1" />
+            </div>
+            <div>
+              <label>Blend</label>
+              <select id="frameBlend">
+                <option value="normal">normal</option>
+                <option value="multiply">multiply</option>
+                <option value="screen">screen</option>
+                <option value="overlay">overlay</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="panel-section">
+        <summary>上下パラメータ拡張</summary>
+        <div class="section-content">
+          <div class="row" style="margin-bottom: 9px;">
+            <label class="checkline" style="margin:0;">
+              <input id="extensionTopEnabled" type="checkbox" />
+              <span>上スライド有効</span>
+            </label>
+            <label class="checkline" style="margin:0;">
+              <input id="extensionBottomEnabled" type="checkbox" />
+              <span>下スライド有効</span>
+            </label>
+          </div>
+
+          <div class="row3">
+            <div>
+              <label>上Y</label>
+              <input id="extensionTopY" type="number" value="-118" step="1" />
+            </div>
+            <div>
+              <label>下Y</label>
+              <input id="extensionBottomY" type="number" value="118" step="1" />
+            </div>
+            <div>
+              <label>倍率</label>
+              <input id="extensionScale" type="number" value="1" step="0.01" />
+            </div>
+          </div>
+
+          <div class="row3">
+            <div>
+              <label>不透明度</label>
+              <input id="extensionOpacity" type="range" min="0" max="1" step="0.01" value="0.7" />
+            </div>
+            <div>
+              <label>表示部位</label>
+              <select id="extensionMask">
+                <option value="none">全体</option>
+                <option value="topBottom">上下のみ</option>
+              </select>
+            </div>
+            <div>
+              <label>Blend</label>
+              <select id="extensionBlend">
+                <option value="normal">normal</option>
+                <option value="multiply">multiply</option>
+                <option value="screen">screen</option>
+                <option value="overlay">overlay</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="panel-section" open>
+        <summary>パラメタ/タグ アイコン配置</summary>
+        <div class="section-content">
+          <div class="tab-container" id="iconTabs"></div>
+          <div id="iconControls"></div>
+        </div>
+      </details>
+
+      <details class="panel-section">
+        <summary>設定の保存・読込</summary>
+        <div class="section-content">
+          <div class="buttonrow">
+            <button id="reset" class="danger">初期値へ戻す</button>
+            <button id="saveLocal">ローカル保存</button>
+            <button id="loadLocal">ローカル読込</button>
+            <button id="copyConfig" class="primary">設定JSONコピー</button>
+            <button id="downloadConfig">設定JSON保存</button>
+          </div>
+          <div id="status" class="status"></div>
+
+          <label style="margin-top:10px;">現在設定</label>
+          <textarea id="configText" spellcheck="false"></textarea>
+        </div>
+      </details>
+    </section>
+  </main>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    const ICON_SHEETS = [
+      "../assets/images/icon/A_UI_RESOURCE_RESULT_64_1.webp",
+      "../assets/images/icon/A_UI_RESOURCE_RESULT_64_2.webp",
+      "../assets/images/icon/B_ITEM_EQUIPMENT_64_1.webp",
+      "../assets/images/icon/B_ITEM_EQUIPMENT_64_2.webp",
+      "../assets/images/icon/C_MUSIC_TAG_64_1.webp",
+      "../assets/images/icon/C_MUSIC_TAG_64_2.webp",
+      "../assets/images/icon/D_REGION_EVENT_64_1.webp",
+      "../assets/images/icon/D_REGION_EVENT_64_2.webp",
+      "../assets/images/icon/E_MINIGAME_64_1.webp",
+      "../assets/images/icon/E_MINIGAME_64_2.webp"
+    ];
+
+    const state = {
+      portraitIndex: 0,
+      frameIndex: 0,
+      iconCount: 6,
+      configVersion: 3,
+      activeIconTab: 1,
+    };
+
+    function n(id) {
+      return Number($(id).value);
+    }
+
+    function b(id) {
+      return $(id).checked;
+    }
+
+    function setStatus(message, error = false) {
+      $("status").textContent = message;
+      $("status").classList.toggle("error", error);
+    }
+
+    function tilePosition(index, cols, rows) {
+      const col = index % cols;
+      const row = Math.floor(index / cols);
+      return {
+        col,
+        row,
+        x: cols <= 1 ? 0 : (col * 100) / (cols - 1),
+        y: rows <= 1 ? 0 : (row * 100) / (rows - 1),
+      };
+    }
+
+    function setTileLayer(layer, sheet, cols, rows, index, baseSize, x, y, scale, opacity, blend) {
+      const tile = tilePosition(index, cols, rows);
+      const size = baseSize * scale;
+
+      layer.style.display = "block";
+      layer.style.backgroundImage = `url("${sheet}")`;
+      layer.style.backgroundSize = `${cols * 100}% ${rows * 100}%`;
+      layer.style.backgroundPosition = `${tile.x}% ${tile.y}%`;
+      layer.style.width = `${size}px`;
+      layer.style.height = `${size}px`;
+      layer.style.left = `${x}px`;
+      layer.style.top = `${y}px`;
+      layer.style.opacity = opacity;
+      layer.style.mixBlendMode = blend || "normal";
+    }
+
+    function iconDefaults(i) {
+      const top = i <= 3;
+      return {
+        enabled: true,
+        sheet: i <= 3 ? "../assets/images/icon/E_MINIGAME_64_1.webp" : "../assets/images/icon/C_MUSIC_TAG_64_1.webp",
+        cols: 8,
+        rows: 8,
+        index: i - 1,
+        x: top ? 78 + (i - 1) * 54 : 78 + (i - 4) * 54,
+        y: top ? 18 : 348,
+        size: 42,
+        opacity: 1,
+        blend: "normal"
+      };
+    }
+
+    function createIconControls() {
+      const tabsWrap = $("iconTabs");
+      const controlsWrap = $("iconControls");
+      tabsWrap.innerHTML = "";
+      controlsWrap.innerHTML = "";
+
+      for (let i = 1; i <= state.iconCount; i += 1) {
+        // Tab button
+        const tabBtn = document.createElement("button");
+        tabBtn.type = "button";
+        tabBtn.className = `tab-btn ${i === state.activeIconTab ? "active" : ""}`;
+        tabBtn.textContent = `アイコン ${i}`;
+        tabBtn.addEventListener("click", () => {
+          state.activeIconTab = i;
+          document.querySelectorAll("#iconTabs .tab-btn").forEach((btn, idx) => {
+            btn.classList.toggle("active", idx + 1 === i);
+          });
+          document.querySelectorAll("#iconControls .tab-content").forEach((content, idx) => {
+            content.classList.toggle("active", idx + 1 === i);
+          });
+        });
+        tabsWrap.appendChild(tabBtn);
+
+        // Control Panel Content
+        const d = iconDefaults(i);
+        const box = document.createElement("div");
+        box.className = `tab-content ${i === state.activeIconTab ? "active" : ""}`;
+        box.innerHTML = `
+          <div class="iconSlotBox">
+            <div class="iconSlotHeader">
+              <span>アイコン${i}設定</span>
+              <label class="checkline" style="margin:0;">
+                <input id="icon${i}Enabled" type="checkbox" ${d.enabled ? "checked" : ""}>
+                <span>表示</span>
+              </label>
+            </div>
+            <label>シート</label>
+            <select id="icon${i}Sheet">
+              ${ICON_SHEETS.map(src => `<option value="${src}" ${src === d.sheet ? "selected" : ""}>${src.split("/").pop()}</option>`).join("")}
+            </select>
+            <div class="row4" style="margin-top:8px;">
+              <div><label>列</label><input id="icon${i}Cols" type="number" min="1" max="12" value="${d.cols}"></div>
+              <div><label>行</label><input id="icon${i}Rows" type="number" min="1" max="12" value="${d.rows}"></div>
+              <div><label>Index</label><input id="icon${i}Index" type="number" min="0" max="143" value="${d.index}"></div>
+              <div><label>Size</label><input id="icon${i}Size" type="number" min="8" max="160" value="${d.size}"></div>
+            </div>
+            <div class="row4">
+              <div><label>X</label><input id="icon${i}X" type="number" value="${d.x}" step="1"></div>
+              <div><label>Y</label><input id="icon${i}Y" type="number" value="${d.y}" step="1"></div>
+              <div><label>Opacity</label><input id="icon${i}Opacity" type="number" min="0" max="1" step="0.05" value="${d.opacity}"></div>
+              <div><label>Blend</label><select id="icon${i}Blend">
+                <option value="normal" selected>normal</option>
+                <option value="multiply">multiply</option>
+                <option value="screen">screen</option>
+                <option value="overlay">overlay</option>
+              </select></div>
+            </div>
+            
+            <label style="margin-top:8px;">アイコン選択 (クリックでピック)</label>
+            <div id="icon${i}Thumbs" class="strip" style="max-height: 120px;"></div>
+          </div>
+        `;
+        controlsWrap.appendChild(box);
+      }
+    }
+
+    function selectedIconConfig(i) {
+      return {
+        enabled: $(`icon${i}Enabled`).checked,
+        sheet: $(`icon${i}Sheet`).value,
+        cols: n(`icon${i}Cols`),
+        rows: n(`icon${i}Rows`),
+        index: n(`icon${i}Index`),
+        x: n(`icon${i}X`),
+        y: n(`icon${i}Y`),
+        size: n(`icon${i}Size`),
+        opacity: n(`icon${i}Opacity`),
+        blend: $(`icon${i}Blend`).value,
+      };
+    }
+
+    function getConfig() {
+      return {
+        version: state.configVersion,
+        portrait: {
+          sheet: $("portraitSheet").value,
+          cols: n("portraitCols"),
+          rows: n("portraitRows"),
+          index: state.portraitIndex,
+          scale: n("portraitScale"),
+          opacity: n("portraitOpacity"),
+          blend: $("portraitBlend").value,
+        },
+        frame: {
+          sheet: $("frameSheet").value,
+          cols: n("frameCols"),
+          rows: n("frameRows"),
+          index: state.frameIndex,
+          x: n("frameX"),
+          y: n("frameY"),
+          scale: n("frameScale"),
+          opacity: n("frameOpacity"),
+          blend: $("frameBlend").value,
+          nineSlice: b("frameNineSlice"),
+          sliceT: n("frameSliceT"),
+          sliceB: n("frameSliceB"),
+          sliceL: n("frameSliceL"),
+          widthT: n("frameWidthT"),
+          widthB: n("frameWidthB"),
+          widthL: n("frameWidthL"),
+        },
+        extension: {
+          topEnabled: b("extensionTopEnabled"),
+          bottomEnabled: b("extensionBottomEnabled"),
+          topY: n("extensionTopY"),
+          bottomY: n("extensionBottomY"),
+          scale: n("extensionScale"),
+          opacity: n("extensionOpacity"),
+          mask: $("extensionMask").value,
+          blend: $("extensionBlend").value,
+        },
+        icons: Array.from({ length: state.iconCount }, (_, idx) => selectedIconConfig(idx + 1)),
+        stage: {
+          size: n("cardSize"),
+          zoom: n("stageZoom"),
+          showSafe: b("showSafe"),
+          showCenter: b("showCenter"),
+          showThird: b("showThird"),
+          bgColor: $("stageBgColor").value,
+          extensionBgColor: $("extensionBgColor").value,
+          checker: b("stageChecker"),
+        }
+      };
+    }
+
+    function buildThumbs(kind) {
+      const isPortrait = kind === "portrait";
+      const container = $(isPortrait ? "portraitThumbs" : "frameThumbs");
+      const sheet = $(isPortrait ? "portraitSheet" : "frameSheet").value;
+      const cols = n(isPortrait ? "portraitCols" : "frameCols");
+      const rows = n(isPortrait ? "portraitRows" : "frameRows");
+      const selected = isPortrait ? state.portraitIndex : state.frameIndex;
+
+      container.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+      container.innerHTML = "";
+
+      for (let i = 0; i < cols * rows; i += 1) {
+        const pos = tilePosition(i, cols, rows);
+        const div = document.createElement("div");
+        div.className = `thumb ${i === selected ? "selected" : ""}`;
+        div.style.backgroundImage = `url("${sheet}")`;
+        div.style.backgroundSize = `${cols * 100}% ${rows * 100}%`;
+        div.style.backgroundPosition = `${pos.x}% ${pos.y}%`;
+
+        const span = document.createElement("span");
+        span.textContent = i + 1;
+        div.appendChild(span);
+
+        div.addEventListener("click", () => {
+          if (isPortrait) state.portraitIndex = i;
+          else state.frameIndex = i;
+          refreshAll();
+        });
+
+        container.appendChild(div);
+      }
+    }
+
+    function buildIconThumbs(i) {
+      const container = $(`icon${i}Thumbs`);
+      if (!container) return;
+
+      const sheet = $(`icon${i}Sheet`).value;
+      const cols = n(`icon${i}Cols`);
+      const rows = n(`icon${i}Rows`);
+      const selectedIdx = n(`icon${i}Index`);
+
+      container.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+      container.innerHTML = "";
+
+      for (let idx = 0; idx < cols * rows; idx += 1) {
+        const pos = tilePosition(idx, cols, rows);
+        const div = document.createElement("div");
+        div.className = `thumb ${idx === selectedIdx ? "selected" : ""}`;
+        div.style.backgroundImage = `url("${sheet}")`;
+        div.style.backgroundSize = `${cols * 100}% ${rows * 100}%`;
+        div.style.backgroundPosition = `${pos.x}% ${pos.y}%`;
+
+        const span = document.createElement("span");
+        span.textContent = idx + 1;
+        div.appendChild(span);
+
+        div.addEventListener("click", () => {
+          $(`icon${i}Index`).value = idx;
+          refreshAll();
+        });
+
+        container.appendChild(div);
+      }
+    }
+
+    function applyNineSliceEmulation(gridId, cols, rows, index, base, f) {
+      const grid = $(gridId);
+      if (!grid) return;
+      grid.style.display = "grid";
+      
+      grid.style.gridTemplateRows = `${f.widthT}px 1fr ${f.widthB}px`;
+      grid.style.gridTemplateColumns = `${f.widthL}px 1fr ${f.widthL}px`;
+      
+      const col = index % cols;
+      const row = Math.floor(index / cols);
+      
+      const tw = 512;
+      const th = 512;
+      
+      const sL = f.sliceL;
+      const sT = f.sliceT;
+      const sB = f.sliceB;
+      const wL = f.widthL;
+      const wT = f.widthT;
+      const wB = f.widthB;
+      
+      const wVar = base - 2 * wL;
+      const hVar = base - wT - wB;
+      
+      const sWVar = tw - 2 * sL;
+      const sHVar = th - sT - sB;
+      
+      const cells = {
+        ".ns-tl": {
+          w: wL, h: wT,
+          scX: wL / sL, scY: wT / sT,
+          offsetX: 0, offsetY: 0
+        },
+        ".ns-tr": {
+          w: wL, h: wT,
+          scX: wL / sL, scY: wT / sT,
+          offsetX: tw - sL, offsetY: 0
+        },
+        ".ns-bl": {
+          w: wL, h: wB,
+          scX: wL / sL, scY: wB / sB,
+          offsetX: 0, offsetY: th - sB
+        },
+        ".ns-br": {
+          w: wL, h: wB,
+          scX: wL / sL, scY: wB / sB,
+          offsetX: tw - sL, offsetY: th - sB
+        },
+        ".ns-t": {
+          w: wVar, h: wT,
+          scX: wVar / sWVar, scY: wT / sT,
+          offsetX: sL, offsetY: 0
+        },
+        ".ns-b": {
+          w: wVar, h: wB,
+          scX: wVar / sWVar, scY: wB / sB,
+          offsetX: sL, offsetY: th - sB
+        },
+        ".ns-l": {
+          w: wL, h: hVar,
+          scX: wL / sL, scY: hVar / sHVar,
+          offsetX: 0, offsetY: sT
+        },
+        ".ns-r": {
+          w: wL, h: hVar,
+          scX: wL / sL, scY: hVar / sHVar,
+          offsetX: tw - sL, offsetY: sT
+        },
+        ".ns-c": {
+          w: wVar, h: hVar,
+          scX: wVar / sWVar, scY: hVar / sHVar,
+          offsetX: sL, offsetY: sT
+        }
+      };
+      
+      Object.entries(cells).forEach(([selector, c]) => {
+        const el = grid.querySelector(selector);
+        if (!el) return;
+        
+        el.style.backgroundImage = `url("${f.sheet}")`;
+        
+        const bgW = cols * tw * c.scX;
+        const bgH = rows * th * c.scY;
+        el.style.backgroundSize = `${bgW}px ${bgH}px`;
+        
+        const posX = -((col * tw + c.offsetX) * c.scX);
+        const posY = -((row * th + c.offsetY) * c.scY);
+        el.style.backgroundPosition = `${posX}px ${posY}px`;
+      });
+    }
+
+    function clampIndices() {
+      const pMax = Math.max(1, n("portraitCols") * n("portraitRows"));
+      const fMax = Math.max(1, n("frameCols") * n("frameRows"));
+      state.portraitIndex = ((state.portraitIndex % pMax) + pMax) % pMax;
+      state.frameIndex = ((state.frameIndex % fMax) + fMax) % fMax;
+    }
+
+    function updateStage() {
+      const cfg = getConfig();
+      const base = cfg.stage.size;
+      const stage = $("cardStage");
+
+      stage.style.width = `${base}px`;
+      stage.style.height = `${base}px`;
+      stage.style.transform = `scale(${cfg.stage.zoom})`;
+
+      // Apply overall background color and checker grid to stageWrap
+      const stageWrap = document.querySelector(".stageWrap");
+      if (stageWrap) {
+        stageWrap.style.backgroundColor = cfg.stage.bgColor;
+        if (cfg.stage.checker) {
+          stageWrap.style.backgroundImage = `
+            linear-gradient(45deg, rgba(255,255,255,0.03) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.03) 75%, rgba(255,255,255,0.03)), 
+            linear-gradient(45deg, rgba(255,255,255,0.03) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.03) 75%, rgba(255,255,255,0.03))
+          `;
+        } else {
+          stageWrap.style.backgroundImage = "none";
+        }
+      }
+
+      $("safeGuide").style.display = cfg.stage.showSafe ? "block" : "none";
+      $("centerGuide").style.display = cfg.stage.showCenter ? "block" : "none";
+      $("thirdGuide").style.display = cfg.stage.showThird ? "block" : "none";
+
+      const portraitLayer = $("portraitLayer");
+      const pSize = base * cfg.portrait.scale;
+      portraitLayer.style.display = "block";
+      portraitLayer.style.backgroundImage = `url("${cfg.portrait.sheet}")`;
+      portraitLayer.style.backgroundSize = `${cfg.portrait.cols * 100}% ${cfg.portrait.rows * 100}%`;
+      const pTile = tilePosition(cfg.portrait.index, cfg.portrait.cols, cfg.portrait.rows);
+      portraitLayer.style.backgroundPosition = `${pTile.x}% ${pTile.y}%`;
+      portraitLayer.style.width = `${pSize}px`;
+      portraitLayer.style.height = `${pSize}px`;
+      // Center align relative to the stage
+      portraitLayer.style.left = "50%";
+      portraitLayer.style.top = "50%";
+      portraitLayer.style.transform = "translate(-50%, -50%)";
+      portraitLayer.style.opacity = cfg.portrait.opacity;
+      portraitLayer.style.mixBlendMode = cfg.portrait.blend || "normal";
+
+      const frameLayer = $("frameLayer");
+      const extTop = $("extensionTopLayer");
+      const extBottom = $("extensionBottomLayer");
+
+      const isNineSlice = b("frameNineSlice");
+      $("frameNineSliceControls").style.display = isNineSlice ? "block" : "none";
+      $("frameNormalControls").style.display = isNineSlice ? "none" : "block";
+
+      if (isNineSlice) {
+        frameLayer.style.display = "block";
+        frameLayer.style.left = "0px";
+        frameLayer.style.top = "0px";
+        frameLayer.style.width = `${base}px`;
+        frameLayer.style.height = `${base}px`;
+        frameLayer.style.transform = "none";
+        frameLayer.style.backgroundImage = "none";
+        frameLayer.style.borderStyle = "none";
+        frameLayer.style.borderWidth = "0px";
+        frameLayer.style.borderImageSource = "none";
+        frameLayer.style.opacity = cfg.frame.opacity;
+        frameLayer.style.mixBlendMode = cfg.frame.blend || "normal";
+
+        applyNineSliceEmulation("nineSliceGrid", cfg.frame.cols, cfg.frame.rows, cfg.frame.index, base, cfg.frame);
+
+        if (cfg.extension.topEnabled) {
+          extTop.style.display = "block";
+          extTop.style.left = "0px";
+          extTop.style.top = "0px";
+          extTop.style.width = `${base}px`;
+          extTop.style.height = `${base}px`;
+          extTop.style.transform = `translateY(${cfg.extension.topY}px) scale(${cfg.extension.scale})`;
+          extTop.style.transformOrigin = "center";
+          extTop.style.opacity = cfg.extension.opacity;
+          extTop.style.mixBlendMode = cfg.extension.blend || "normal";
+          extTop.style.backgroundImage = "none";
+          extTop.style.borderStyle = "none";
+          extTop.style.backgroundColor = "transparent";
+
+          const extTopBg = $("extTopBg");
+          if (extTopBg) {
+            extTopBg.style.display = "block";
+            extTopBg.style.backgroundColor = cfg.stage.extensionBgColor;
+            
+            // Align extension background with the portrait's scale width and height
+            const topOffset = (base - pSize) / 2;
+            extTopBg.style.left = `${topOffset}px`;
+            extTopBg.style.top = `${topOffset}px`;
+            extTopBg.style.width = `${pSize}px`;
+            extTopBg.style.height = `${base - topOffset}px`;
+          }
+
+          applyNineSliceEmulation("nineSliceGridTop", cfg.frame.cols, cfg.frame.rows, cfg.frame.index, base, cfg.frame);
+          if (cfg.extension.mask === "topBottom") {
+            extTop.style.clipPath = "inset(0 0 66.6% 0)";
+          } else {
+            extTop.style.clipPath = "none";
+          }
+        } else {
+          extTop.style.display = "none";
+          extTop.style.backgroundColor = "transparent";
+          const extTopBg = $("extTopBg");
+          if (extTopBg) extTopBg.style.display = "none";
+          $("nineSliceGridTop").style.display = "none";
+        }
+
+        if (cfg.extension.bottomEnabled) {
+          extBottom.style.display = "block";
+          extBottom.style.left = "0px";
+          extBottom.style.top = "0px";
+          extBottom.style.width = `${base}px`;
+          extBottom.style.height = `${base}px`;
+          extBottom.style.transform = `translateY(${cfg.extension.bottomY}px) scale(${cfg.extension.scale})`;
+          extBottom.style.transformOrigin = "center";
+          extBottom.style.opacity = cfg.extension.opacity;
+          extBottom.style.mixBlendMode = cfg.extension.blend || "normal";
+          extBottom.style.backgroundImage = "none";
+          extBottom.style.borderStyle = "none";
+          extBottom.style.backgroundColor = "transparent";
+
+          const extBottomBg = $("extBottomBg");
+          if (extBottomBg) {
+            extBottomBg.style.display = "block";
+            extBottomBg.style.backgroundColor = cfg.stage.extensionBgColor;
+            
+            // Align extension background with the portrait's scale width and height
+            const topOffset = (base - pSize) / 2;
+            extBottomBg.style.left = `${topOffset}px`;
+            extBottomBg.style.top = "0px";
+            extBottomBg.style.width = `${pSize}px`;
+            extBottomBg.style.height = `${base - topOffset}px`;
+          }
+
+          applyNineSliceEmulation("nineSliceGridBottom", cfg.frame.cols, cfg.frame.rows, cfg.frame.index, base, cfg.frame);
+          if (cfg.extension.mask === "topBottom") {
+            extBottom.style.clipPath = "inset(66.6% 0 0 0)";
+          } else {
+            extBottom.style.clipPath = "none";
+          }
+        } else {
+          extBottom.style.display = "none";
+          extBottom.style.backgroundColor = "transparent";
+          const extBottomBg = $("extBottomBg");
+          if (extBottomBg) extBottomBg.style.display = "none";
+          $("nineSliceGridBottom").style.display = "none";
+        }
+      } else {
+        $("nineSliceGrid").style.display = "none";
+        $("nineSliceGridTop").style.display = "none";
+        $("nineSliceGridBottom").style.display = "none";
+        frameLayer.style.borderStyle = "none";
+        frameLayer.style.borderWidth = "0px";
+        frameLayer.style.borderImageSource = "none";
+
+        setTileLayer(
+          frameLayer,
+          cfg.frame.sheet,
+          cfg.frame.cols,
+          cfg.frame.rows,
+          cfg.frame.index,
+          base,
+          cfg.frame.x,
+          cfg.frame.y,
+          cfg.frame.scale,
+          cfg.frame.opacity,
+          cfg.frame.blend
+        );
+        frameLayer.style.transform = "none";
+
+        if (cfg.extension.topEnabled) {
+          setTileLayer(extTop, cfg.frame.sheet, cfg.frame.cols, cfg.frame.rows, cfg.frame.index, base, cfg.frame.x, cfg.extension.topY, cfg.extension.scale, cfg.extension.opacity, cfg.extension.blend);
+          extTop.style.transform = "none";
+          extTop.style.backgroundColor = cfg.stage.extensionBgColor;
+          const extTopBg = $("extTopBg");
+          if (extTopBg) extTopBg.style.display = "none";
+          if (cfg.extension.mask === "topBottom") {
+            extTop.style.clipPath = "inset(0 0 66.6% 0)";
+          } else {
+            extTop.style.clipPath = "none";
+          }
+        } else {
+          extTop.style.display = "none";
+          extTop.style.backgroundColor = "transparent";
+          const extTopBg = $("extTopBg");
+          if (extTopBg) extTopBg.style.display = "none";
+        }
+
+        if (cfg.extension.bottomEnabled) {
+          setTileLayer(extBottom, cfg.frame.sheet, cfg.frame.cols, cfg.frame.rows, cfg.frame.index, base, cfg.frame.x, cfg.extension.bottomY, cfg.extension.scale, cfg.extension.opacity, cfg.extension.blend);
+          extBottom.style.transform = "none";
+          extBottom.style.backgroundColor = cfg.stage.extensionBgColor;
+          const extBottomBg = $("extBottomBg");
+          if (extBottomBg) extBottomBg.style.display = "none";
+          if (cfg.extension.mask === "topBottom") {
+            extBottom.style.clipPath = "inset(66.6% 0 0 0)";
+          } else {
+            extBottom.style.clipPath = "none";
+          }
+        } else {
+          extBottom.style.display = "none";
+          extBottom.style.backgroundColor = "transparent";
+          const extBottomBg = $("extBottomBg");
+          if (extBottomBg) extBottomBg.style.display = "none";
+        }
+      }
+
+      cfg.icons.forEach((icon, idx) => {
+        const layer = $(`iconLayer${idx + 1}`);
+        if (!icon.enabled) {
+          layer.style.display = "none";
+          return;
+        }
+        setTileLayer(layer, icon.sheet, icon.cols, icon.rows, icon.index, icon.size, icon.x, icon.y, 1, icon.opacity, icon.blend);
+      });
+
+      $("currentInfo").textContent = `キャラ ${cfg.portrait.index + 1}/${cfg.portrait.cols * cfg.portrait.rows} / 枠 ${cfg.frame.index + 1}/${cfg.frame.cols * cfg.frame.rows}`;
+      $("zoomVal").textContent = `${Math.round(cfg.stage.zoom * 100)}%`;
+      $("configText").value = JSON.stringify(cfg, null, 2);
+    }
+
+    function refreshAll() {
+      clampIndices();
+      buildThumbs("portrait");
+      buildThumbs("frame");
+      for (let i = 1; i <= state.iconCount; i += 1) {
+        buildIconThumbs(i);
+      }
+      updateStage();
+    }
+
+    function resetDefaults() {
+      const defaults = {
+        portraitCols: "4",
+        portraitRows: "4",
+        frameCols: "6",
+        frameRows: "6",
+        stageZoom: "1",
+        cardSize: "420",
+        showSafe: true,
+        showCenter: false,
+        showThird: true,
+        stageBgColor: "#181411",
+        stageChecker: true,
+        extensionBgColor: "#241e19",
+        portraitScale: "1",
+        portraitOpacity: "1",
+        portraitBlend: "normal",
+        frameX: "0",
+        frameY: "0",
+        frameScale: "1",
+        frameOpacity: "1",
+        frameBlend: "normal",
+        frameNineSlice: true,
+        frameSliceAll: "24",
+        frameWidthAll: "24",
+        frameSliceT: "24",
+        frameSliceB: "24",
+        frameSliceL: "24",
+        frameWidthT: "24",
+        frameWidthB: "24",
+        frameWidthL: "24",
+        extensionTopEnabled: false,
+        extensionBottomEnabled: false,
+        extensionTopY: "-118",
+        extensionBottomY: "118",
+        extensionScale: "1",
+        extensionOpacity: "0.7",
+        extensionMask: "topBottom",
+        extensionBlend: "normal",
+      };
+
+      Object.entries(defaults).forEach(([id, value]) => {
+        const node = $(id);
+        if (!node) return;
+        if (node.type === "checkbox") node.checked = Boolean(value);
+        else node.value = value;
+      });
+
+      for (let i = 1; i <= state.iconCount; i += 1) {
+        const d = iconDefaults(i);
+        $(`icon${i}Enabled`).checked = d.enabled;
+        $(`icon${i}Sheet`).value = d.sheet;
+        $(`icon${i}Cols`).value = d.cols;
+        $(`icon${i}Rows`).value = d.rows;
+        $(`icon${i}Index`).value = d.index;
+        $(`icon${i}X`).value = d.x;
+        $(`icon${i}Y`).value = d.y;
+        $(`icon${i}Size`).value = d.size;
+        $(`icon${i}Opacity`).value = d.opacity;
+        $(`icon${i}Blend`).value = d.blend;
+      }
+
+      state.portraitIndex = 0;
+      state.frameIndex = 0;
+      refreshAll();
+      setStatus("初期値へ戻しました。");
+    }
+
+    function applyConfig(cfg) {
+      if (!cfg) return;
+
+      if (cfg.portrait) {
+        $("portraitSheet").value = cfg.portrait.sheet || $("portraitSheet").value;
+        $("portraitCols").value = cfg.portrait.cols ?? 4;
+        $("portraitRows").value = cfg.portrait.rows ?? 4;
+        state.portraitIndex = cfg.portrait.index ?? 0;
+        $("portraitScale").value = cfg.portrait.scale ?? 1;
+        $("portraitOpacity").value = cfg.portrait.opacity ?? 1;
+        $("portraitBlend").value = cfg.portrait.blend ?? "normal";
+      }
+
+      if (cfg.frame) {
+        $("frameSheet").value = cfg.frame.sheet || $("frameSheet").value;
+        $("frameCols").value = cfg.frame.cols ?? 6;
+        $("frameRows").value = cfg.frame.rows ?? 6;
+        state.frameIndex = cfg.frame.index ?? 0;
+        $("frameX").value = cfg.frame.x ?? 0;
+        $("frameY").value = cfg.frame.y ?? 0;
+        $("frameScale").value = cfg.frame.scale ?? 1;
+        $("frameOpacity").value = cfg.frame.opacity ?? 1;
+        $("frameBlend").value = cfg.frame.blend ?? "normal";
+        $("frameNineSlice").checked = cfg.frame.nineSlice ?? true;
+        $("frameSliceT").value = cfg.frame.sliceT ?? 24;
+        $("frameSliceB").value = cfg.frame.sliceB ?? 24;
+        $("frameSliceL").value = cfg.frame.sliceL ?? 24;
+        $("frameWidthT").value = cfg.frame.widthT ?? 24;
+        $("frameWidthB").value = cfg.frame.widthB ?? 24;
+        $("frameWidthL").value = cfg.frame.widthL ?? 24;
+        $("frameSliceAll").value = cfg.frame.sliceT ?? 24;
+        $("frameWidthAll").value = cfg.frame.widthT ?? 24;
+      }
+
+      if (cfg.extension) {
+        if (cfg.extension.topEnabled !== undefined) {
+          $("extensionTopEnabled").checked = Boolean(cfg.extension.topEnabled);
+        } else if (cfg.extension.enabled !== undefined) {
+          $("extensionTopEnabled").checked = Boolean(cfg.extension.enabled);
+        }
+        if (cfg.extension.bottomEnabled !== undefined) {
+          $("extensionBottomEnabled").checked = Boolean(cfg.extension.bottomEnabled);
+        } else if (cfg.extension.enabled !== undefined) {
+          $("extensionBottomEnabled").checked = Boolean(cfg.extension.enabled);
+        }
+        $("extensionTopY").value = cfg.extension.topY ?? -118;
+        $("extensionBottomY").value = cfg.extension.bottomY ?? 118;
+        $("extensionScale").value = cfg.extension.scale ?? 1;
+        $("extensionOpacity").value = cfg.extension.opacity ?? 0.7;
+        $("extensionMask").value = cfg.extension.mask ?? "topBottom";
+        $("extensionBlend").value = cfg.extension.blend ?? "normal";
+      }
+
+      if (cfg.stage) {
+        $("cardSize").value = cfg.stage.size ?? 420;
+        $("stageZoom").value = cfg.stage.zoom ?? 1;
+        $("showSafe").checked = cfg.stage.showSafe ?? true;
+        $("showCenter").checked = cfg.stage.showCenter ?? false;
+        $("showThird").checked = cfg.stage.showThird ?? true;
+        $("stageBgColor").value = cfg.stage.bgColor ?? "#181411";
+        $("extensionBgColor").value = cfg.stage.extensionBgColor ?? cfg.stage.bgColor ?? "#241e19";
+        $("stageChecker").checked = cfg.stage.checker ?? true;
+      }
+
+      if (Array.isArray(cfg.icons)) {
+        cfg.icons.slice(0, state.iconCount).forEach((icon, idx) => {
+          const i = idx + 1;
+          $(`icon${i}Enabled`).checked = Boolean(icon.enabled);
+          $(`icon${i}Sheet`).value = icon.sheet || $(`icon${i}Sheet`).value;
+          $(`icon${i}Cols`).value = icon.cols ?? 6;
+          $(`icon${i}Rows`).value = icon.rows ?? 6;
+          $(`icon${i}Index`).value = icon.index ?? 0;
+          $(`icon${i}X`).value = icon.x ?? 0;
+          $(`icon${i}Y`).value = icon.y ?? 0;
+          $(`icon${i}Size`).value = icon.size ?? 42;
+          $(`icon${i}Opacity`).value = icon.opacity ?? 1;
+          $(`icon${i}Blend`).value = icon.blend ?? "normal";
+        });
+      }
+
+      refreshAll();
+    }
+
+    async function copyConfig() {
+      try {
+        await navigator.clipboard.writeText($("configText").value);
+        setStatus("設定JSONをコピーしました。");
+      } catch (_) {
+        setStatus("コピーに失敗しました。textareaから手動コピーしてください。", true);
+      }
+    }
+
+    function downloadConfig() {
+      const blob = new Blob([$("configText").value], { type: "application/json;charset=utf-8" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "portrait_frame_test_config.json";
+      a.click();
+      URL.revokeObjectURL(a.href);
+      setStatus("設定JSONを保存しました。");
+    }
+
+    function saveLocal() {
+      localStorage.setItem("bardPortraitFrameTesterConfig", $("configText").value);
+      setStatus("ローカル保存しました。");
+    }
+
+    function loadLocal() {
+      const raw = localStorage.getItem("bardPortraitFrameTesterConfig");
+      if (!raw) {
+        setStatus("ローカル保存がありません。", true);
+        return;
+      }
+      try {
+        const parsed = JSON.parse(raw);
+        if (!parsed.version || parsed.version < state.configVersion) {
+          setStatus("古いバージョンの設定を検知したため、初期値にリセットしました。");
+          resetDefaults();
+          return;
+        }
+        applyConfig(parsed);
+        setStatus("ローカル設定を読み込みました。");
+      } catch (err) {
+        setStatus("ローカル設定のJSON解析に失敗しました。", true);
+      }
+    }
+
+    function bindAllInputs() {
+      // Sync bulk sliders to individual inputs
+      $("frameSliceAll").addEventListener("input", (e) => {
+        const val = e.target.value;
+        $("frameSliceT").value = val;
+        $("frameSliceB").value = val;
+        $("frameSliceL").value = val;
+        refreshAll();
+      });
+      $("frameWidthAll").addEventListener("input", (e) => {
+        const val = e.target.value;
+        $("frameWidthT").value = val;
+        $("frameWidthB").value = val;
+        $("frameWidthL").value = val;
+        refreshAll();
+      });
+
+      const ids = [
+        "portraitSheet","portraitCols","portraitRows",
+        "frameSheet","frameCols","frameRows",
+        "stageZoom","cardSize","showSafe","showCenter","showThird",
+        "stageBgColor","stageChecker","extensionBgColor",
+        "portraitScale","portraitOpacity","portraitBlend",
+        "frameX","frameY","frameScale","frameOpacity","frameBlend",
+        "frameNineSlice","frameSliceT","frameSliceB","frameSliceL","frameWidthT","frameWidthB","frameWidthL",
+        "extensionTopEnabled","extensionBottomEnabled","extensionTopY","extensionBottomY","extensionScale","extensionOpacity","extensionMask","extensionBlend"
+      ];
+
+      ids.forEach((id) => {
+        const node = $(id);
+        if (node) {
+          node.addEventListener("input", refreshAll);
+          node.addEventListener("change", () => {
+            refreshAll();
+            pushHistory();
+          });
+        }
+      });
+
+      for (let i = 1; i <= state.iconCount; i += 1) {
+        ["Enabled","Sheet","Cols","Rows","Index","X","Y","Size","Opacity","Blend"].forEach((suffix) => {
+          const node = $(`icon${i}${suffix}`);
+          if (node) {
+            node.addEventListener("input", refreshAll);
+            node.addEventListener("change", () => {
+              refreshAll();
+              pushHistory();
+            });
+          }
+        });
+      }
+    }
+
+    let dragIconIndex = null;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let dragStartIconX = 0;
+    let dragStartIconY = 0;
+
+    function initDragEvents() {
+      for (let i = 1; i <= state.iconCount; i += 1) {
+        const layer = $(`iconLayer${i}`);
+        if (!layer) continue;
+
+        const onStart = (e) => {
+          const cfg = getConfig();
+          if (!cfg.icons[i - 1].enabled) return;
+
+          e.preventDefault();
+          dragIconIndex = i;
+
+          // Drag started: activate the tab for this icon
+          state.activeIconTab = i;
+          document.querySelectorAll("#iconTabs .tab-btn").forEach((btn, idx) => {
+            btn.classList.toggle("active", idx + 1 === i);
+          });
+          document.querySelectorAll("#iconControls .tab-content").forEach((content, idx) => {
+            content.classList.toggle("active", idx + 1 === i);
+          });
+
+          const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+          const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+          dragStartX = clientX;
+          dragStartY = clientY;
+
+          dragStartIconX = n(`icon${i}X`);
+          dragStartIconY = n(`icon${i}Y`);
+
+          document.addEventListener("mousemove", onMove, { passive: false });
+          document.addEventListener("mouseup", onEnd);
+          document.addEventListener("touchmove", onMove, { passive: false });
+          document.addEventListener("touchend", onEnd);
+        };
+
+        layer.addEventListener("mousedown", onStart);
+        layer.addEventListener("touchstart", onStart, { passive: false });
+      }
+
+      function onMove(e) {
+        if (dragIconIndex === null) return;
+        e.preventDefault();
+
+        const cfg = getConfig();
+        const zoom = cfg.stage.zoom || 1;
+
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+        const dx = (clientX - dragStartX) / zoom;
+        const dy = (clientY - dragStartY) / zoom;
+
+        let newX = dragStartIconX + dx;
+        let newY = dragStartIconY + dy;
+
+        if (e.ctrlKey) {
+          newX = Math.round(newX / 5) * 5;
+          newY = Math.round(newY / 5) * 5;
+        } else {
+          newX = Math.round(newX);
+          newY = Math.round(newY);
+        }
+
+        $(`icon${dragIconIndex}X`).value = newX;
+        $(`icon${dragIconIndex}Y`).value = newY;
+
+        refreshAll();
+      }
+
+      function onEnd() {
+        dragIconIndex = null;
+        document.removeEventListener("mousemove", onMove);
+        document.removeEventListener("mouseup", onEnd);
+        document.removeEventListener("touchmove", onMove);
+        document.removeEventListener("touchend", onEnd);
+        pushHistory();
+      }
+    }
+
+    // Color extraction from portrait sheet
+    function autoGenerateExtensionColor() {
+      const img = new Image();
+      img.src = $("portraitSheet").value;
+      img.onload = () => {
+        try {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          
+          img.crossOrigin = "anonymous";
+          
+          const cols = n("portraitCols");
+          const rows = n("portraitRows");
+          const index = state.portraitIndex;
+          
+          const tileW = img.naturalWidth / cols;
+          const tileH = img.naturalHeight / rows;
+          const col = index % cols;
+          const row = Math.floor(index / cols);
+          
+          canvas.width = 100;
+          canvas.height = 100;
+          
+          ctx.drawImage(img, col * tileW, row * tileH, tileW, tileH, 0, 0, 100, 100);
+          
+          const imgData = ctx.getImageData(0, 0, 100, 100);
+          const data = imgData.data;
+          let r = 0, g = 0, b = 0, count = 0;
+          
+          for (let i = 0; i < data.length; i += 4) {
+            if (data[i + 3] < 50) continue;
+            r += data[i];
+            g += data[i + 1];
+            b += data[i + 2];
+            count += 1;
+          }
+          
+          if (count > 0) {
+            r = Math.round(r / count);
+            g = Math.round(g / count);
+            b = Math.round(b / count);
+            
+            // 80% darkness = 20% brightness
+            const targetR = Math.round(r * 0.2);
+            const targetG = Math.round(g * 0.2);
+            const targetB = Math.round(b * 0.2);
+            
+            const hex = "#" + [targetR, targetG, targetB].map(v => {
+              const h = v.toString(16);
+              return h.length === 1 ? "0" + h : h;
+            }).join("");
+            
+            $("extensionBgColor").value = hex;
+            refreshAll();
+            setStatus("キャラ画像から拡張背景色を自動生成しました (暗さ80%)。");
+          }
+        } catch (err) {
+          console.warn("CORS limitation, using preset color instead.", err);
+          applyPresetColorFallback();
+        }
+      };
+      img.onerror = () => {
+        applyPresetColorFallback();
+      };
+    }
+
+    function applyPresetColorFallback() {
+      const sheet = $("portraitSheet").value;
+      let hex = "#241e19";
+      if (sheet.includes("_A")) {
+        hex = "#2b1a1a";
+      } else if (sheet.includes("_B")) {
+        hex = "#1a2b24";
+      } else {
+        hex = "#241d18";
+      }
+      $("extensionBgColor").value = hex;
+      refreshAll();
+      setStatus("CORS制限のため、シート情報からプリセット背景色を適用しました。");
+    }
+
+    // Undo / Redo History System
+    const historyState = {
+      undoStack: [],
+      redoStack: [],
+      maxDepth: 50,
+      isApplying: false
+    };
+
+    function pushHistory() {
+      if (historyState.isApplying) return;
+      const current = JSON.stringify(getConfig());
+      if (historyState.undoStack.length > 0 && historyState.undoStack[historyState.undoStack.length - 1] === current) {
+        return;
+      }
+      historyState.undoStack.push(current);
+      if (historyState.undoStack.length > historyState.maxDepth) {
+        historyState.undoStack.shift();
+      }
+      historyState.redoStack = [];
+    }
+
+    function undo() {
+      if (historyState.undoStack.length <= 1) {
+        setStatus("これ以上元に戻せません。");
+        return;
+      }
+      historyState.isApplying = true;
+      const current = historyState.undoStack.pop();
+      historyState.redoStack.push(current);
+      
+      const prev = historyState.undoStack[historyState.undoStack.length - 1];
+      try {
+        applyConfig(JSON.parse(prev));
+        setStatus("元に戻しました (Ctrl+Z)。");
+      } catch (e) {
+        console.error(e);
+      }
+      historyState.isApplying = false;
+    }
+
+    function redo() {
+      if (historyState.redoStack.length === 0) {
+        setStatus("やり直す操作がありません。");
+        return;
+      }
+      historyState.isApplying = true;
+      const next = historyState.redoStack.pop();
+      historyState.undoStack.push(next);
+      try {
+        applyConfig(JSON.parse(next));
+        setStatus("やり直しました (Ctrl+Y)。");
+      } catch (e) {
+        console.error(e);
+      }
+      historyState.isApplying = false;
+    }
+
+    // Bind Undo / Redo Shortcuts
+    window.addEventListener("keydown", (e) => {
+      if (e.ctrlKey && !e.shiftKey) {
+        if (e.key === "z" || e.key === "Z") {
+          e.preventDefault();
+          undo();
+        } else if (e.key === "y" || e.key === "Y") {
+          e.preventDefault();
+          redo();
+        }
+      }
+    });
+
+    $("prevPortrait").addEventListener("click", () => { state.portraitIndex -= 1; refreshAll(); pushHistory(); });
+    $("nextPortrait").addEventListener("click", () => { state.portraitIndex += 1; refreshAll(); pushHistory(); });
+    $("prevFrame").addEventListener("click", () => { state.frameIndex -= 1; refreshAll(); pushHistory(); });
+    $("nextFrame").addEventListener("click", () => { state.frameIndex += 1; refreshAll(); pushHistory(); });
+    $("reset").addEventListener("click", () => { resetDefaults(); pushHistory(); });
+    $("copyConfig").addEventListener("click", copyConfig);
+    $("downloadConfig").addEventListener("click", downloadConfig);
+    $("saveLocal").addEventListener("click", saveLocal);
+    $("loadLocal").addEventListener("click", () => { loadLocal(); pushHistory(); });
+    $("autoColorBtn").addEventListener("click", () => { autoGenerateExtensionColor(); pushHistory(); });
+
+    createIconControls();
+    bindAllInputs();
+    initDragEvents();
+    refreshAll();
+    pushHistory();
+  </script>
+</body>
+</html>

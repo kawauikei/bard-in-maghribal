@@ -1,0 +1,8 @@
+{
+  "total_prompts": 144,
+  "title_duplicate_count": 0,
+  "lyrics_duplicate_count": 0,
+  "forbidden_o_word_hits": [],
+  "repeated_individual_line_count": 120,
+  "note": "Exact title/full lyric duplicates are checked as errors. Individual repeated lyric lines are listed for review only."
+}
