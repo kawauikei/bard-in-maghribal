@@ -81,11 +81,11 @@ if os.path.exists(prompt_dir):
 if os.path.exists(vocal_dir):
     audio_files = [f for f in os.listdir(vocal_dir) if f.endswith(".mp4") or f.endswith(".mp3")]
     for f in audio_files:
-        # New naming: 113110__砂の手紙.mp4  or  11611A__苔の石段・朝.mp4
-        match = re.match(r"^([0-9A-Za-z]{5,7})__(.+)\.(mp4|mp3)$", f)
+        # Matches the standard ID prefix e.g. song_101_211_321 followed by optional text or Japanese labels and extension
+        match = re.match(r"^(song_[0-9]{3}_[0-9]{3}_[0-9]{3})(.*)\.(mp4|mp3)$", f)
         if not match:
-            # Old naming: song_101_211_321__*.mp4
-            match = re.match(r"^(song_[0-9]{3}_[0-9]{3}_[0-9]{3})__(.+)\.(mp4|mp3)$", f)
+            # Check other patterns if needed
+            match = re.match(r"^([0-9A-Za-z]{5,7})__(.+)\.(mp4|mp3)$", f)
         if not match:
             continue
 
