@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Sprite Composer</title>
+<style>
+:root {
+  --bg: #0d0f18;
+  --panel: #111422;
+  --border: rgba(255,255,255,0.08);
+  --text: #e8eaf2;
+  --muted: #4a4f70;
+  --c0: #4fc3f7;
+  --c1: #8bc34a;
+  --c2: #ce93d8;
+  --c3: #ffa726;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; overflow: hidden; }
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg); color: var(--text);
+  display: flex; font-size: 12px;
+}
+
+/* ── LEFT ─────────────────────────────────────── */
+#left {
+  width: 300px; flex-shrink: 0;
+  background: var(--panel);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+#left-top {
+  padding: 8px 10px 6px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+  display: flex; flex-direction: column; gap: 5px;
+}
+#left-top h2 { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #6c63ff; }
+.ctrl-row { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+.ctrl-row label { font-size: 10px; color: var(--muted); }
+.ctrl-row input[type=number] {
+  width: 38px; background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+  color: var(--text); border-radius: 3px; padding: 2px 4px; font-size: 10px; text-align: center;
+}
+#dz {
+  flex-shrink: 0; margin: 6px 8px 3px;
+  border: 2px dashed rgba(108,99,255,0.35); border-radius: 6px;
+  padding: 8px; text-align: center; font-size: 10px; color: var(--muted);
+  cursor: pointer; transition: all .2s;
+}
+#dz:hover { border-color: #6c63ff; color: var(--text); background: rgba(108,99,255,0.07); }
+/* full-screen drop overlay */
+#drop-overlay {
+  display: none; position: fixed; inset: 0; z-index: 200;
+  background: rgba(108,99,255,0.18); border: 4px dashed #6c63ff;
+  align-items: center; justify-content: center;
+  font-size: 28px; font-weight: 800; color: #fff;
+  letter-spacing: 2px; pointer-events: none;
+}
+#drop-overlay.show { display: flex; }
+.legend { display: flex; gap: 8px; font-size: 9px; }
+.leg { display: flex; align-items: center; gap: 3px; color: var(--muted); }
+.leg-sq { width: 8px; height: 8px; border-radius: 2px; }
+
+#sheet-list { flex: 1; overflow-y: auto; padding: 4px 8px 10px; }
+.sheet-entry { margin-bottom: 10px; }
+.sheet-hd {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 9px; color: var(--muted); padding: 2px 2px 4px;
+}
+.sheet-hd strong { color: var(--text); font-size: 10px; }
+.rm-btn { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 11px; }
+.rm-btn:hover { color: #ff6584; }
+.sheet-canvas-wrap { position: relative; cursor: crosshair; }
+.sheet-canvas-wrap canvas { display: block; width: 100%; image-rendering: pixelated; border-radius: 4px; }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+/* ── RIGHT ────────────────────────────────────── */
+#right { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+#right-top {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 7px 12px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+#right-top h2 { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #ff9580; }
+.hc { display: flex; gap: 6px; align-items: center; }
+.np { display: flex; align-items: center; gap: 4px; font-size: 10px; color: var(--muted); }
+.np input[type=number] {
+  width: 36px; background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+  color: var(--text); border-radius: 3px; padding: 2px 4px; font-size: 10px; text-align: center;
+}
+.btn { background: rgba(255,255,255,0.07); border: 1px solid var(--border); color: var(--text); padding: 4px 10px; border-radius: 4px; font-size: 10px; font-weight: 600; cursor: pointer; transition: all .15s; }
+.btn:hover { background: rgba(255,255,255,0.13); }
+.btn-p { background: #6c63ff; border-color: transparent; }
+.btn-p:hover { background: #5a52e0; }
+.btn-d { color: #ff6584; background: rgba(255,101,132,0.1); border-color: rgba(255,101,132,0.2); }
+.btn-d:hover { background: rgba(255,101,132,0.22); }
+
+#out-area {
+  flex: 1; overflow: auto; display: flex; align-items: flex-start;
+  padding: 10px 10px 10px 0;
+}
+#row-labels { display: flex; flex-direction: column; flex-shrink: 0; padding-left: 6px; margin-right: 2px; }
+.rl { display: flex; align-items: center; justify-content: flex-end; padding-right: 6px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; white-space: nowrap; }
+
+#out-grid { display: inline-grid; gap: 3px; align-self: flex-start; padding: 8px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255,255,255,0.01); }
+.oc {
+  position: relative; border-radius: 3px; overflow: hidden;
+  border: 1.5px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.02);
+  display: flex; align-items: center; justify-content: center;
+}
+.oc canvas { display: block; width: 100%; height: 100%; image-rendering: pixelated; }
+.oc.f0 { border-color: rgba(79,195,247,.4); }
+.oc.f1 { border-color: rgba(139,195,74,.4); }
+.oc.f2 { border-color: rgba(206,147,216,.4); }
+.oc.f3 { border-color: rgba(255,167,38,.4); }
+.oc .oclbl { position: absolute; bottom: 2px; right: 3px; font-size: 7px; color: rgba(255,255,255,.18); pointer-events: none; }
+.oc.filled { cursor: pointer; }
+.oc.filled:hover::after {
+  content: '✕';
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; font-weight: 900; color: #ff6584;
+  background: rgba(0,0,0,0.55);
+}
+.oc .ocp { font-size: 18px; opacity: .05; pointer-events: none; }
+
+#sbar { padding: 4px 12px; border-top: 1px solid var(--border); font-size: 10px; color: var(--muted); display: flex; gap: 10px; flex-shrink: 0; }
+#sbar b { color: var(--text); }
+
+#toast { position: fixed; bottom: 12px; right: 12px; background: #6c63ff; color: #fff; padding: 6px 13px; border-radius: 6px; font-size: 10px; font-weight: 700; opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 99; }
+#toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div id="left">
+  <div id="left-top">
+    <h2>📦 素材シート</h2>
+    <div class="ctrl-row">
+      <label>グリッド</label>
+      <input type="number" id="sc" value="4" min="1" max="16">
+      <label>×</label>
+      <input type="number" id="sr" value="4" min="1" max="16">
+    </div>
+    <div class="legend">
+      <div class="leg"><div class="leg-sq" style="background:var(--c0)"></div>BGM</div>
+      <div class="leg"><div class="leg-sq" style="background:var(--c1)"></div>VOCAL</div>
+      <div class="leg"><div class="leg-sq" style="background:var(--c2)"></div>CHORUS</div>
+      <div class="leg"><div class="leg-sq" style="background:var(--c3)"></div>VOCAL UP</div>
+    </div>
+  </div>
+  <div id="dz" onclick="document.getElementById('fi').click()">🖼 クリックして追加（画面全体にドロップ可）</div>
+  <input type="file" id="fi" multiple accept="image/*" style="display:none">
+  <div id="sheet-list"></div>
+</div>
+
+<div id="right">
+  <div id="right-top">
+    <h2>🎨 コンポーザー</h2>
+    <div class="hc">
+      <div class="np">出力 <input type="number" id="oc-cols" value="8" min="1" max="32">×<input type="number" id="oc-rows" value="4" min="1" max="16"></div>
+      <button class="btn btn-d" onclick="clearAll()">全消去</button>
+      <button class="btn btn-p" onclick="exportPng()">⬇ PNG出力</button>
+    </div>
+  </div>
+  <div id="out-area">
+    <div id="row-labels"></div>
+    <div id="out-grid"></div>
+  </div>
+  <div id="sbar">配置: <b id="sf">0</b> &nbsp;空き: <b id="se">32</b> &nbsp;合計: <b id="st">32</b></div>
+</div>
+
+<div id="drop-overlay">🖼 ドロップして追加</div>
+<div id="toast"></div>
+
+<!-- ズーム拡大表示モーダル (左列でコマ選定中のホバー表示用) -->
+<div id="zoom-modal" style="display:none; position:fixed; top:40px; right:20px; width:520px; height:540px; background:rgba(17,20,34,0.98); border:3px solid var(--c0); border-radius:12px; box-shadow:0 15px 40px rgba(0,0,0,0.65); z-index:150; align-items:center; justify-content:center; flex-direction:column; padding:15px; pointer-events:none;">
+  <canvas id="zoom-canvas" style="width:480px; height:480px; image-rendering:pixelated; border-radius:6px; background:#f4ecd8; border:1px solid var(--border);"></canvas>
+  <div id="zoom-info" style="font-size:12px; color:var(--text); margin-top:10px; font-weight:bold; max-width:480px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:center;"></div>
+</div>
+
+<script>
+const ROW_META=[
+  {label:'BGM',     color:'#4fc3f7', fcls:'f0', alpha:'rgba(79,195,247,'},
+  {label:'VOCAL',   color:'#8bc34a', fcls:'f1', alpha:'rgba(139,195,74,'},
+  {label:'CHORUS',  color:'#ce93d8', fcls:'f2', alpha:'rgba(206,147,216,'},
+  {label:'VOCALUP', color:'#ffa726', fcls:'f3', alpha:'rgba(255,167,38,'},
+];
+
+let sheets=[], nextId=0;
+let outCols=8, outRows=4;
+// slots[row][col] = null | {canvas,w,h,sheetId,cellIdx}
+let slots=[];
+
+function initSlots(){
+  slots=Array.from({length:outRows},()=>new Array(outCols).fill(null));
+}
+initSlots();
+
+// ── Drop: 画面全体 ────────────────────────────────
+const dropOverlay=document.getElementById('drop-overlay');
+let dragCounter=0;
+document.addEventListener('dragenter',e=>{
+  if([...e.dataTransfer.types].includes('Files')){
+    dragCounter++;
+    dropOverlay.classList.add('show');
+  }
+});
+document.addEventListener('dragleave',e=>{
+  dragCounter--;
+  if(dragCounter<=0){dragCounter=0;dropOverlay.classList.remove('show');}
+});
+document.addEventListener('dragover',e=>{
+  if([...e.dataTransfer.types].includes('Files')) e.preventDefault();
+});
+document.addEventListener('drop',e=>{
+  e.preventDefault();
+  dragCounter=0;
+  dropOverlay.classList.remove('show');
+  const files=[...e.dataTransfer.files].filter(f=>f.type.startsWith('image/'));
+  if(files.length) loadFiles(files);
+});
+document.getElementById('fi').addEventListener('change',e=>{loadFiles([...e.target.files]);e.target.value='';});
+
+function loadFiles(files){
+  files.filter(f=>f.type.startsWith('image/')).forEach(f=>{
+    const r=new FileReader();r.onload=ev=>addSheet(ev.target.result,f.name);r.readAsDataURL(f);
+  });
+}
+
+function addSheet(src,name){
+  const img=new Image();
+  img.onload=()=>{
+    // 8x4画像か判定 (アスペクト比がほぼ2:1の場合)
+    const aspect = img.width / img.height;
+    if (Math.abs(aspect - 2.0) < 0.15) {
+      const halfW = img.width / 2;
+      const h = img.height;
+      const cols = 4;
+      const rows = 4;
+      const cw = Math.floor(halfW / cols);
+      const ch = Math.floor(h / rows);
+
+      // 左側の4x4シート生成
+      const canvasA = document.createElement('canvas');
+      canvasA.width = halfW; canvasA.height = h;
+      canvasA.getContext('2d').drawImage(img, 0, 0, halfW, h, 0, 0, halfW, h);
+      const imgA = new Image();
+      imgA.src = canvasA.toDataURL();
+      
+      // 右側の4x4シート生成
+      const canvasB = document.createElement('canvas');
+      canvasB.width = halfW; canvasB.height = h;
+      canvasB.getContext('2d').drawImage(img, halfW, 0, halfW, h, 0, 0, halfW, h);
+      const imgB = new Image();
+      imgB.src = canvasB.toDataURL();
+
+      let loadedCount = 0;
+      const checkDone = () => {
+        loadedCount++;
+        if (loadedCount === 2) {
+          const idA = ++nextId;
+          const cellsA = [];
+          for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+              const cv = document.createElement('canvas');
+              cv.width = cw; cv.height = ch;
+              cv.getContext('2d').drawImage(imgA, c * cw, r * ch, cw, ch, 0, 0, cw, ch);
+              cellsA.push({ canvas: cv, row: r, col: c });
+            }
+          }
+          const sheetA = { id: idA, name: name.replace(/\.[^/.]+$/, "") + "_L", img: imgA, cols, rows, cw, ch, cells: cellsA };
+          sheets.push(sheetA);
+
+          const idB = ++nextId;
+          const cellsB = [];
+          for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+              const cv = document.createElement('canvas');
+              cv.width = cw; cv.height = ch;
+              cv.getContext('2d').drawImage(imgB, c * cw, r * ch, cw, ch, 0, 0, cw, ch);
+              cellsB.push({ canvas: cv, row: r, col: c });
+            }
+          }
+          const sheetB = { id: idB, name: name.replace(/\.[^/.]+$/, "") + "_R", img: imgB, cols, rows, cw, ch, cells: cellsB };
+          sheets.push(sheetB);
+
+          // slots に全配置する (4x8のグリッド)
+          outCols = 8;
+          outRows = 4;
+          document.getElementById('oc-cols').value = 8;
+          document.getElementById('oc-rows').value = 4;
+          initSlots();
+
+          // シートAを左半分 (0〜3列) に配置
+          for (let r = 0; r < 4; r++) {
+            for (let c = 0; c < 4; c++) {
+              const cellIdx = r * 4 + c;
+              slots[r][c] = {
+                canvas: cellsA[cellIdx].canvas,
+                w: cw,
+                h: ch,
+                sheetId: idA,
+                cellIdx: cellIdx
+              };
+            }
+          }
+
+          // シートBを右半分 (4〜7列) に配置
+          for (let r = 0; r < 4; r++) {
+            for (let c = 0; c < 4; c++) {
+              const cellIdx = r * 4 + c;
+              slots[r][c + 4] = {
+                canvas: cellsB[cellIdx].canvas,
+                w: cw,
+                h: ch,
+                sheetId: idB,
+                cellIdx: cellIdx
+              };
+            }
+          }
+
+          renderSrcList();
+          renderOutGrid();
+          updateStatus();
+          toast(`8x4画像を 4x4×2枚 に分解して全配置しました`);
+        }
+      };
+
+      imgA.onload = checkDone;
+      imgB.onload = checkDone;
+    } else {
+      const cols=parseInt(document.getElementById('sc').value)||4;
+      const rows=parseInt(document.getElementById('sr').value)||4;
+      const id=++nextId;
+      const cw=Math.floor(img.width/cols);
+      const ch=Math.floor(img.height/rows);
+      const cells=[];
+      for(let r=0;r<rows;r++) for(let c=0;c<cols;c++){
+        const cv=document.createElement('canvas');
+        cv.width=cw;cv.height=ch;
+        cv.getContext('2d').drawImage(img,c*cw,r*ch,cw,ch,0,0,cw,ch);
+        cells.push({canvas:cv,row:r,col:c});
+      }
+      sheets.push({id,name,img,cols,rows,cw,ch,cells});
+      renderSrcList();
+      renderOutGrid();
+      updateStatus();
+      toast(`${name.length>20?'…'+name.slice(-18):name} 追加`);
+    }
+  };
+  img.src=src;
+}
+
+// ── Used map ─────────────────────────────────────
+function buildUsedMap(){
+  const m=new Map();
+  for(let r=0;r<slots.length;r++)
+    for(let c=0;c<slots[r].length;c++){
+      const s=slots[r][c];
+      if(s) m.set(`${s.sheetId}_${s.cellIdx}`,r);
+    }
+  return m;
+}
+
+// ── Src list: render each sheet as a full canvas ──
+function renderSrcList(){
+  const usedMap=buildUsedMap();
+  const el=document.getElementById('sheet-list');
+  const savedScrollTop = el.scrollTop;
+  el.innerHTML='';
+  const panelW=document.getElementById('left').clientWidth-16; // minus padding
+
+  sheets.forEach(sheet=>{
+    const entry=document.createElement('div');
+    entry.className='sheet-entry';
+
+    // header
+    const hd=document.createElement('div');hd.className='sheet-hd';
+    const sn=sheet.name.length>28?'…'+sheet.name.slice(-26):sheet.name;
+    const usedCount=[...usedMap.values()].filter((_,i,a)=>{
+      // count entries for this sheet
+      return true;
+    });
+    // simpler count
+    let uc=0;
+    for(const[k,v] of usedMap) if(k.startsWith(`${sheet.id}_`)) uc++;
+    hd.innerHTML=`<strong>${sn}</strong><span>${sheet.cols}×${sheet.rows} 採用:${uc}</span>`;
+    const rm=document.createElement('button');rm.className='rm-btn';rm.textContent='✕';rm.title='削除';
+    rm.onclick=()=>removeSheet(sheet.id);
+    hd.appendChild(rm);
+    entry.appendChild(hd);
+
+    // full sheet canvas
+    const displayW=panelW;
+    const displayH=Math.round(displayW*(sheet.img.height/sheet.img.width));
+    const cellDispW=displayW/sheet.cols;
+    const cellDispH=displayH/sheet.rows;
+
+    // main canvas (image)
+    const mainCv=document.createElement('canvas');
+    mainCv.width=displayW;mainCv.height=displayH;
+    const mctx=mainCv.getContext('2d');
+    mctx.drawImage(sheet.img,0,0,displayW,displayH);
+
+    // draw used overlays + grid
+    for(let r=0;r<sheet.rows;r++){
+      for(let c=0;c<sheet.cols;c++){
+        const cellIdx=r*sheet.cols+c;
+        const usedRow=usedMap.has(`${sheet.id}_${cellIdx}`)?usedMap.get(`${sheet.id}_${cellIdx}`):-1;
+        if(usedRow>=0){
+          const m=ROW_META[usedRow]||ROW_META[0];
+          mctx.fillStyle=m.alpha+'0.35)';
+          mctx.fillRect(c*cellDispW,r*cellDispH,cellDispW,cellDispH);
+          // row label badge
+          mctx.fillStyle=m.color;
+          mctx.font=`bold ${Math.max(9,Math.floor(cellDispW*0.18))}px Segoe UI,sans-serif`;
+          mctx.textAlign='left';mctx.textBaseline='top';
+          const txt=m.label;
+          const tw=mctx.measureText(txt).width;
+          mctx.fillStyle='rgba(0,0,0,0.7)';
+          mctx.fillRect(c*cellDispW+2,r*cellDispH+2,tw+6,14);
+          mctx.fillStyle=m.color;
+          mctx.fillText(txt,c*cellDispW+5,r*cellDispH+3);
+        }
+      }
+    }
+    // grid lines
+    mctx.strokeStyle='rgba(255,255,255,0.25)';
+    mctx.lineWidth=1;
+    for(let c=1;c<sheet.cols;c++){mctx.beginPath();mctx.moveTo(c*cellDispW,0);mctx.lineTo(c*cellDispW,displayH);mctx.stroke();}
+    for(let r=1;r<sheet.rows;r++){mctx.beginPath();mctx.moveTo(0,r*cellDispH);mctx.lineTo(displayW,r*cellDispH);mctx.stroke();}
+
+    const wrap=document.createElement('div');
+    wrap.className='sheet-canvas-wrap';
+    wrap.draggable = true;
+    wrap.appendChild(mainCv);
+
+    wrap.addEventListener('dragstart',e=>{
+      const rect=wrap.getBoundingClientRect();
+      const x=e.clientX-rect.left, y=e.clientY-rect.top;
+      const scaleX=displayW/rect.width, scaleY=displayH/rect.height;
+      const col=Math.floor(x*scaleX/cellDispW);
+      const row=Math.floor(y*scaleY/cellDispH);
+      if(col<0||col>=sheet.cols||row<0||row>=sheet.rows){
+        e.preventDefault();
+        return;
+      }
+      const cellIdx=row*sheet.cols+col;
+      e.dataTransfer.setData('application/json', JSON.stringify({
+        type: 'source-cell',
+        sheetId: sheet.id,
+        cellIdx: cellIdx,
+        originalRow: row
+      }));
+    });
+
+    wrap.addEventListener('click',e=>{
+      const rect=wrap.getBoundingClientRect();
+      const x=e.clientX-rect.left, y=e.clientY-rect.top;
+      const scaleX=displayW/rect.width, scaleY=displayH/rect.height;
+      const col=Math.floor(x*scaleX/cellDispW);
+      const row=Math.floor(y*scaleY/cellDispH);
+      if(col<0||col>=sheet.cols||row<0||row>=sheet.rows)return;
+      const cellIdx=row*sheet.cols+col;
+      toggleCell(sheet.id,cellIdx,row);
+    });
+
+    wrap.addEventListener('mousemove',e=>{
+      const rect=wrap.getBoundingClientRect();
+      const x=e.clientX-rect.left, y=e.clientY-rect.top;
+      const scaleX=displayW/rect.width, scaleY=displayH/rect.height;
+      const col=Math.floor(x*scaleX/cellDispW);
+      const row=Math.floor(y*scaleY/cellDispH);
+      if(col<0||col>=sheet.cols||row<0||row>=sheet.rows){
+        hideZoomModal();
+        return;
+      }
+      const cellIdx=row*sheet.cols+col;
+      const cell=sheet.cells[cellIdx];
+      if (cell) {
+        showZoomModal(cell.canvas, `${sheet.name} (${row}, ${col})`);
+      }
+    });
+
+    wrap.addEventListener('mouseleave',()=>{
+      hideZoomModal();
+    });
+
+    entry.appendChild(wrap);
+    el.appendChild(entry);
+  });
+  el.scrollTop = savedScrollTop;
+}
+
+function removeSheet(id){
+  sheets=sheets.filter(s=>s.id!==id);
+  for(let r=0;r<slots.length;r++)
+    for(let c=0;c<slots[r].length;c++)
+      if(slots[r][c]&&slots[r][c].sheetId===id) slots[r][c]=null;
+  for(let r=0;r<slots.length;r++) compactRow(slots[r]);
+  renderSrcList();renderOutGrid();updateStatus();
+}
+
+// ── Toggle ───────────────────────────────────────
+function toggleCell(sid,cellIdx,srcRow){
+  if(srcRow>=outRows){toast(`出力は${outRows}行です`);return;}
+  const row=slots[srcRow];
+  const existCol=row.findIndex(s=>s&&s.sheetId===sid&&s.cellIdx===cellIdx);
+  if(existCol!==-1){
+    row[existCol]=null;compactRow(row);
+    renderSrcList();renderOutGrid();updateStatus();return;
+  }
+  const emptyCol=row.findIndex(s=>s===null);
+  if(emptyCol===-1){toast(`${ROW_META[srcRow]?.label||'Row'+srcRow} が満杯`);return;}
+  const sheet=sheets.find(s=>s.id===sid);
+  const cell=sheet.cells[cellIdx];
+  row[emptyCol]={canvas:cell.canvas,w:sheet.cw,h:sheet.ch,sheetId:sid,cellIdx,originalRow:srcRow};
+  renderSrcList();renderOutGrid();updateStatus();
+}
+
+function compactRow(row){
+  const f=row.filter(s=>s!==null);
+  for(let i=0;i<row.length;i++) row[i]=f[i]||null;
+}
+
+// ── Output grid ──────────────────────────────────
+function computeCellSize(){
+  const area=document.getElementById('out-area');
+  const rl=document.getElementById('row-labels');
+  const rlW=62; // row label width
+  const availW=area.clientWidth-rlW-30;
+  const availH=area.clientHeight-20;
+  const byW=Math.floor(availW/outCols);
+  const byH=Math.floor(availH/outRows);
+  return Math.max(40,Math.min(byW,byH,300));
+}
+
+function renderOutGrid(){
+  const cellSize=computeCellSize();
+
+  // row labels
+  const rl=document.getElementById('row-labels');
+  rl.innerHTML='';
+  for(let r=0;r<outRows;r++){
+    const d=document.createElement('div');
+    d.className='rl';
+    d.style.height=cellSize+'px';
+    d.style.width='60px';
+    const m=ROW_META[r];
+    if(m){d.style.color=m.color;d.textContent=m.label;}
+    else{d.style.color='var(--muted)';d.textContent=`R${r}`;}
+    rl.appendChild(d);
+  }
+  // gap rows
+  rl.style.gap='3px';
+
+  const g=document.getElementById('out-grid');
+  g.style.gridTemplateColumns=`repeat(${outCols},${cellSize}px)`;
+  g.innerHTML='';
+  for(let r=0;r<outRows;r++) for(let c=0;c<outCols;c++){
+    const s=slots[r]&&slots[r][c];
+    const m=ROW_META[r];
+    const d=document.createElement('div');
+    d.className='oc';
+    d.style.width=cellSize+'px';d.style.height=cellSize+'px';
+    
+    // ドラッグ＆ドロップ対応
+    d.draggable = s ? true : false;
+    
+    if(s){
+      d.classList.add('filled');
+      const cv=document.createElement('canvas');
+      cv.width=s.canvas.width;cv.height=s.canvas.height;
+      cv.getContext('2d').drawImage(s.canvas,0,0);
+      d.appendChild(cv);
+      
+      // 元の行と異なる場合の枠線色付けとバッジ表示
+      const origRow = s.originalRow !== undefined ? s.originalRow : r;
+      if (origRow !== r) {
+        const mOrig = ROW_META[origRow];
+        d.style.borderColor = mOrig ? mOrig.color : '#fff';
+        d.style.borderWidth = '3px';
+        d.style.boxShadow = `0 0 6px ${mOrig ? mOrig.color : '#fff'}`;
+        
+        const badge = document.createElement('div');
+        badge.style.position = 'absolute';
+        badge.style.top = '1px';
+        badge.style.left = '2px';
+        badge.style.fontSize = '8px';
+        badge.style.background = 'rgba(0,0,0,0.7)';
+        badge.style.color = mOrig ? mOrig.color : '#fff';
+        badge.style.padding = '1px 4px';
+        badge.style.borderRadius = '2px';
+        badge.style.fontWeight = 'bold';
+        badge.style.zIndex = '10';
+        badge.textContent = mOrig ? mOrig.label : '';
+        d.appendChild(badge);
+      } else {
+        d.classList.add(m?.fcls||'');
+      }
+
+      d.addEventListener('click', (e) => {
+        // ドラッグイベント発生中はクリック（削除）を無効化
+        if (e.defaultPrevented) return;
+        removeSlot(r,c);
+      });
+
+      d.addEventListener('dragstart', (e) => {
+        e.dataTransfer.setData('text/plain', JSON.stringify({row: r, col: c}));
+        d.style.opacity = '0.5';
+      });
+
+      d.addEventListener('dragend', () => {
+        d.style.opacity = '1.0';
+      });
+    } else {
+      const p=document.createElement('div');p.className='ocp';p.textContent='+';d.appendChild(p);
+    }
+
+    // ドロップ対象としての処理
+    d.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      d.style.background = 'rgba(255,255,255,0.15)';
+    });
+
+    d.addEventListener('dragleave', () => {
+      d.style.background = '';
+    });
+
+    d.addEventListener('drop', (e) => {
+      e.preventDefault();
+      d.style.background = '';
+      try {
+        // 左側のスプライトシートからのドラッグ＆ドロップ判定
+        const jsonStr = e.dataTransfer.getData('application/json');
+        if (jsonStr) {
+          const data = JSON.parse(jsonStr);
+          if (data.type === 'source-cell') {
+            const sid = data.sheetId;
+            const cellIdx = data.cellIdx;
+            const origRow = data.originalRow;
+
+            const sheet = sheets.find(s => s.id === sid);
+            const cell = sheet.cells[cellIdx];
+
+            // 指定されたスロット位置に直接追加
+            slots[r][c] = {
+              canvas: cell.canvas,
+              w: sheet.cw,
+              h: sheet.ch,
+              sheetId: sid,
+              cellIdx: cellIdx,
+              originalRow: origRow
+            };
+
+            compactRow(slots[r]);
+            renderSrcList();
+            renderOutGrid();
+            updateStatus();
+            return;
+          }
+        }
+
+        // 右側セル同士のスワップ
+        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+        const srcRow = data.row;
+        const srcCol = data.col;
+        if (srcRow === r && srcCol === c) return;
+
+        // セル同士のスワップ
+        const temp = slots[r][c];
+        slots[r][c] = slots[srcRow][srcCol];
+        slots[srcRow][srcCol] = temp;
+
+        // 各行を前詰め (コンパクト化)
+        compactRow(slots[r]);
+        if (srcRow !== r) {
+          compactRow(slots[srcRow]);
+        }
+
+        renderSrcList();
+        renderOutGrid();
+        updateStatus();
+      } catch (err) {
+        console.error("Drop error", err);
+      }
+    });
+
+    const lbl=document.createElement('div');lbl.className='oclbl';lbl.textContent=`${r}·${c}`;d.appendChild(lbl);
+    g.appendChild(d);
+  }
+}
+
+function removeSlot(row,col){
+  slots[row][col]=null;compactRow(slots[row]);
+  renderSrcList();renderOutGrid();updateStatus();
+}
+
+function clearAll(){
+  if(!confirm('全消去しますか？'))return;
+  initSlots();renderSrcList();renderOutGrid();updateStatus();
+}
+
+function updateStatus(){
+  const total=outCols*outRows;
+  let filled=0;
+  slots.forEach(r=>r.forEach(s=>{if(s)filled++;}));
+  document.getElementById('sf').textContent=filled;
+  document.getElementById('se').textContent=total-filled;
+  document.getElementById('st').textContent=total;
+}
+
+document.getElementById('oc-cols').addEventListener('change',e=>{
+  outCols=Math.max(1,parseInt(e.target.value)||8);e.target.value=outCols;
+  initSlots();renderSrcList();renderOutGrid();updateStatus();
+});
+document.getElementById('oc-rows').addEventListener('change',e=>{
+  outRows=Math.max(1,parseInt(e.target.value)||4);e.target.value=outRows;
+  initSlots();renderSrcList();renderOutGrid();updateStatus();
+});
+
+// resize → recalculate output cell size
+let resizeTimer;
+window.addEventListener('resize',()=>{
+  clearTimeout(resizeTimer);
+  resizeTimer=setTimeout(renderOutGrid,120);
+});
+
+// ── Export ───────────────────────────────────────
+function exportPng(){
+  let cw=0,ch=0;
+  slots.forEach(r=>r.forEach(s=>{if(s){cw=Math.max(cw,s.w);ch=Math.max(ch,s.h);}}));
+  if(!cw){toast('配置済みセルがありません');return;}
+  const oc=document.createElement('canvas');
+  oc.width=cw*outCols;oc.height=ch*outRows;
+  const ctx=oc.getContext('2d');ctx.clearRect(0,0,oc.width,oc.height);
+  for(let r=0;r<outRows;r++) for(let c=0;c<outCols;c++){
+    const s=slots[r][c];if(s) ctx.drawImage(s.canvas,c*cw,r*ch);
+  }
+  oc.toBlob(blob=>{
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');a.href=url;a.download=`sprite_${outCols}x${outRows}.png`;a.click();
+    URL.revokeObjectURL(url);toast(`${outCols}×${outRows} PNG 出力完了`);
+  },'image/png');
+}
+
+// ── Toast ────────────────────────────────────────
+let tt;
+function toast(msg){
+  const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');
+  clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('show'),1800);
+}
+
+// ── Zoom Modal Helpers ─────────────────────────────
+function showZoomModal(srcCanvas, infoText) {
+  const modal = document.getElementById('zoom-modal');
+  const zCanvas = document.getElementById('zoom-canvas');
+  const zInfo = document.getElementById('zoom-info');
+  if (!modal || !zCanvas || !zInfo) return;
+  
+  modal.style.display = 'flex';
+  zInfo.textContent = infoText;
+  
+  zCanvas.width = srcCanvas.width;
+  zCanvas.height = srcCanvas.height;
+  const ctx = zCanvas.getContext('2d');
+  ctx.clearRect(0, 0, zCanvas.width, zCanvas.height);
+  ctx.drawImage(srcCanvas, 0, 0);
+}
+
+function hideZoomModal() {
+  const modal = document.getElementById('zoom-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+// initial render
+renderOutGrid();
+updateStatus();
+</script>
+</body>
+</html>

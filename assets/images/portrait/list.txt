@@ -1,0 +1,366 @@
+PORTRAIT_SHEET_META
+columns=4
+rows=4
+index_rule=index is left-to-right, top-to-bottom (0 to 15)
+col=index%4
+row=floor(index/4)
+
+portrait_core_A_4x4
+0 protagonist_brave ロクサーナ（主人公・勇猛）
+1 protagonist_elegant ルミエラ（主人公・優美）
+2 protagonist_mystic ネフェリカ（主人公・神秘）
+3 friend_brave ラーミア（親友・勇猛）
+4 friend_elegant セレーネ（親友・優美）
+5 friend_mystic ザフラ（親友・神秘）
+6 bar_master_brave 隊商酒場のマスター
+7 bar_master_elegant 夜会酒場の女将
+8 bar_master_mystic 古物酒場の主
+9 requester_capital 王都の依頼人
+10 requester_border 辺境の依頼人
+11 requester_labyrinth 迷宮の依頼人
+12 requester_port 港町の依頼人
+13 requester_sanctuary 聖堂の依頼人
+14 audience_patron 王都の上客（後援者）
+15 audience_festival 祭り客
+
+portrait_core_B_4x4
+0 audience_arena 闘技場の熱狂観客
+1 npc_archivist 書庫番
+2 npc_caravan_guide 隊商の案内人
+3 npc_trader 旅商人
+4 npc_gossip 噂好き
+5 npc_fake_requester 偽依頼人
+6 npc_dream_child 夢を見る子ども
+7 enemy_rough 荒くれ者
+8 spirit_beast_small 小型精霊獣（普通の家畜は禁止）
+9 requester_town 町の依頼人
+10 requester_village 村の依頼人
+11 requester_travel 旅の依頼人
+12 requester_urgent 急ぎの依頼人
+13 requester_local_official 地方役人
+14 audience_court_lady 宮廷婦人
+15 audience_salon_gentleman 夜会の老紳士
+
+portrait_candidates_A1_4x4
+0 candidate_capital_brave_spear マルジャーナ（槍手）
+1 candidate_capital_elegant_singer リュシア（歌い手）
+2 candidate_capital_mystic_star_reader サディール（読師）
+3 candidate_border_brave_trapper ナーシラ（罠師）
+4 candidate_border_elegant_flutist ミナ（笛吹き）
+5 candidate_border_mystic_dreamer オルワ（夢見）
+6 candidate_labyrinth_brave_scout ラシード（斥候）
+7 candidate_labyrinth_elegant_storyteller ハナーン（語り部）
+8 candidate_labyrinth_mystic_decoder ナジュム（解読者）
+9 candidate_tower_brave_guard_mage バディア（術師護衛）
+10 candidate_tower_elegant_lecturer ルワン（講堂奏者）
+11 candidate_tower_mystic_cataloger マルワ（目録係）
+12 candidate_port_brave_guard_head サービル（護衛頭）
+13 candidate_port_elegant_stagehand アイーダ（舞台係）
+14 candidate_port_mystic_collector マウラ（採集者）
+15 candidate_fortress_brave_bandmaster カーリム（軍楽長）
+
+portrait_candidates_A2_4x4
+0 candidate_fortress_elegant_dance_instructor ジュナ（舞踏教官）
+1 candidate_fortress_mystic_wall_reader ターミル（読解者）
+2 candidate_generic_brave_drummer バルク（太鼓手）
+3 candidate_generic_brave_signal ナーディヤ（合図役）
+4 candidate_generic_brave_mercenary ジャミーラ（傭兵娘）
+5 candidate_generic_brave_guard ハルド（隊商護衛）
+6 candidate_generic_elegant_dancer ミレイユ（踊り子）
+7 candidate_generic_elegant_perfume ルバーブ（香油商）
+8 candidate_generic_elegant_actor イーサ（若役者）
+9 requester_captain 隊長
+10 requester_priest 司祭
+11 requester_guild_head 商会代表
+12 requester_elder 長老
+13 requester_merchant 商人
+14 audience_trade_patron 商会の後援者
+15 audience_quiet_listener 静かな聞き手
+
+portrait_candidates_B1_4x4
+0 candidate_sanctuary_brave_guard サイーダ（巡礼路守）
+1 candidate_sanctuary_elegant_hymn ノーラ（聖歌導き）
+2 candidate_sanctuary_mystic_funeral イムラン（葬送聖歌）
+3 candidate_brass_brave_shield ダリム（盾持ち）
+4 candidate_brass_elegant_dancer サミーラ（舞姫）
+5 candidate_brass_mystic_star ライラ（星読師）
+6 candidate_castle_brave_ghost_teller ファリド（亡霊騎士）
+7 candidate_castle_elegant_dancer アーディラ（没落舞踏）
+8 candidate_castle_mystic_mask_collector サーレハ（仮面蒐集）
+9 candidate_grave_brave_guard ジャリール（墓地護衛）
+10 candidate_grave_elegant_reader マヒナ（朗読者）
+11 candidate_grave_mystic_keeper ハディ（名簿守り）
+12 candidate_arena_brave_champion ザイド（王者）
+13 candidate_arena_elegant_entrance ナイーマ（入場奏者）
+14 candidate_arena_mystic_oracle カシム（占い師）
+15 candidate_grove_brave_archer リーファ（弓手）
+
+portrait_candidates_B2_4x4
+0 candidate_grove_elegant_string_keeper ミルザ（弦守り）
+1 candidate_grove_mystic_spirit_talker シュラ（精霊語り）
+2 candidate_generic_elegant_cook サリーマ（料理番）
+3 candidate_generic_mystic_scribe ファディール（写本師）
+4 candidate_generic_mystic_cat ヌーラ（黒猫占い）
+5 candidate_generic_mystic_bell サハル（鐘守）
+6 candidate_generic_mystic_dream_beast リシェ（夢見獣人）
+7 reserve_candidates_B_nonhuman_01 予備枠・小型精霊獣
+8 reserve_candidates_B_elder_01 予備枠・年長の異国商人
+9 requester_craftsperson 職人
+10 requester_herbalist 薬草師
+11 requester_sailor 船乗り
+12 requester_pilgrim 巡礼者
+13 requester_student 学徒
+14 audience_port_viewer 港町の見物客
+15 audience_sanctuary_pilgrim 聖堂の巡礼者
+
+portrait_candidates_generic_A_4x4
+0 candidate_generic_brave_drummer バルク（太鼓手）
+1 candidate_generic_brave_signal ナーディヤ（合図役）
+2 candidate_generic_brave_mercenary ジャミーラ（傭兵娘）
+3 candidate_generic_brave_guard ハルド（隊商護衛）
+4 candidate_generic_elegant_dancer ミレイユ（踊り子）
+5 candidate_generic_elegant_perfume ルバーブ（香油商）
+6 candidate_generic_elegant_actor イーサ（若役者）
+7 candidate_generic_elegant_cook サリーマ（料理番）
+8 candidate_generic_mystic_scribe ファディール（写本師）
+9 candidate_generic_mystic_cat ヌーラ（黒猫占い）
+10 candidate_generic_mystic_bell サハル（鐘守）
+11 candidate_generic_mystic_dream_beast リシェ（夢見獣人）
+12 reserve_candidate_generic_spirit_beast 予備枠・小型精霊獣
+13 reserve_candidate_generic_sand_folk_elder 予備枠・砂民の年長者
+14 reserve_candidate_generic_blue_haired_minstrel 予備枠・青髪の旅楽師
+15 reserve_candidate_generic_green_ogre_guard 予備枠・緑肌の鬼護衛
+
+portrait_candidates_generic_B_4x4
+0 reserve_candidate_generic_old_mask_scholar 予備枠・仮面の老学者（男性、年長。白髪。古い仮面）
+1 reserve_candidate_generic_fish_folk_singer 予備枠・魚人歌い手（女性、魚人風。鰭耳。耳4つ禁止）
+2 reserve_candidate_generic_bronze_golem_page 予備枠・真鍮ゴーレム従者（金属製小型ゴーレム。人間化禁止）
+3 reserve_candidate_generic_bird_beast_messenger 予備枠・鳥獣人の伝令（男性、若い成人。羽耳）
+4 reserve_candidate_generic_red_haired_elder_dancer 予備枠・赤髪の年長舞手（女性、年長。赤髪）
+5 reserve_candidate_generic_ashen_dead_speaker 予備枠・灰肌の死者語り（死霊風。人間顔にしすぎない）
+6 reserve_candidate_generic_child_prodigy_lute 予備枠・リュートの神童（男性、子ども。大人化禁止）
+7 reserve_candidate_generic_dark_skin_oracle 予備枠・褐色肌の神託者（女性、白髪、濃褐色肌、額飾り）
+8 reserve_candidate_generic_leaf_spirit_child 予備枠・葉の精霊子（精霊。人間子ども化禁止）
+9 requester_cartographer 地図師
+10 requester_gossip 噂好き
+11 requester_guide 案内人
+12 requester_archivist 書庫番
+13 requester_messenger 伝令
+14 special_luck_tuner 楽器調整役
+15 special_wander_strange_animal 不思議な動物
+
+portrait_requester_A_4x4
+0 requester_town 町の依頼人
+1 requester_village 村の依頼人
+2 requester_travel 旅の依頼人
+3 requester_urgent 急ぎの依頼人
+4 requester_local_official 地方役人
+5 requester_captain 隊長
+6 requester_priest 司祭
+7 requester_guild_head 商会代表
+8 requester_elder 長老
+9 requester_merchant 商人
+10 requester_craftsperson 職人
+11 requester_herbalist 薬草師
+12 requester_sailor 船乗り
+13 requester_pilgrim 巡礼者
+14 requester_student 学徒
+15 requester_gossip 噂好き
+
+portrait_requester_B_4x4
+0 requester_guide 案内人
+1 requester_archivist 書庫番
+2 requester_messenger 伝令
+3 requester_cartographer 地図師
+4 requester_palace_clerk 王宮事務官
+5 requester_waterfall_keeper 滝守り
+6 requester_port_merchant 港商人
+7 requester_grave_keeper 墓守
+8 requester_grove_elder 隠れ里の長老
+9 audience_capital_patron 王都の上客
+10 audience_court_lady 宮廷婦人
+11 audience_salon_gentleman 夜会の老紳士
+12 audience_young_noblewoman 若い貴族令嬢（踊り子化禁止）
+13 audience_trade_patron 商会の後援者
+14 audience_festival_woman 祭り客
+15 audience_festival_boy 祭りの少年
+
+portrait_audience_A_4x4
+0 audience_capital_patron 王都の上客
+1 audience_court_lady 宮廷婦人
+2 audience_salon_gentleman 夜会の老紳士
+3 audience_young_noblewoman 若い貴族令嬢
+4 audience_trade_patron 商会の後援者
+5 audience_festival_woman 祭り客
+6 audience_festival_boy 祭りの少年
+7 audience_festival_elder 祭りの老婦人
+8 audience_port_viewer 港町の見物客
+9 audience_port_merchant_woman 港町の商人女性
+10 audience_arena_fan 闘技場の熱狂観客
+11 audience_arena_regular 闘技場の常連女性
+12 audience_arena_bettor 闘技場の賭け客
+13 audience_quiet_listener 静かな聞き手
+14 audience_sanctuary_pilgrim 聖堂の巡礼者
+15 audience_sanctuary_woman 聖堂の信徒女性
+
+portrait_audience_B_4x4
+0 audience_tower_student 講堂の学徒
+1 audience_tower_researcher 講堂の研究者女性
+2 audience_caravan_guest 荒野の隊商客
+3 audience_desert_travel_woman 荒野の旅装女性
+4 audience_fallen_noble 古城の没落貴族
+5 audience_mask_guest 古城の仮面客
+6 audience_grove_listener 隠れ里の聞き手
+7 audience_grove_elder 隠れ里の年長者
+8 audience_general_patron 汎用後援者
+9 special_shop_trader 旅商人
+10 special_shop_instrument 楽器商
+11 special_shop_relic 遺物商
+12 special_shop_costume 衣装屋
+13 special_shop_book 古本屋
+14 special_luck_patron 後援者
+15 special_luck_lost_child 迷子
+
+portrait_special_A_4x4
+0 special_shop_trader 旅商人
+1 special_shop_instrument 楽器商
+2 special_shop_relic 遺物商
+3 special_shop_costume 衣装屋
+4 special_shop_book 古本屋
+5 special_luck_patron 後援者
+6 special_luck_lost_child 迷子
+7 special_luck_old_song 古い歌を覚えた老人
+8 special_luck_festival_guest 祭り客
+9 special_luck_tuner 楽器調整役
+10 special_bad_pickpocket スリ
+11 special_bad_weather_guide 悪天候の案内人
+12 special_bad_fake_requester 偽依頼人
+13 special_bad_rumor_spreader 噂を流す者
+14 special_bad_repairer 楽器修理職人
+15 special_rumor_tavern_gossip 酒場の噂好き
+
+portrait_special_B_4x4
+0 special_rumor_market_informant 市場の情報屋
+1 special_rumor_palace_insider 王宮の内通者
+2 special_rumor_tower_student 塔の学生
+3 special_rumor_caravan_teller 隊商の伝聞屋
+4 special_wander_lost_traveler 迷った旅人
+5 special_wander_strange_animal 不思議な動物
+6 special_wander_mask_guest 仮面の客
+7 special_wander_dream_child 夢を見る子ども
+8 special_wander_silent_pilgrim 無言の巡礼者
+9 special_luck_music_child 歌を拾った子ども
+10 special_luck_coin_finder 古銭を拾った女性
+11 special_luck_friendly_guard 親切な門番
+12 special_bad_debt_collector 借金取り
+13 special_bad_broken_instrument_owner 壊れた楽器の持ち主
+14 special_rumor_masked_listener 仮面の聞き手
+15 special_wander_glowing_moth 光る蛾の精霊
+
+portrait_enemy_human_A_4x4
+0 enemy_human_thief_m 盗賊(男)
+1 enemy_human_thief_f 盗賊(女)
+2 enemy_human_maze_raider 迷宮荒らし
+3 enemy_human_deserter 脱走兵
+4 enemy_human_rough 荒くれ者
+5 enemy_human_spy 密偵
+6 enemy_human_assassin 暗殺者
+7 enemy_human_gladiator_f 闘士
+8 enemy_human_merc_captain 傭兵隊長
+9 enemy_human_fake_priest 偽司祭
+10 enemy_human_exile_knight 亡命騎士
+11 enemy_human_mask_duelist 仮面の決闘者
+12 enemy_human_desert_raider 砂漠の襲撃者
+13 enemy_human_castle_witch 古城の呪術師
+14 enemy_human_maze_broker 迷宮の裏案内人
+15 enemy_human_arena_shadow 闘技場王者の影
+
+portrait_enemy_human_B_4x4
+0 enemy_human_poisoner 毒使い
+1 enemy_human_blackmailer 脅迫者
+2 enemy_human_corrupt_guard 腐敗した衛兵
+3 enemy_human_false_bard 偽吟遊詩人
+4 enemy_human_smuggler 密輸人
+5 enemy_human_cultist 邪教徒
+6 enemy_human_bounty_hunter 賞金稼ぎ
+7 enemy_human_castle_agent 古城の密使
+8 enemy_human_arena_boss 闘技場の裏元締め
+9 enemy_human_ruined_noblewoman 没落貴族の女敵
+10 enemy_human_tower_traitor 塔の裏切り者
+11 enemy_human_grave_robber 墓荒らし
+12 enemy_human_desert_scout 砂漠の斥候敵
+13 enemy_human_broken_minstrel 壊れた楽師
+14 enemy_human_masked_broker 仮面の仲介人
+15 enemy_human_final_agent 黒幕の使者
+
+portrait_enemy_monster_A_4x4
+0 enemy_monster_sand_beast 砂獣（砂色毛皮、角、発光目）
+1 enemy_monster_rock_imp 岩小鬼（岩肌、石角、人間子ども化禁止）
+2 enemy_monster_forest_spirit 森の小精霊（葉と光の精霊。人間顔に寄せない）
+3 enemy_monster_bat_beast 迷宮蝙蝠獣（翼耳。普通蝙蝠禁止）
+4 enemy_monster_grave_wraith 墓地の死霊（青白い霧、ぼんやりした顔）
+5 enemy_monster_storm_beast 砂嵐の獣（赤砂色、荒い毛、たてがみ）
+6 enemy_monster_masked_curse 仮面憑き（浮遊する仮面、呪物）
+7 enemy_monster_castle_shadow 古城の影（黒青の影、細い冠）
+8 enemy_monster_waterway_spirit 水路の精霊獣（青緑の鱗、光るひれ）
+9 enemy_monster_bronze_beetle 真鍮甲虫（真鍮甲殻、丸い発光目）
+10 enemy_monster_rock_golem 岩のゴーレム（石の顔、割れ目発光。巨漢化禁止）
+11 enemy_monster_dead_steed 死霊騎獣（骨と霧の騎獣頭部）
+12 enemy_monster_forest_lord_kin 森主の眷属（深緑の毛と葉。人間化禁止）
+13 enemy_monster_maze_score 迷宮譜の魔物（紫の体表、譜面風紋様）
+14 enemy_monster_sand_circle 砂円陣の獣（金砂の体、円陣風の角）
+15 enemy_monster_cursed_armor 呪いの鎧（黒金の空の鎧）
+
+portrait_enemy_monster_B_4x4
+0 enemy_monster_ancient_shadow 古代王国の影（黒青の影、欠けた王冠）
+1 enemy_monster_bronze_star_aberration 真鍮星の異形（金緑 of 金属片、発光する星核）
+2 enemy_monster_spirit_tree_wrath 精霊樹の逆鱗（緑金の樹皮、樹の顔）
+3 enemy_monster_name_eater 墓地の名喰い（白灰の骨面、霧。文字禁止）
+4 enemy_monster_reserve_01 予備枠・魔物1（赤黒の鱗と角。ドラゴン化抑止）
+5 enemy_monster_reserve_02 予備枠・獣2（白黒の獣。普通犬猫狼にしない）
+6 enemy_monster_reserve_03 予備枠・精霊3（青い光の精霊。人間子ども化禁止）
+7 enemy_monster_reserve_04 予備枠・死霊4（灰白い霧の死霊）
+8 enemy_monster_reserve_05 予備枠・ゴーレム5（真鍮と石の混成ゴーレム）
+9 enemy_monster_mirage_serpent 蜃気楼の蛇獣（砂金の鱗、青い光。普通蛇禁止）
+10 enemy_monster_lantern_mimic ランタン擬態魔（ランタン風呪物、影の触手）
+11 enemy_monster_singing_shell 歌う貝の魔物（貝殻頭部、真珠光、音波）
+12 enemy_monster_cinder_sprite 灰燼の小精霊（灰と火花の小精霊）
+13 enemy_monster_clockwork_scorpion 時計仕掛けの蠍（真鍮蠍、歯車、鋏、針）
+14 enemy_monster_veil_moth 帳の蛾獣（白紫の羽、仮面のような顔）
+15 enemy_monster_black_oasis_core 黒いオアシスの核（黒緑の液体、青い結晶）
+
+portrait_expression_main_A_4x4
+0 protagonist_brave [`joy` 喜] ロクサーナ。自信のある明るい笑み。
+1 protagonist_brave [`anger` 怒] ロクサーナ。守る覚悟の怒り。
+2 protagonist_brave [`sadness` 哀] ロクサーナ。悔しさを抑えた落胆。
+3 protagonist_brave [`surprise` 驚] ロクサーナ。目を開く、息を呑む。
+4 protagonist_brave [`tears` 泣] ロクサーナ。涙をこらえる勇ましい泣き。
+5 protagonist_elegant [`joy` 喜] ルミエラ。上品な微笑み。
+6 protagonist_elegant [`anger` 怒] ルミエラ。静かな怒り。
+7 protagonist_elegant [`sadness` 哀] ルミエラ。寂しげに伏せる目。
+8 protagonist_elegant [`surprise` 驚] ルミエラ。優雅さを残した驚き。
+9 protagonist_elegant [`tears` 泣] ルミエラ。静かに涙。
+10 protagonist_mystic [`joy` 喜] ネフェリカ。控えめで神秘的な微笑み。
+11 protagonist_mystic [`anger` 怒] ネフェリカ。冷静で底の深い怒り。
+12 protagonist_mystic [`sadness` 哀] ネフェリカ. 静かに沈む表情。
+13 protagonist_mystic [`surprise` 驚] ネフェリカ。予兆に驚く静かな目の変化。
+14 protagonist_mystic [`tears` 泣] ネフェリカ。声を出さず涙。
+15 friend_brave [`joy` 喜] ラーミア。快活な笑顔。
+
+portrait_expression_main_B_4x4
+0 friend_brave [`anger` 怒] ラーミア。狩人らしい鋭い怒り。
+1 friend_brave [`sadness` 哀] ラーミア。悔しさ、素朴な落胆。
+2 friend_brave [`surprise` 驚] ラーミア。獲物を見つけたような驚き。
+3 friend_brave [`tears` 泣] ラーミア。強がりながら泣く。
+4 friend_elegant [`joy` 喜] セレーネ。華やかで明るい笑顔。
+5 friend_elegant [`anger` 怒] セレーネ。明るさの奥の怒り。
+6 friend_elegant [`sadness` 哀] セレーネ。少し寂しげ。
+7 friend_elegant [`surprise` 驚] セレーネ。舞台的だが誇張しすぎない。
+8 friend_elegant [`tears` 泣] セレーネ。涙を見せるが上品。
+9 friend_mystic [`joy` 喜] ザフラ。控えめで知的な微笑み。
+10 friend_mystic [`anger` 怒] ザフラ。静かな怒り、知的で冷たい目。
+11 friend_mystic [`sadness` 哀] ザフラ。伏せ目、内向的な悲しみ。
+12 friend_mystic [`surprise` 驚] ザフラ。知的な驚き。
+13 friend_mystic [`tears` 泣] ザフラ。静かに涙。
+14 protagonist_neutral_reference [`neutral` 中立参照] 主人公正本維持用。
+15 friend_neutral_reference [`neutral` 中立参照] 親友3人の混同防止用。

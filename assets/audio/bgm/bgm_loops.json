@@ -1,0 +1,122 @@
+{
+  "bgm_collection_01_Maps_of_Yesterday.mp3": {
+    "loopStart": 8.0001,
+    "loopEnd": 26.6677,
+    "duration": 30.7722,
+    "bpm": 90.0,
+    "fadeDuration": 1.42,
+    "trackType": "Percussive (Beat)"
+  },
+  "bgm_companion_01_The_Open_Ledger.mp3": {
+    "loopStart": 7.1635,
+    "loopEnd": 28.6546,
+    "duration": 30.7722,
+    "bpm": 67.0,
+    "fadeDuration": 1.9,
+    "trackType": "Percussive (Beat)"
+  },
+  "bgm_menu_01_Morning_at_the_Gate.mp3": {
+    "loopStart": 13.5202,
+    "loopEnd": 27.0416,
+    "duration": 30.7722,
+    "bpm": 71.0,
+    "fadeDuration": 1.77,
+    "trackType": "Percussive (Beat)"
+  },
+  "bgm_phase_01_Where_the_River_Bends.mp3": {
+    "loopStart": 0.033,
+    "loopEnd": 25.9459,
+    "duration": 29.7273,
+    "bpm": 111.0,
+    "fadeDuration": 1.16,
+    "trackType": "Percussive (Beat)"
+  },
+  "bgm_story_anger_01_The_Measured_Path.mp3": {
+    "loopStart": 13.7166,
+    "loopEnd": 27.4273,
+    "duration": 30.6678,
+    "bpm": 70.0,
+    "fadeDuration": 1.79,
+    "trackType": "Percussive (Beat)"
+  },
+  "bgm_story_failure_01_The_Basin_Road.mp3": {
+    "loopStart": 4.2112,
+    "loopEnd": 28.0711,
+    "duration": 30.4065,
+    "bpm": 171.0,
+    "fadeDuration": 0.77,
+    "trackType": "Percussive (Beat)"
+  },
+  "bgm_story_fun_01_Coins_Across_the_Counter.mp3": {
+    "loopStart": 12.5217,
+    "loopEnd": 27.1306,
+    "duration": 30.7722,
+    "bpm": 115.0,
+    "fadeDuration": 1.11,
+    "trackType": "Percussive (Beat)"
+  },
+  "bgm_story_joy_01_Across_the_Dry_Sea.mp3": {
+    "loopStart": 3.8088,
+    "loopEnd": 26.6659,
+    "duration": 30.72,
+    "bpm": 63.0,
+    "fadeDuration": 1.95,
+    "trackType": "Percussive (Beat)"
+  },
+  "bgm_story_neutral_01_The_Merchant_s_Hour.mp3": {
+    "loopStart": 7.3473,
+    "loopEnd": 26.9355,
+    "duration": 30.3543,
+    "bpm": 98.0,
+    "fadeDuration": 1.3,
+    "trackType": "Percussive (Beat)"
+  },
+  "bgm_story_neutral_02_A_Quiet_Agreement.mp3": {
+    "loopStart": 0.0366,
+    "loopEnd": 28.6271,
+    "duration": 30.7722,
+    "bpm": 109.0,
+    "fadeDuration": 1.12,
+    "trackType": "Percussive (Beat)"
+  },
+  "bgm_story_neutral_03_Beneath_a_Copper_Sky.mp3": {
+    "loopStart": 5.3331,
+    "loopEnd": 26.6671,
+    "duration": 30.7722,
+    "bpm": 90.0,
+    "fadeDuration": 1.43,
+    "trackType": "Percussive (Beat)"
+  },
+  "bgm_story_sorrow_01_Threshold_of_the_Horizon.mp3": {
+    "loopStart": 2.6659,
+    "loopEnd": 28.0021,
+    "duration": 30.7722,
+    "bpm": 180.0,
+    "fadeDuration": 0.76,
+    "trackType": "Percussive (Beat)"
+  },
+  "bgm_story_success_01_The_Golden_Threshold.mp3": {
+    "loopStart": 4.324,
+    "loopEnd": 25.9468,
+    "duration": 29.649,
+    "bpm": 111.0,
+    "fadeDuration": 1.22,
+    "trackType": "Percussive (Beat)"
+  },
+  "bgm_story_surprise_01_The_Pattern_Underfoot.mp3": {
+    "loopStart": 0.0381,
+    "loopEnd": 26.9156,
+    "duration": 30.7722,
+    "bpm": 107.0,
+    "fadeDuration": 1.19,
+    "trackType": "Percussive (Beat)"
+  },
+  "bgm_title_01_Beneath_the_Gilded_Arch.mp3": {
+    "loopStart": 6.6057,
+    "loopEnd": 28.6259,
+    "duration": 30.7722,
+    "bpm": 109.0,
+    "fadeDuration": 1.17,
+    "trackType": "Percussive (Beat)"
+  }
+}

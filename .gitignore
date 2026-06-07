@@ -1,0 +1,26 @@
+# secrets - never publish
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.pfx
+*.jks
+*.keystore
+*credential*
+*credentials*
+*secret*
+*secrets*
+*_API_KEY*
+*api_key*
+
+# local trash
+*.zip
+*.log
+.DS_Store
+Thumbs.db
+tmp/
+temp/
+
+# generated Vite build artifacts
+build/

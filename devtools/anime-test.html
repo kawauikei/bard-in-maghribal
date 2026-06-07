@@ -1,0 +1,2018 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sprite Animation Tester</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f111a;
+            --panel-bg: rgba(26, 29, 46, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --accent-color: #ff3e6c;
+            --accent-glow: rgba(255, 62, 108, 0.4);
+            --text-color: #f1f3f9;
+            --text-muted: #8b92b6;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --kf-color: #4fc3f7;
+            --kf-selected: #ffffff;
+        }
+        body.light-theme {
+            --bg-color: #f0f2f9;
+            --panel-bg: rgba(255, 255, 255, 0.85);
+            --border-color: rgba(0, 0, 0, 0.1);
+            --accent-color: #e91e63;
+            --accent-glow: rgba(233, 30, 99, 0.3);
+            --text-color: #1a1d2e;
+            --text-muted: #646b90;
+            --card-bg: rgba(0, 0, 0, 0.02);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+        body {
+            font-family: 'Outfit', 'Noto Sans JP', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            transition: background-color 0.3s ease;
+        }
+        .workspace { flex: 1; display: flex; flex-direction: column; position: relative; height: 100vh; }
+        .canvas-container {
+            flex: 1; position: relative; cursor: grab;
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
+        }
+        .canvas-container:active { cursor: grabbing; }
+        canvas {
+            background-size: 20px 20px;
+            background-image: linear-gradient(to right, var(--card-bg) 1px, transparent 1px),
+                              linear-gradient(to bottom, var(--card-bg) 1px, transparent 1px);
+            border-radius: 8px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            max-width: 100%; max-height: 100%;
+        }
+        .sidebar {
+            width: 400px;
+            background: var(--panel-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-left: 1px solid var(--border-color);
+            display: flex; flex-direction: column;
+            height: 100vh;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.15);
+            z-index: 10;
+        }
+        .sidebar-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex; align-items: center; justify-content: space-between;
+            flex-shrink: 0;
+        }
+        .sidebar-header h1 {
+            font-size: 16px; font-weight: 800; letter-spacing: 1px;
+            background: linear-gradient(45deg, var(--text-color), var(--accent-color));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .sidebar-content { flex: 1; overflow-y: auto; padding: 16px 20px; }
+        .section {
+            margin-bottom: 16px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 14px;
+        }
+        .section-title {
+            font-size: 11px; font-weight: 800; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .control-group { margin-bottom: 10px; }
+        .control-group:last-child { margin-bottom: 0; }
+        label {
+            display: block; font-size: 11px; font-weight: 600; color: var(--text-muted);
+            margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        select, input[type="text"], input[type="number"] {
+            width: 100%;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 7px 10px;
+            color: var(--text-color);
+            font-family: inherit; font-size: 12px; outline: none;
+            transition: border-color 0.2s;
+        }
+        select:focus, input:focus { border-color: var(--accent-color); }
+        .row { display: flex; gap: 10px; }
+        .col { flex: 1; }
+        .btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 8px 14px;
+            border-radius: 6px; font-size: 12px; font-weight: 600;
+            cursor: pointer; transition: all 0.2s;
+            display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+            text-decoration: none;
+        }
+        .btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
+        .btn-primary { background: var(--accent-color); border: none; box-shadow: 0 4px 15px var(--accent-glow); }
+        .btn-primary:hover { background: #ff5c82; box-shadow: 0 6px 20px var(--accent-glow); }
+        .btn-group { display: flex; gap: 8px; margin-top: 10px; }
+        .btn-group .btn { flex: 1; }
+        .timeline-container {
+            background: var(--panel-bg);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid var(--border-color);
+            padding: 12px 20px;
+            display: flex; flex-direction: column; gap: 8px;
+            z-index: 5;
+        }
+        .timeline-controls { display: flex; align-items: center; justify-content: space-between; }
+        .timeline-track-container {
+            position: relative; height: 56px;
+            background: rgba(0,0,0,0.25);
+            border: 1px solid var(--border-color);
+            border-radius: 8px; cursor: pointer;
+            display: flex; flex-direction: column;
+            overflow: hidden;
+        }
+        .timeline-ticks {
+            position: absolute; inset: 0;
+            padding: 0 4px; pointer-events: none;
+            z-index: 1;
+        }
+        .tick { width: 1px; height: 100%; background: rgba(255,255,255,0.1); position: absolute; }
+        .tick::after {
+            content: attr(data-frame); position: absolute; bottom: 2px;
+            left: 50%; transform: translateX(-50%); font-size: 9px; color: var(--text-muted);
+            z-index: 2;
+        }
+        .blank-zone {
+            position: absolute; top: 0; bottom: 0; left: 0;
+            background: rgba(255, 255, 255, 0.04);
+            border-right: 2px dashed rgba(255,255,255,0.2);
+            pointer-events: none;
+            border-radius: 8px 0 0 8px;
+            z-index: 1;
+        }
+        .playhead {
+            position: absolute; top: 0; bottom: 0; width: 3px;
+            background: var(--text-color);
+            box-shadow: 0 0 8px rgba(255,255,255,0.8);
+            pointer-events: none; transform: translateX(-50%);
+            z-index: 4;
+        }
+        .track-row {
+            position: relative; height: 28px; width: 100%;
+            box-sizing: border-box;
+        }
+        .track-row.pos-track {
+            border-bottom: 1px solid var(--border-color);
+        }
+        .se-marker {
+            position: absolute; top: 50%; width: 20px; height: 20px;
+            transform: translate(-50%, -50%);
+            background: #ffc107; border-radius: 4px;
+            box-shadow: 0 0 10px rgba(255,193,7,0.5);
+            cursor: ew-resize;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 11px; font-weight: 800; color: #000;
+            z-index: 3;
+            border: 1px solid rgba(0,0,0,0.3);
+            transition: background 0.15s;
+        }
+        .se-marker.selected {
+            background: #ffffff;
+            box-shadow: 0 0 12px rgba(255,255,255,0.8);
+            border: 2px solid #ffc107;
+        }
+        .kf-marker {
+            position: absolute; top: 50%; width: 16px; height: 16px;
+            transform: translate(-50%, -50%) rotate(45deg);
+            background: var(--kf-color);
+            border: 2px solid rgba(0,0,0,0.4);
+            cursor: ew-resize;
+            box-shadow: 0 0 8px rgba(79,195,247,0.6);
+            z-index: 2;
+            transition: background 0.15s;
+        }
+        .kf-marker.selected {
+            background: var(--kf-selected);
+            box-shadow: 0 0 12px rgba(255,255,255,0.8);
+        }
+        textarea {
+            width: 100%; height: 100px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+            border-radius: 8px; color: #5af78e;
+            font-family: monospace; font-size: 10px; padding: 10px;
+            resize: none; outline: none;
+        }
+        .canvas-overlay {
+            position: absolute; top: 16px; left: 16px;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            padding: 10px; border-radius: 8px;
+            pointer-events: none; font-size: 11px; color: var(--text-muted);
+            display: flex; flex-direction: column; gap: 4px;
+        }
+        .canvas-overlay span { color: var(--text-color); font-weight: bold; }
+        .hint-bar { text-align: center; font-size: 11px; color: var(--text-muted); padding-bottom: 4px; }
+        .theme-toggle {
+            cursor: pointer; padding: 6px; border-radius: 50%;
+            width: 30px; height: 30px;
+            display: flex; align-items: center; justify-content: center;
+            background: var(--card-bg); border: 1px solid var(--border-color);
+        }
+        .kf-list { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+        .kf-item {
+            display: flex; align-items: center; gap: 6px;
+            padding: 6px 8px;
+            background: rgba(79,195,247,0.07);
+            border: 1px solid rgba(79,195,247,0.2);
+            border-radius: 6px; cursor: pointer;
+            font-size: 11px; transition: all 0.15s;
+        }
+        .kf-item:hover { background: rgba(79,195,247,0.15); }
+        .kf-item.selected { border-color: var(--kf-color); background: rgba(79,195,247,0.2); }
+        .kf-item .kf-frame-badge {
+            background: var(--kf-color); color: #000;
+            border-radius: 4px; padding: 2px 6px;
+            font-weight: 800; font-size: 10px; min-width: 28px; text-align: center;
+        }
+        .kf-item .kf-coords { flex: 1; color: var(--text-muted); font-size: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .kf-item .kf-del {
+            color: #ff3e6c; font-size: 14px; font-weight: bold;
+            cursor: pointer; padding: 0 4px; line-height: 1;
+            opacity: 0.6;
+        }
+        .kf-item .kf-del:hover { opacity: 1; }
+    </style>
+</head>
+<body>
+    <div class="workspace">
+        <div class="canvas-overlay">
+            <div>アニメ: <span id="overlay-name">-</span></div>
+            <div>座標 (KF補間): <span id="overlay-offset">X: 0, Y: 0</span></div>
+            <div>スケール: <span id="overlay-scale">1.00x</span></div>
+            <div>フレーム: <span id="overlay-frame">1 / 25</span></div>
+            <div>選択KF: <span id="overlay-kf">なし</span></div>
+            <div style="margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 8px; font-size: 10px; line-height: 1.4;">
+                <span style="color:#5af78e; font-weight:bold;">⌨ 操作ヘルプ:</span><br>
+                ・ドラッグ: 座標変更<br>
+                ・└ + Shift: 水平/垂直ロック<br>
+                ・└ + Ctrl/Alt: 10pxスナップ<br>
+                ・矢印キー: 選択KFを1px移動<br>
+                ・└ + Shift: 10px移動<br>
+                ・ホイール: ズーム表示
+            </div>
+        </div>
+        <div class="canvas-container" id="canvas-container">
+            <canvas id="preview-canvas"></canvas>
+        </div>
+        <div class="hint-bar">
+            💡 ドラッグ=選択KFの座標変更 / ホイール=ズーム / 青◆=位置KF（クリック選択・ドラッグ時間移動・右クリック削除） / 黄SE=SEタイミング（ドラッグ時間移動・右クリック削除）
+        </div>
+        <div class="timeline-container">
+            <div class="timeline-controls">
+                <div style="display:flex;gap:8px;">
+                    <button class="btn" id="btn-play">▶ 再生</button>
+                    <button class="btn" id="btn-stop">■ 停止</button>
+                    <button class="btn" id="btn-prev">◀ 前へ</button>
+                    <button class="btn" id="btn-next">次へ ▶</button>
+                    <button class="btn" id="btn-trigger-se">🎵 音再生</button>
+                </div>
+                <div style="display:flex;gap:8px;align-items:center;">
+                    <button class="btn" id="btn-undo" title="元に戻す (Ctrl+Z)" style="padding:5px 10px;font-size:11px;">↩ Undo</button>
+                    <button class="btn" id="btn-redo" title="やり直す (Ctrl+Y)" style="padding:5px 10px;font-size:11px;">↪ Redo</button>
+                </div>
+                <div style="font-size:12px;color:var(--text-muted);">
+                    FPS: <span id="val-fps-display" style="color:var(--text-color);font-weight:bold;">12</span>
+                </div>
+            </div>
+            <div class="timeline-track-container" id="timeline-track">
+                <div class="blank-zone" id="blank-zone" style="width:0%"></div>
+                <div class="timeline-ticks" id="timeline-ticks"></div>
+                <div class="playhead" id="playhead"></div>
+                <div class="track-row pos-track" id="pos-track"></div>
+                <div class="track-row se-track" id="se-track"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h1>SPRITE TESTER</h1>
+            <div style="display:flex;gap:8px;align-items:center;">
+                <button class="btn" id="btn-clear-cache" title="設定を初期化" style="padding:4px 8px;font-size:11px;color:#ff3e6c;background:rgba(255,62,108,0.1);border-color:rgba(255,62,108,0.2);">リセット</button>
+                <div class="theme-toggle" id="theme-toggle" title="テーマ切り替え">🌓</div>
+            </div>
+        </div>
+        <div class="sidebar-content">
+            <div class="section">
+                <div class="section-title"><span>アニメーション設定</span></div>
+                <div class="control-group">
+                    <label>編集中のキー</label>
+                    <div style="display:flex;gap:8px;">
+                        <select id="select-anime-key"><option value="slash">slash</option></select>
+                        <button class="btn" id="btn-add-key" style="padding:6px 10px;">+</button>
+                        <button class="btn" id="btn-del-key" style="padding:6px 10px;color:#ff3e6c;">-</button>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>スプライト画像</label>
+                    <select id="select-image">
+                        <option value="../assets/images/anime/0010_slash_light_5x5.webp">0010_slash_light_5x5.webp</option><option value="../assets/images/anime/0020_arrow_stuck_5x5.webp">0020_arrow_stuck_5x5.webp</option><option value="../assets/images/anime/0030_guard_clash_5x5.webp">0030_guard_clash_5x5.webp</option><option value="../assets/images/anime/0040_thrust_light_5x5.webp">0040_thrust_light_5x5.webp</option><option value="../assets/images/anime/0050_impact_spark_5x5.webp">0050_impact_spark_5x5.webp</option><option value="../assets/images/anime/0200_rune_flash_5x5.webp">0200_rune_flash_5x5.webp</option><option value="../assets/images/anime/0210_light_burst_5x5.webp">0210_light_burst_5x5.webp</option><option value="../assets/images/anime/0220_orb_burst_5x5.webp">0220_orb_burst_5x5.webp</option><option value="../assets/images/anime/0230_seal_circle_5x5.webp">0230_seal_circle_5x5.webp</option><option value="../assets/images/anime/0240_music_wave_5x5.webp">0240_music_wave_5x5.webp</option><option value="../assets/images/anime/0400_monster_claw_5x5.webp">0400_monster_claw_5x5.webp</option><option value="../assets/images/anime/0440_shadow_burst_5x5.webp">0440_shadow_burst_5x5.webp</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>デフォルト新規追加用SE</label>
+                    <select id="select-audio">
+                        <option value="">(効果音なし)</option>
+                        <option value="../assets/audio/se/0010_slash_light.mp3">0010_slash_light.mp3</option><option value="../assets/audio/se/0020_arrow_stuck.mp3">0020_arrow_stuck.mp3</option><option value="../assets/audio/se/0030_guard_clash.mp3">0030_guard_clash.mp3</option><option value="../assets/audio/se/0040_thrust_light.mp3">0040_thrust_light.mp3</option><option value="../assets/audio/se/0050_impact_spark.mp3">0050_impact_spark.mp3</option><option value="../assets/audio/se/0200_rune_flash.mp3">0200_rune_flash.mp3</option><option value="../assets/audio/se/0210_light_burst.mp3">0210_light_burst.mp3</option><option value="../assets/audio/se/0220_orb_burst.mp3">0220_orb_burst.mp3</option><option value="../assets/audio/se/0230_seal_circle.mp3">0230_seal_circle.mp3</option><option value="../assets/audio/se/0240_music_wave.mp3">0240_music_wave.mp3</option><option value="../assets/audio/se/0400_monster_claw.mp3">0400_monster_claw.mp3</option><option value="../assets/audio/se/0440_shadow_burst.mp3">0440_shadow_burst.mp3</option>
+                    </select>
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-title">スプライトグリッド</div>
+                <div class="row">
+                    <div class="col">
+                        <div class="control-group">
+                            <label>横分割 (X)</label>
+                            <input type="number" id="grid-cols" value="5" min="1">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="control-group">
+                            <label>縦分割 (Y)</label>
+                            <input type="number" id="grid-rows" value="5" min="1">
+                        </div>
+                    </div>
+                </div>
+                <div class="control-group" style="margin-top:8px; display:flex; gap:10px;">
+                    <div style="flex:1;">
+                        <label>先頭空白フレーム数</label>
+                        <input type="number" id="input-blank-frames" value="0" min="0" title="スプライト描画前の透明フレーム数。SEを先に鳴らすために使用">
+                    </div>
+                    <div style="flex:1;">
+                        <label>末尾スキップコマ数</label>
+                        <input type="number" id="input-skip-frames" value="0" min="0" title="スプライトシート末尾の描画・ループ判定から除外するスキップコマ数">
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-title">パラメータ</div>
+                <div class="row">
+                    <div class="col">
+                        <div class="control-group">
+                            <label>速度 (FPS)</label>
+                            <input type="number" id="input-fps" value="12" min="1" max="60">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="control-group" style="display:flex;flex-direction:column;justify-content:center;height:100%;padding-top:15px;gap:6px;">
+                            <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;text-transform:none;">
+                                <input type="checkbox" id="check-loop" checked> ループ再生
+                            </label>
+                            <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;text-transform:none;">
+                                <input type="checkbox" id="check-pingpong"> 往復ループ
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:8px;">
+                    <div class="col">
+                        <div class="control-group">
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                                <label style="margin-bottom:0;">往復イージング</label>
+                                <span id="val-pingpong-ease" style="font-size:11px;font-weight:bold;color:var(--text-color);">0%</span>
+                            </div>
+                            <input type="range" id="input-pingpong-ease" min="0" max="1" step="0.05" value="0.0" style="width:100%;accent-color:var(--accent-color);cursor:pointer;" title="折り返し地点での減速の強さを設定します">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:8px;">
+                    <div class="col">
+                        <div class="control-group">
+                            <label>グリッド表示</label>
+                            <select id="select-grid-view">
+                                <option value="on">表示</option>
+                                <option value="off">非表示</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="control-group">
+                            <label>オニオンスキン</label>
+                            <select id="select-onion-skin">
+                                <option value="off">非表示</option>
+                                <option value="prev">前フレーム (50%)</option>
+                                <option value="next">後フレーム (50%)</option>
+                                <option value="both">前後フレーム (50%)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:8px;">
+                    <div class="col">
+                        <div class="control-group">
+                            <label>接合ブレンド (F数)</label>
+                            <input type="number" id="input-crossfade" value="0" min="0" max="20" title="ループの終端で先頭フレームを重ね合わせるフレーム数">
+                        </div>
+                    </div>
+                    <div class="col" style="display:flex;align-items:flex-end;">
+                        <button class="btn" id="btn-reset-pos" style="width:100%;height:32px;">位置リセット</button>
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-title">
+                    <span>位置キーフレーム</span>
+                    <button class="btn" id="btn-add-kf" style="padding:3px 8px;font-size:10px;">+ 現在フレームを追加</button>
+                </div>
+                <div style="font-size:10px;color:var(--text-muted);margin-bottom:8px;">
+                    タイムラインの◆をドラッグで時間移動。右クリックで削除。<br>
+                    キャンバスドラッグで選択中KFの座標を変更。
+                </div>
+                <div class="kf-list" id="kf-list"></div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span>音声キーフレーム</span>
+                    <button class="btn" id="btn-add-se-kf" style="padding:3px 8px;font-size:10px;">+ 現在フレームに音声を追加</button>
+                </div>
+                <div style="font-size:10px;color:var(--text-muted);margin-bottom:8px;">
+                    タイムラインの🎵をドラッグで時間移動。右クリックで削除。
+                </div>
+                <div id="selected-se-kf-panel" style="border: 1px solid var(--border-color); padding: 8px; border-radius: 6px; margin-bottom: 8px; display: none;">
+                    <div style="font-size: 11px; font-weight: bold; margin-bottom: 6px; color: #ffc107;">選択中の音声KF編集</div>
+                    <div class="control-group">
+                        <label>SEアセット</label>
+                        <select id="edit-se-audio">
+                            <option value="">(効果音なし)</option>
+                            <option value="../assets/audio/se/0010_slash_light.mp3">0010_slash_light.mp3</option><option value="../assets/audio/se/0020_arrow_stuck.mp3">0020_arrow_stuck.mp3</option><option value="../assets/audio/se/0030_guard_clash.mp3">0030_guard_clash.mp3</option><option value="../assets/audio/se/0040_thrust_light.mp3">0040_thrust_light.mp3</option><option value="../assets/audio/se/0050_impact_spark.mp3">0050_impact_spark.mp3</option><option value="../assets/audio/se/0200_rune_flash.mp3">0200_rune_flash.mp3</option><option value="../assets/audio/se/0210_light_burst.mp3">0210_light_burst.mp3</option><option value="../assets/audio/se/0220_orb_burst.mp3">0220_orb_burst.mp3</option><option value="../assets/audio/se/0230_seal_circle.mp3">0230_seal_circle.mp3</option><option value="../assets/audio/se/0240_music_wave.mp3">0240_music_wave.mp3</option><option value="../assets/audio/se/0400_monster_claw.mp3">0400_monster_claw.mp3</option><option value="../assets/audio/se/0440_shadow_burst.mp3">0440_shadow_burst.mp3</option>
+                        </select>
+                    </div>
+                    <div class="control-group" style="margin-top:6px;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                            <label style="margin-bottom:0;">音量</label>
+                            <span id="val-edit-se-volume" style="font-size:11px;font-weight:bold;">100%</span>
+                        </div>
+                        <input type="range" id="edit-se-volume" min="0" max="1" step="0.05" value="1.0" style="width:100%;accent-color:var(--accent-color);cursor:pointer;">
+                    </div>
+                    <div class="control-group" style="margin-top:6px;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                            <label style="margin-bottom:0;">再生速度 (倍速)</label>
+                            <span id="val-edit-se-rate" style="font-size:11px;font-weight:bold;">1.00x</span>
+                        </div>
+                        <input type="range" id="edit-se-rate" min="0.25" max="4.0" step="0.05" value="1.0" style="width:100%;accent-color:var(--accent-color);cursor:pointer;">
+                    </div>
+                </div>
+                <div class="kf-list" id="se-kf-list"></div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">データ管理</div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="btn-export">JSON書き出し</button>
+                    <button class="btn" id="btn-import">JSON読込</button>
+                </div>
+                <input type="file" id="file-input" style="display:none;" accept=".json">
+                <div class="control-group" style="margin-top:10px;">
+                    <label>現在の設定値 (プレビュー)</label>
+                    <textarea id="json-output" readonly></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let config = {
+          "0010_slash_light": {
+                    "images": [
+                              "../assets/images/anime/0010_slash_light_5x5.webp"
+                    ],
+                    "cols": 5,
+                    "rows": 5,
+                    "leadingBlankFrames": 0,
+                    "positionKeyframes": [
+                              {
+                                        "frame": 0,
+                                        "offsetX": 0,
+                                        "offsetY": 0
+                              }
+                    ],
+                    "audioKeyframes": [
+                              {
+                                        "frame": 0,
+                                        "audio": "../assets/audio/se/0010_slash_light.mp3",
+                                        "volume": 1,
+                                        "playbackRate": 1
+                              }
+                    ],
+                    "scale": 2,
+                    "fps": 12,
+                    "loop": true,
+                    "pingpong": false
+          },
+          "0020_arrow_stuck": {
+                    "images": [
+                              "../assets/images/anime/0020_arrow_stuck_5x5.webp"
+                    ],
+                    "cols": 5,
+                    "rows": 5,
+                    "leadingBlankFrames": 0,
+                    "positionKeyframes": [
+                              {
+                                        "frame": 0,
+                                        "offsetX": 0,
+                                        "offsetY": 0
+                              }
+                    ],
+                    "audioKeyframes": [
+                              {
+                                        "frame": 0,
+                                        "audio": "../assets/audio/se/0020_arrow_stuck.mp3",
+                                        "volume": 1,
+                                        "playbackRate": 1
+                              }
+                    ],
+                    "scale": 2,
+                    "fps": 12,
+                    "loop": true,
+                    "pingpong": false
+          },
+          "0030_guard_clash": {
+                    "images": [
+                              "../assets/images/anime/0030_guard_clash_5x5.webp"
+                    ],
+                    "cols": 5,
+                    "rows": 5,
+                    "leadingBlankFrames": 0,
+                    "positionKeyframes": [
+                              {
+                                        "frame": 0,
+                                        "offsetX": 0,
+                                        "offsetY": 0
+                              }
+                    ],
+                    "audioKeyframes": [
+                              {
+                                        "frame": 0,
+                                        "audio": "../assets/audio/se/0030_guard_clash.mp3",
+                                        "volume": 1,
+                                        "playbackRate": 1
+                              }
+                    ],
+                    "scale": 2,
+                    "fps": 12,
+                    "loop": true,
+                    "pingpong": false
+          },
+          "0040_thrust_light": {
+                    "images": [
+                              "../assets/images/anime/0040_thrust_light_5x5.webp"
+                    ],
+                    "cols": 5,
+                    "rows": 5,
+                    "leadingBlankFrames": 0,
+                    "positionKeyframes": [
+                              {
+                                        "frame": 0,
+                                        "offsetX": 0,
+                                        "offsetY": 0
+                              }
+                    ],
+                    "audioKeyframes": [
+                              {
+                                        "frame": 0,
+                                        "audio": "../assets/audio/se/0040_thrust_light.mp3",
+                                        "volume": 1,
+                                        "playbackRate": 1
+                              }
+                    ],
+                    "scale": 2,
+                    "fps": 12,
+                    "loop": true,
+                    "pingpong": false
+          },
+          "0050_impact_spark": {
+                    "images": [
+                              "../assets/images/anime/0050_impact_spark_5x5.webp"
+                    ],
+                    "cols": 5,
+                    "rows": 5,
+                    "leadingBlankFrames": 0,
+                    "positionKeyframes": [
+                              {
+                                        "frame": 0,
+                                        "offsetX": 0,
+                                        "offsetY": 0
+                              }
+                    ],
+                    "audioKeyframes": [
+                              {
+                                        "frame": 0,
+                                        "audio": "../assets/audio/se/0050_impact_spark.mp3",
+                                        "volume": 1,
+                                        "playbackRate": 1
+                              }
+                    ],
+                    "scale": 2,
+                    "fps": 12,
+                    "loop": true,
+                    "pingpong": false
+          },
+          "0200_rune_flash": {
+                    "images": [
+                              "../assets/images/anime/0200_rune_flash_5x5.webp"
+                    ],
+                    "cols": 5,
+                    "rows": 5,
+                    "leadingBlankFrames": 0,
+                    "positionKeyframes": [
+                              {
+                                        "frame": 0,
+                                        "offsetX": 0,
+                                        "offsetY": 0
+                              }
+                    ],
+                    "audioKeyframes": [
+                              {
+                                        "frame": 0,
+                                        "audio": "../assets/audio/se/0200_rune_flash.mp3",
+                                        "volume": 1,
+                                        "playbackRate": 1
+                              }
+                    ],
+                    "scale": 2,
+                    "fps": 12,
+                    "loop": true,
+                    "pingpong": false
+          },
+          "0210_light_burst": {
+                    "images": [
+                              "../assets/images/anime/0210_light_burst_5x5.webp"
+                    ],
+                    "cols": 5,
+                    "rows": 5,
+                    "leadingBlankFrames": 0,
+                    "positionKeyframes": [
+                              {
+                                        "frame": 0,
+                                        "offsetX": 0,
+                                        "offsetY": 0
+                              }
+                    ],
+                    "audioKeyframes": [
+                              {
+                                        "frame": 0,
+                                        "audio": "../assets/audio/se/0210_light_burst.mp3",
+                                        "volume": 1,
+                                        "playbackRate": 1
+                              }
+                    ],
+                    "scale": 2,
+                    "fps": 12,
+                    "loop": true,
+                    "pingpong": false
+          },
+          "0220_orb_burst": {
+                    "images": [
+                              "../assets/images/anime/0220_orb_burst_5x5.webp"
+                    ],
+                    "cols": 5,
+                    "rows": 5,
+                    "leadingBlankFrames": 0,
+                    "positionKeyframes": [
+                              {
+                                        "frame": 0,
+                                        "offsetX": 0,
+                                        "offsetY": 0
+                              }
+                    ],
+                    "audioKeyframes": [
+                              {
+                                        "frame": 0,
+                                        "audio": "../assets/audio/se/0220_orb_burst.mp3",
+                                        "volume": 1,
+                                        "playbackRate": 1
+                              }
+                    ],
+                    "scale": 2,
+                    "fps": 12,
+                    "loop": true,
+                    "pingpong": false
+          },
+          "0230_seal_circle": {
+                    "images": [
+                              "../assets/images/anime/0230_seal_circle_5x5.webp"
+                    ],
+                    "cols": 5,
+                    "rows": 5,
+                    "leadingBlankFrames": 0,
+                    "positionKeyframes": [
+                              {
+                                        "frame": 0,
+                                        "offsetX": 0,
+                                        "offsetY": 0
+                              }
+                    ],
+                    "audioKeyframes": [
+                              {
+                                        "frame": 0,
+                                        "audio": "../assets/audio/se/0230_seal_circle.mp3",
+                                        "volume": 1,
+                                        "playbackRate": 1
+                              }
+                    ],
+                    "scale": 2,
+                    "fps": 12,
+                    "loop": true,
+                    "pingpong": false
+          },
+          "0240_music_wave": {
+                    "images": [
+                              "../assets/images/anime/0240_music_wave_5x5.webp"
+                    ],
+                    "cols": 5,
+                    "rows": 5,
+                    "leadingBlankFrames": 0,
+                    "positionKeyframes": [
+                              {
+                                        "frame": 0,
+                                        "offsetX": 0,
+                                        "offsetY": 0
+                              }
+                    ],
+                    "audioKeyframes": [
+                              {
+                                        "frame": 0,
+                                        "audio": "../assets/audio/se/0240_music_wave.mp3",
+                                        "volume": 1,
+                                        "playbackRate": 1
+                              }
+                    ],
+                    "scale": 2,
+                    "fps": 12,
+                    "loop": true,
+                    "pingpong": false
+          },
+          "0400_monster_claw": {
+                    "images": [
+                              "../assets/images/anime/0400_monster_claw_5x5.webp"
+                    ],
+                    "cols": 5,
+                    "rows": 5,
+                    "leadingBlankFrames": 0,
+                    "positionKeyframes": [
+                              {
+                                        "frame": 0,
+                                        "offsetX": 0,
+                                        "offsetY": 0
+                              }
+                    ],
+                    "audioKeyframes": [
+                              {
+                                        "frame": 0,
+                                        "audio": "../assets/audio/se/0400_monster_claw.mp3",
+                                        "volume": 1,
+                                        "playbackRate": 1
+                              }
+                    ],
+                    "scale": 2,
+                    "fps": 12,
+                    "loop": true,
+                    "pingpong": false
+          },
+          "0440_shadow_burst": {
+                    "images": [
+                              "../assets/images/anime/0440_shadow_burst_5x5.webp"
+                    ],
+                    "cols": 5,
+                    "rows": 5,
+                    "leadingBlankFrames": 0,
+                    "positionKeyframes": [
+                              {
+                                        "frame": 0,
+                                        "offsetX": 0,
+                                        "offsetY": 0
+                              }
+                    ],
+                    "audioKeyframes": [
+                              {
+                                        "frame": 0,
+                                        "audio": "../assets/audio/se/0440_shadow_burst.mp3",
+                                        "volume": 1,
+                                        "playbackRate": 1
+                              }
+                    ],
+                    "scale": 2,
+                    "fps": 12,
+                    "loop": true,
+                    "pingpong": false
+          }
+};
+        let currentKey = "slash";
+        let isPlaying = false;
+        let currentFrame = 0;
+        let lastFrameTime = 0;
+        let animationId = null;
+        let selectedKfIndex = 0;
+        let selectedSeKfIndex = -1;
+        let loopDirection = 1;
+        let historyStack = [];
+        let historyIndex = -1;
+        let isDragging = false;
+        let dragStart = { x: 0, y: 0 };
+        let dragKfStart = { x: 0, y: 0 };
+        let isDraggingSeKf = false;
+        let draggingSeKfIdx = -1;
+        let isDraggingKf = false;
+        let draggingKfIdx = -1;
+
+        const canvas = document.getElementById('preview-canvas');
+        const ctx = canvas.getContext('2d');
+        const container = document.getElementById('canvas-container');
+        const overlayName = document.getElementById('overlay-name');
+        const overlayOffset = document.getElementById('overlay-offset');
+        const overlayScale = document.getElementById('overlay-scale');
+        const overlayFrame = document.getElementById('overlay-frame');
+        const overlayKf = document.getElementById('overlay-kf');
+        let spriteImages = [];
+        let isImgLoaded = false;
+        const selectKey = document.getElementById('select-anime-key');
+        const selectImage = document.getElementById('select-image');
+        const selectAudio = document.getElementById('select-audio');
+        const gridCols = document.getElementById('grid-cols');
+        const gridRows = document.getElementById('grid-rows');
+        const inputBlankFrames = document.getElementById('input-blank-frames');
+        const inputSkipFrames = document.getElementById('input-skip-frames');
+        const inputFps = document.getElementById('input-fps');
+        const inputCrossfade = document.getElementById('input-crossfade');
+        const checkLoop = document.getElementById('check-loop');
+        const checkPingpong = document.getElementById('check-pingpong');
+        const inputPingpongEase = document.getElementById('input-pingpong-ease');
+        const valPingpongEase = document.getElementById('val-pingpong-ease');
+        const selectGridView = document.getElementById('select-grid-view');
+        const selectOnionSkin = document.getElementById('select-onion-skin');
+        const timelineTrack = document.getElementById('timeline-track');
+        const timelineTicks = document.getElementById('timeline-ticks');
+        const playhead = document.getElementById('playhead');
+        const blankZone = document.getElementById('blank-zone');
+        const jsonOutput = document.getElementById('json-output');
+        const kfList = document.getElementById('kf-list');
+        
+        const posTrack = document.getElementById('pos-track');
+        const seTrack = document.getElementById('se-track');
+        const seKfList = document.getElementById('se-kf-list');
+        const selectedSeKfPanel = document.getElementById('selected-se-kf-panel');
+        const editSeAudio = document.getElementById('edit-se-audio');
+        const editSeVolume = document.getElementById('edit-se-volume');
+        const valEditSeVolume = document.getElementById('val-edit-se-volume');
+        const editSeRate = document.getElementById('edit-se-rate');
+        const valEditSeRate = document.getElementById('val-edit-se-rate');
+
+        function migrateConfig(cfg) {
+            Object.keys(cfg).forEach(key => {
+                const d = cfg[key]; if (!d) return;
+                if (!Array.isArray(d.positionKeyframes)) {
+                    d.positionKeyframes = [{ frame: 0, offsetX: d.offsetX || 0, offsetY: d.offsetY || 0 }];
+                }
+                if (typeof d.leadingBlankFrames !== 'number') d.leadingBlankFrames = 0;
+                if (typeof d.trailingSkipFrames !== 'number') d.trailingSkipFrames = 0;
+                if (typeof d.pingpong === 'undefined') d.pingpong = false;
+                if (typeof d.pingpongEase !== 'number') d.pingpongEase = 0.0;
+                if (typeof d.crossfadeFrames !== 'number') d.crossfadeFrames = 0;
+                
+                // image -> images 配列への移行
+                if (!Array.isArray(d.images)) {
+                    d.images = d.image ? [d.image] : [];
+                }
+                
+                // Migrate single audio setup to audioKeyframes
+                if (!Array.isArray(d.audioKeyframes)) {
+                    d.audioKeyframes = [];
+                    if (d.audio || typeof d.seFrame === 'number') {
+                        d.audioKeyframes.push({
+                            frame: typeof d.seFrame === 'number' ? d.seFrame : 0,
+                            audio: d.audio || "",
+                            volume: typeof d.volume === 'number' ? d.volume : 1.0,
+                            playbackRate: typeof d.playbackRate === 'number' ? d.playbackRate : 1.0
+                        });
+                    }
+                } else {
+                    d.audioKeyframes.forEach(akf => {
+                        if (typeof akf.playbackRate === 'undefined') {
+                            akf.playbackRate = 1.0;
+                        }
+                    });
+                }
+                
+                delete d.offsetX; delete d.offsetY;
+                delete d.image;
+                delete d.audio; delete d.seFrame; delete d.volume; delete d.playbackRate;
+            });
+        }
+        function normalizeDevtoolAssetPath(src) {
+            if (!src) return src;
+            return src.replace(/\\/g, '/')
+                .replace(/^\.\//,'').replace(/^public\/assets\//,'../assets/')
+                .replace(/^assets\//,'../assets/')
+                .replace(/^\.\.\/public\/assets\//,'../assets/');
+        }
+        function normalizeConfigAssetPaths(cfg) {
+            Object.keys(cfg).forEach(key => {
+                const d = cfg[key]; if (!d) return;
+                if (Array.isArray(d.images)) {
+                    d.images = d.images.map(img => normalizeDevtoolAssetPath(img));
+                }
+                if (Array.isArray(d.audioKeyframes)) {
+                    d.audioKeyframes.forEach(akf => {
+                        akf.audio = normalizeDevtoolAssetPath(akf.audio);
+                    });
+                }
+            });
+        }
+        migrateConfig(config);
+        normalizeConfigAssetPaths(config);
+
+
+        function getTotalFrames(data) {
+            const list = data.images || [];
+            let rawFrames = (data.leadingBlankFrames || 0);
+            
+            // Check if the loaded active asset is a video
+            const firstSrc = list[0] || "";
+            const isVideo = firstSrc.toLowerCase().endsWith('.mp4');
+            
+            if (isVideo && spriteImages && spriteImages[0] && spriteImages[0].isVideo) {
+                const videoAsset = spriteImages[0];
+                // Video frame count is fixed at native 24fps. Playback speed (FPS) scales the interval.
+                const videoNativeFps = 24;
+                rawFrames += Math.round(videoAsset.duration * videoNativeFps);
+            } else {
+                const framesPerSheet = (parseInt(data.cols) || 1) * (parseInt(data.rows) || 1);
+                rawFrames += framesPerSheet * list.length;
+            }
+            const skip = data.trailingSkipFrames || 0;
+            return Math.max(1, rawFrames - skip);
+        }
+        function interpolatePosition(keyframes, frame) {
+            if (!keyframes || keyframes.length === 0) return { x: 0, y: 0 };
+            const sorted = [...keyframes].sort((a, b) => a.frame - b.frame);
+            if (frame <= sorted[0].frame) return { x: sorted[0].offsetX, y: sorted[0].offsetY };
+            if (frame >= sorted[sorted.length - 1].frame) {
+                const last = sorted[sorted.length - 1];
+                return { x: last.offsetX, y: last.offsetY };
+            }
+            const nextIdx = sorted.findIndex(k => k.frame > frame);
+            const prev = sorted[nextIdx - 1], next = sorted[nextIdx];
+            const t = (frame - prev.frame) / (next.frame - prev.frame);
+            return { x: prev.offsetX + (next.offsetX - prev.offsetX) * t, y: prev.offsetY + (next.offsetY - prev.offsetY) * t };
+        }
+        function frameToPercent(frame, totalFrames) {
+            return totalFrames <= 1 ? 50 : (frame / (totalFrames - 1)) * 96 + 2;
+        }
+        function percentToFrame(percent, totalFrames) {
+            return Math.max(0, Math.min(Math.round(percent * (totalFrames - 1)), totalFrames - 1));
+        }
+
+        function pushHistory() {
+            if (historyIndex < historyStack.length - 1) historyStack = historyStack.slice(0, historyIndex + 1);
+            historyStack.push(JSON.parse(JSON.stringify(config)));
+            if (historyStack.length > 100) historyStack.shift();
+            historyIndex = historyStack.length - 1;
+            updateUndoRedoButtons();
+        }
+        function undo() {
+            if (historyIndex > 0) {
+                historyIndex--;
+                config = JSON.parse(JSON.stringify(historyStack[historyIndex]));
+                migrateConfig(config); loadCurrentConfigValues();
+                localStorage.setItem('sprite_tester_config', JSON.stringify(config, null, 2));
+                updateUndoRedoButtons();
+            }
+        }
+        function redo() {
+            if (historyIndex < historyStack.length - 1) {
+                historyIndex++;
+                config = JSON.parse(JSON.stringify(historyStack[historyIndex]));
+                migrateConfig(config); loadCurrentConfigValues();
+                localStorage.setItem('sprite_tester_config', JSON.stringify(config, null, 2));
+                updateUndoRedoButtons();
+            }
+        }
+        function updateUndoRedoButtons() {
+            document.getElementById('btn-undo').disabled = (historyIndex <= 0);
+            document.getElementById('btn-redo').disabled = (historyIndex >= historyStack.length - 1);
+        }
+
+        function updateKeyDropdown() {
+            selectKey.innerHTML = '';
+            Object.keys(config).sort().forEach(key => {
+                const opt = document.createElement('option');
+                opt.value = key; opt.textContent = key; selectKey.appendChild(opt);
+            });
+            selectKey.value = currentKey;
+        }
+        function saveToLocalStorage() {
+            localStorage.setItem('sprite_tester_config', JSON.stringify(config, null, 2));
+            localStorage.setItem('sprite_tester_current_key', currentKey);
+            updateJsonOutput();
+        }
+        function updateJsonOutput() { jsonOutput.value = JSON.stringify(config, null, 2); }
+        
+        // ... (loadCurrentConfigValues, loadImage, etc. unchanged)
+        // (Due to tool size limits and specificity, replacing only modified event handlers and load scripts below)
+        // Wait, let's keep the target range precise and only edit from selectKey change listener to the end.
+        // Actually, we can make this replacing chunk clean. Let's do it.
+
+        function loadCurrentConfigValues() {
+            const data = config[currentKey]; if (!data) return;
+            selectImage.value = (data.images && data.images[0]) ? data.images[0] : (data.image || "");
+            gridCols.value = data.cols;
+            gridRows.value = data.rows;
+            inputBlankFrames.value = data.leadingBlankFrames || 0;
+            inputSkipFrames.value = data.trailingSkipFrames || 0;
+            inputFps.value = data.fps;
+            checkLoop.checked = data.loop;
+            checkPingpong.checked = !!data.pingpong;
+            inputPingpongEase.value = typeof data.pingpongEase === 'number' ? data.pingpongEase : 0.0;
+            valPingpongEase.textContent = Math.round(parseFloat(inputPingpongEase.value) * 100) + '%';
+            inputCrossfade.value = data.crossfadeFrames || 0;
+            overlayName.textContent = currentKey;
+            document.getElementById('val-fps-display').textContent = data.fps;
+            
+            if (!data.positionKeyframes || data.positionKeyframes.length === 0)
+                data.positionKeyframes = [{ frame: 0, offsetX: 0, offsetY: 0 }];
+            selectedKfIndex = Math.min(selectedKfIndex, data.positionKeyframes.length - 1);
+            
+            if (!Array.isArray(data.audioKeyframes)) {
+                data.audioKeyframes = [];
+            }
+            if (data.audioKeyframes.length > 0) {
+                selectedSeKfIndex = Math.min(Math.max(0, selectedSeKfIndex), data.audioKeyframes.length - 1);
+            } else {
+                selectedSeKfIndex = -1;
+            }
+            
+            // ドロップダウンの初期表示は選択中の音声または最初の音声。キーフレームがない場合は空文字
+            const activeAudio = (selectedSeKfIndex >= 0 && data.audioKeyframes[selectedSeKfIndex])
+                ? data.audioKeyframes[selectedSeKfIndex].audio
+                : (data.audioKeyframes[0] ? data.audioKeyframes[0].audio : "");
+            selectAudio.value = activeAudio;
+            
+            loadImages(data.images || [data.image]);
+            rebuildTimeline(); updateKfList(); selectSeKf(selectedSeKfIndex); updateOverlay(); updateJsonOutput();
+        }
+        function loadImages(srcList) {
+            isImgLoaded = false;
+            spriteImages = [];
+            let loadedCount = 0;
+            const list = Array.isArray(srcList) ? srcList : [srcList];
+            
+            if (list.length === 0) {
+                isImgLoaded = true;
+                resizeCanvas();
+                draw();
+                return;
+            }
+            
+            list.forEach((src, idx) => {
+                const isVideo = src.toLowerCase().endsWith('.mp4');
+                if (isVideo) {
+                    const video = document.createElement('video');
+                    video.preload = 'auto';
+                    video.muted = true;
+                    video.playsInline = true;
+                    if (window.location.protocol !== 'file:') {
+                        video.crossOrigin = "anonymous";
+                    }
+                    video.onseeked = () => {
+                        // Whenever seek finishes, redraw the frame on canvas
+                        draw();
+                    };
+                    video.onloadedmetadata = () => {
+                        // metadata is loaded, we can now calculate frames based on duration/fps
+                        loadedCount++;
+                        spriteImages[idx] = {
+                            isVideo: true,
+                            element: video,
+                            width: video.videoWidth || 480,
+                            height: video.videoHeight || 480,
+                            duration: video.duration
+                        };
+                        if (loadedCount === list.length) {
+                            isImgLoaded = true;
+                            resizeCanvas();
+                            draw();
+                        }
+                    };
+                    video.onerror = () => {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        ctx.fillStyle = '#ff3e6c'; ctx.fillText('動画の読み込みに失敗しました: ' + src, 20, 40);
+                    };
+                    video.src = src;
+                    video.load();
+                } else {
+                    const img = new Image();
+                    if (window.location.protocol !== 'file:') {
+                        img.crossOrigin = "anonymous";
+                    }
+                    img.onload = () => {
+                        loadedCount++;
+                        spriteImages[idx] = img;
+                        if (loadedCount === list.length) {
+                            isImgLoaded = true;
+                            resizeCanvas();
+                            draw();
+                        }
+                    };
+                    img.onerror = () => {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        ctx.fillStyle = '#ff3e6c'; ctx.fillText('画像の読み込みに失敗しました: ' + src, 20, 40);
+                    };
+                    img.src = src;
+                }
+            });
+        }
+        function resizeCanvas() { canvas.width = 600; canvas.height = 600; draw(); }
+
+        function drawFrame(frame, alpha) {
+            const data = config[currentKey];
+            const blank = data.leadingBlankFrames || 0;
+            if (frame < blank) return;
+            
+            const totalFrames = getTotalFrames(data);
+            if (frame >= totalFrames) return;
+            
+            const spriteFrame = frame - blank;
+            const activeImg = spriteImages[0];
+            if (!activeImg) return;
+            
+            if (activeImg.isVideo) {
+                const videoEl = activeImg.element;
+                const videoNativeFps = 24;
+                const targetTime = spriteFrame / videoNativeFps;
+                
+                // Paused/Seeking/Playing: Seek exactly to the selected frame time.
+                // Do not use native play() to avoid thread rendering divergence and ping-pong direction failures.
+                if (!videoEl.paused) {
+                    videoEl.pause();
+                }
+                if (Math.abs(videoEl.currentTime - targetTime) > 0.005) {
+                    videoEl.currentTime = Math.min(videoEl.duration, Math.max(0, targetTime));
+                }
+                
+                const frameWidth = activeImg.width;
+                const frameHeight = activeImg.height;
+                const pos = interpolatePosition(data.positionKeyframes, frame);
+                const cx = canvas.width / 2, cy = canvas.height / 2;
+                const dw = frameWidth * data.scale, dh = frameHeight * data.scale;
+                const dx = cx - dw / 2 + pos.x, dy = cy - dh / 2 + pos.y;
+                
+                ctx.save();
+                ctx.globalAlpha = alpha;
+                ctx.imageSmoothingEnabled = false;
+                ctx.drawImage(videoEl, dx, dy, dw, dh);
+                if (selectGridView.value === 'on' && alpha === 1.0) {
+                    ctx.strokeStyle = 'rgba(255,62,108,0.4)'; ctx.lineWidth = 1;
+                    ctx.strokeRect(dx, dy, dw, dh);
+                }
+                ctx.restore();
+            } else {
+                const cols = parseInt(data.cols) || 1;
+                const rows = parseInt(data.rows) || 1;
+                const framesPerSheet = cols * rows;
+                
+                const sheetIdx = Math.floor(spriteFrame / framesPerSheet);
+                const frameInSheet = spriteFrame % framesPerSheet;
+                
+                const targetSheetImg = spriteImages[sheetIdx];
+                if (!targetSheetImg) return;
+                
+                const frameWidth = targetSheetImg.width / cols;
+                const frameHeight = targetSheetImg.height / rows;
+                const col = frameInSheet % cols;
+                const row = Math.floor(frameInSheet / cols);
+                console.log('DEBUG [drawFrame] frame:', frame, 'spriteFrame:', spriteFrame, 'sheetIdx:', sheetIdx, 'frameInSheet:', frameInSheet, 'col:', col, 'row:', row, 'cols:', cols, 'rows:', rows, 'framesPerSheet:', framesPerSheet);
+                const pos = interpolatePosition(data.positionKeyframes, frame);
+                const cx = canvas.width / 2, cy = canvas.height / 2;
+                const dw = frameWidth * data.scale, dh = frameHeight * data.scale;
+                const dx = cx - dw / 2 + pos.x, dy = cy - dh / 2 + pos.y;
+                
+                ctx.save();
+                ctx.globalAlpha = alpha;
+                ctx.imageSmoothingEnabled = false;
+                ctx.drawImage(targetSheetImg, col * frameWidth, row * frameHeight, frameWidth, frameHeight, dx, dy, dw, dh);
+                
+                if (selectGridView.value === 'on' && alpha === 1.0) {
+                    ctx.strokeStyle = 'rgba(255,62,108,0.4)'; ctx.lineWidth = 1;
+                    ctx.strokeRect(dx, dy, dw, dh);
+                }
+                ctx.restore();
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (!isImgLoaded) return;
+            
+            const data = config[currentKey];
+            const totalFrames = getTotalFrames(data);
+            const onionSkin = selectOnionSkin ? selectOnionSkin.value : 'off';
+            
+            // オニオンスキン描画 (透過50% = 0.5)
+            if (onionSkin === 'prev' || onionSkin === 'both') {
+                if (currentFrame > 0) {
+                    drawFrame(currentFrame - 1, 0.5);
+                }
+            }
+            if (onionSkin === 'next' || onionSkin === 'both') {
+                if (currentFrame < totalFrames - 1) {
+                    drawFrame(currentFrame + 1, 0.5);
+                }
+            }
+            
+            // 接合クロスフェードのパラメータ計算
+            let overlayFrame = -1;
+            let overlayAlpha = 1.0;
+            let underlayFrame = -1;
+            
+            const blank = data.leadingBlankFrames || 0;
+            const activeFrames = totalFrames - blank;
+            const isCrossfadeActive = data.loop && !data.pingpong && data.crossfadeFrames > 0 && activeFrames > data.crossfadeFrames;
+            
+            if (isCrossfadeActive) {
+                const cfStart = totalFrames - data.crossfadeFrames;
+                if (currentFrame >= cfStart && currentFrame < totalFrames) {
+                    const cfIndex = currentFrame - cfStart;
+                    underlayFrame = blank + cfIndex; // 先頭フレームを正順で下に敷く (alpha = 1.0)
+                    overlayFrame = currentFrame;     // 現在のフレームを上に重ねる (alpha = 1.0 -> 0.0)
+                    overlayAlpha = 1.0 - (cfIndex + 1) / (data.crossfadeFrames + 1);
+                }
+            }
+            
+            if (underlayFrame !== -1) {
+                // クロスフェード中: 先頭フレームを不透明で下に描画し、その上に現在のフレームをフェードアウトで重ねる (背景透過を防ぐ)
+                drawFrame(underlayFrame, 1.0);
+                drawFrame(overlayFrame, overlayAlpha);
+            } else {
+                // 通常時: 現在のフレームを不透明で描画
+                drawFrame(currentFrame, 1.0);
+            }
+            
+            if (selectGridView.value === 'on') {
+                const cx = canvas.width / 2, cy = canvas.height / 2;
+                ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+                ctx.beginPath();
+                ctx.moveTo(cx, 0); ctx.lineTo(cx, canvas.height);
+                ctx.moveTo(0, cy); ctx.lineTo(canvas.width, cy);
+                ctx.stroke();
+            }
+        }
+
+        function rebuildTimeline() {
+            const data = config[currentKey];
+            const totalFrames = getTotalFrames(data);
+            const blank = data.leadingBlankFrames || 0;
+            timelineTicks.innerHTML = '';
+            for (let i = 0; i < totalFrames; i++) {
+                const tick = document.createElement('div');
+                tick.className = 'tick';
+                tick.style.left = frameToPercent(i, totalFrames) + '%';
+                if (totalFrames <= 25 || i % 5 === 0 || i === totalFrames - 1)
+                    tick.setAttribute('data-frame', i + 1);
+                timelineTicks.appendChild(tick);
+            }
+            blankZone.style.width = (blank > 0 && totalFrames > 1)
+                ? (frameToPercent(blank - 1, totalFrames) + 1) + '%' : '0%';
+            rebuildKfMarkers();
+            rebuildSeMarkers();
+            updateTimelineUI();
+        }
+
+        function rebuildKfMarkers() {
+            posTrack.querySelectorAll('.kf-marker').forEach(el => el.remove());
+            const data = config[currentKey];
+            if (!data.positionKeyframes) return;
+            const totalFrames = getTotalFrames(data);
+            data.positionKeyframes.forEach((kf, idx) => {
+                const marker = document.createElement('div');
+                marker.className = 'kf-marker' + (idx === selectedKfIndex ? ' selected' : '');
+                marker.style.left = frameToPercent(kf.frame, totalFrames) + '%';
+                marker.dataset.kfIdx = idx;
+                marker.addEventListener('mousedown', (e) => {
+                    e.stopPropagation(); selectKf(idx); startKfDrag(e, idx);
+                });
+                marker.addEventListener('contextmenu', (e) => { e.preventDefault(); deleteKf(idx); });
+                posTrack.appendChild(marker);
+            });
+        }
+
+        function rebuildSeMarkers() {
+            seTrack.querySelectorAll('.se-marker').forEach(el => el.remove());
+            const data = config[currentKey];
+            if (!Array.isArray(data.audioKeyframes)) return;
+            const totalFrames = getTotalFrames(data);
+            data.audioKeyframes.forEach((akf, idx) => {
+                const marker = document.createElement('div');
+                marker.className = 'se-marker' + (idx === selectedSeKfIndex ? ' selected' : '');
+                marker.style.left = frameToPercent(akf.frame, totalFrames) + '%';
+                marker.dataset.seKfIdx = idx;
+                marker.textContent = '🎵';
+                marker.addEventListener('mousedown', (e) => {
+                    e.stopPropagation(); selectSeKf(idx); startSeKfDrag(e, idx);
+                });
+                marker.addEventListener('contextmenu', (e) => { e.preventDefault(); deleteSeKf(idx); });
+                seTrack.appendChild(marker);
+            });
+        }
+
+        function updateTimelineUI() {
+            const data = config[currentKey];
+            const totalFrames = getTotalFrames(data);
+            playhead.style.left = frameToPercent(currentFrame, totalFrames) + '%';
+            
+            posTrack.querySelectorAll('.kf-marker').forEach(el => {
+                const idx = parseInt(el.dataset.kfIdx);
+                const kf = data.positionKeyframes[idx];
+                if (kf) el.style.left = frameToPercent(kf.frame, totalFrames) + '%';
+                el.classList.toggle('selected', idx === selectedKfIndex);
+            });
+            
+            seTrack.querySelectorAll('.se-marker').forEach(el => {
+                const idx = parseInt(el.dataset.seKfIdx);
+                const akf = data.audioKeyframes[idx];
+                if (akf) el.style.left = frameToPercent(akf.frame, totalFrames) + '%';
+                el.classList.toggle('selected', idx === selectedSeKfIndex);
+            });
+            
+            updateOverlay();
+        }
+        function updateOverlay() {
+            const data = config[currentKey];
+            const totalFrames = getTotalFrames(data);
+            const pos = interpolatePosition(data.positionKeyframes, currentFrame);
+            overlayOffset.textContent = 'X: ' + pos.x.toFixed(1) + ', Y: ' + pos.y.toFixed(1);
+            overlayScale.textContent = data.scale.toFixed(2) + 'x';
+            overlayFrame.textContent = (currentFrame + 1) + ' / ' + totalFrames;
+            const kfs = data.positionKeyframes;
+            if (kfs && kfs[selectedKfIndex]) {
+                const kf = kfs[selectedKfIndex];
+                overlayKf.textContent = 'F' + (kf.frame + 1) + ' (X:' + kf.offsetX.toFixed(0) + ', Y:' + kf.offsetY.toFixed(0) + ')';
+            } else overlayKf.textContent = 'なし';
+        }
+
+        function selectKf(idx) { selectedKfIndex = idx; updateKfList(); updateTimelineUI(); }
+        function addKfAtCurrentFrame() {
+            const data = config[currentKey];
+            const pos = interpolatePosition(data.positionKeyframes, currentFrame);
+            const existing = data.positionKeyframes.findIndex(k => k.frame === currentFrame);
+            if (existing >= 0) {
+                data.positionKeyframes[existing].offsetX = pos.x;
+                data.positionKeyframes[existing].offsetY = pos.y;
+                selectedKfIndex = existing;
+            } else {
+                data.positionKeyframes.push({ frame: currentFrame, offsetX: pos.x, offsetY: pos.y });
+                data.positionKeyframes.sort((a, b) => a.frame - b.frame);
+                selectedKfIndex = data.positionKeyframes.findIndex(k => k.frame === currentFrame);
+            }
+            rebuildTimeline(); updateKfList(); pushHistory(); saveToLocalStorage();
+        }
+        function deleteKf(idx) {
+            const data = config[currentKey];
+            if (data.positionKeyframes.length <= 1) { alert('最後のキーフレームは削除できません。'); return; }
+            data.positionKeyframes.splice(idx, 1);
+            selectedKfIndex = Math.min(selectedKfIndex, data.positionKeyframes.length - 1);
+            rebuildTimeline(); updateKfList(); pushHistory(); saveToLocalStorage();
+        }
+        function updateKfList() {
+            const data = config[currentKey];
+            kfList.innerHTML = '';
+            if (!data.positionKeyframes) return;
+            data.positionKeyframes.forEach((kf, idx) => {
+                const item = document.createElement('div');
+                item.className = 'kf-item' + (idx === selectedKfIndex ? ' selected' : '');
+                item.innerHTML =
+                    '<div class="kf-frame-badge">F' + (kf.frame + 1) + '</div>' +
+                    '<div class="kf-coords">X: ' + kf.offsetX.toFixed(1) + ' / Y: ' + kf.offsetY.toFixed(1) + '</div>' +
+                    '<div class="kf-del" data-idx="' + idx + '" title="削除">×</div>';
+                item.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('kf-del')) return;
+                    selectKf(idx); currentFrame = kf.frame; draw(); updateTimelineUI();
+                });
+                item.querySelector('.kf-del').addEventListener('click', () => deleteKf(idx));
+                kfList.appendChild(item);
+            });
+        }
+
+        // SE keyframe operations
+        function selectSeKf(idx) {
+            selectedSeKfIndex = idx;
+            updateSeKfList();
+            updateTimelineUI();
+            
+            const data = config[currentKey];
+            if (idx >= 0 && data.audioKeyframes && data.audioKeyframes[idx]) {
+                const akf = data.audioKeyframes[idx];
+                selectedSeKfPanel.style.display = 'block';
+                editSeAudio.value = akf.audio;
+                selectAudio.value = akf.audio; // メインのドロップダウンも同期
+                editSeVolume.value = akf.volume !== undefined ? akf.volume : 1.0;
+                valEditSeVolume.textContent = Math.round(parseFloat(editSeVolume.value) * 100) + '%';
+                editSeRate.value = akf.playbackRate !== undefined ? akf.playbackRate : 1.0;
+                valEditSeRate.textContent = parseFloat(editSeRate.value).toFixed(2) + 'x';
+                
+                // 選択時に試聴再生
+                playSeTest(akf.audio, akf.volume, akf.playbackRate);
+            } else {
+                selectedSeKfPanel.style.display = 'none';
+            }
+        }
+        function addSeKfAtCurrentFrame() {
+            const data = config[currentKey];
+            if (!Array.isArray(data.audioKeyframes)) data.audioKeyframes = [];
+            const audioSrc = selectAudio.value || "../assets/audio/se/0010_slash_light.mp3";
+            data.audioKeyframes.push({
+                frame: currentFrame,
+                audio: audioSrc,
+                volume: 1.0,
+                playbackRate: 1.0
+            });
+            data.audioKeyframes.sort((a, b) => a.frame - b.frame);
+            selectedSeKfIndex = data.audioKeyframes.findIndex(k => k.frame === currentFrame && k.audio === audioSrc);
+            
+            rebuildTimeline(); selectSeKf(selectedSeKfIndex); pushHistory(); saveToLocalStorage();
+        }
+        function deleteSeKf(idx) {
+            const data = config[currentKey];
+            if (!Array.isArray(data.audioKeyframes)) return;
+            data.audioKeyframes.splice(idx, 1);
+            if (selectedSeKfIndex === idx) {
+                selectedSeKfIndex = data.audioKeyframes.length > 0 ? 0 : -1;
+            } else if (selectedSeKfIndex > idx) {
+                selectedSeKfIndex--;
+            }
+            rebuildTimeline(); selectSeKf(selectedSeKfIndex); pushHistory(); saveToLocalStorage();
+        }
+        function updateSeKfList() {
+            const data = config[currentKey];
+            seKfList.innerHTML = '';
+            if (!Array.isArray(data.audioKeyframes)) return;
+            data.audioKeyframes.forEach((akf, idx) => {
+                const item = document.createElement('div');
+                item.className = 'kf-item' + (idx === selectedSeKfIndex ? ' selected' : '');
+                const fileName = akf.audio ? akf.audio.split('/').pop() : '未設定';
+                const rateText = akf.playbackRate ? akf.playbackRate.toFixed(2) + 'x' : '1.00x';
+                const volText = Math.round((akf.volume !== undefined ? akf.volume : 1.0) * 100) + '%';
+                item.innerHTML =
+                    '<div class="kf-frame-badge" style="background:#ffc107;">F' + (akf.frame + 1) + '</div>' +
+                    '<div class="kf-coords">' + fileName + ' (' + volText + ', ' + rateText + ')</div>' +
+                    '<div class="kf-del" data-idx="' + idx + '" title="削除">×</div>';
+                item.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('kf-del')) return;
+                    selectSeKf(idx); currentFrame = akf.frame; draw(); updateTimelineUI();
+                });
+                item.querySelector('.kf-del').addEventListener('click', () => deleteSeKf(idx));
+                seKfList.appendChild(item);
+            });
+            
+            if (selectedSeKfIndex >= 0 && data.audioKeyframes && data.audioKeyframes[selectedSeKfIndex]) {
+                selectedSeKfPanel.style.display = 'block';
+            } else {
+                selectedSeKfPanel.style.display = 'none';
+            }
+        }
+
+        function startKfDrag(e, idx) { isDraggingKf = true; draggingKfIdx = idx; }
+        function startSeKfDrag(e, idx) { isDraggingSeKf = true; draggingSeKfIdx = idx; }
+
+        window.addEventListener('mousemove', (e) => {
+            if (isDraggingKf) {
+                const rect = timelineTrack.getBoundingClientRect();
+                const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+                const data = config[currentKey];
+                const totalFrames = getTotalFrames(data);
+                const targetFrame = percentToFrame(x / rect.width, totalFrames);
+                if (data.positionKeyframes[draggingKfIdx])
+                    data.positionKeyframes[draggingKfIdx].frame = targetFrame;
+                updateTimelineUI(); updateKfList();
+            }
+            if (isDraggingSeKf) {
+                const rect = timelineTrack.getBoundingClientRect();
+                const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+                const data = config[currentKey];
+                const totalFrames = getTotalFrames(data);
+                const targetFrame = percentToFrame(x / rect.width, totalFrames);
+                if (data.audioKeyframes[draggingSeKfIdx])
+                    data.audioKeyframes[draggingSeKfIdx].frame = targetFrame;
+                updateTimelineUI(); updateSeKfList();
+            }
+            if (isDragging) {
+                let dx = e.clientX - dragStart.x;
+                let dy = e.clientY - dragStart.y;
+                if (e.shiftKey) {
+                    if (Math.abs(dx) > Math.abs(dy)) dy = 0;
+                    else dx = 0;
+                }
+                let targetX = dragKfStart.x + dx;
+                let targetY = dragKfStart.y + dy;
+                if (e.ctrlKey || e.altKey) {
+                    targetX = Math.round(targetX / 10) * 10;
+                    targetY = Math.round(targetY / 10) * 10;
+                }
+                const data = config[currentKey];
+                if (data.positionKeyframes && data.positionKeyframes[selectedKfIndex]) {
+                    data.positionKeyframes[selectedKfIndex].offsetX = targetX;
+                    data.positionKeyframes[selectedKfIndex].offsetY = targetY;
+                }
+                draw(); updateOverlay(); updateKfList();
+            }
+        });
+        window.addEventListener('mouseup', () => {
+            if (isDraggingKf) {
+                const draggedKf = config[currentKey].positionKeyframes[draggingKfIdx];
+                isDraggingKf = false; draggingKfIdx = -1;
+                config[currentKey].positionKeyframes.sort((a, b) => a.frame - b.frame);
+                if (draggedKf) {
+                    selectedKfIndex = config[currentKey].positionKeyframes.indexOf(draggedKf);
+                }
+                rebuildTimeline(); selectKf(selectedKfIndex); pushHistory(); saveToLocalStorage();
+            }
+            if (isDraggingSeKf) {
+                const draggedAkf = config[currentKey].audioKeyframes[draggingSeKfIdx];
+                isDraggingSeKf = false; draggingSeKfIdx = -1;
+                config[currentKey].audioKeyframes.sort((a, b) => a.frame - b.frame);
+                if (draggedAkf) {
+                    selectedSeKfIndex = config[currentKey].audioKeyframes.indexOf(draggedAkf);
+                }
+                rebuildTimeline(); selectSeKf(selectedSeKfIndex); pushHistory(); saveToLocalStorage();
+            }
+            if (isDragging) { isDragging = false; pushHistory(); saveToLocalStorage(); }
+        });
+
+        container.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            dragStart.x = e.clientX; dragStart.y = e.clientY;
+            const data = config[currentKey];
+            const kf = data.positionKeyframes && data.positionKeyframes[selectedKfIndex];
+            dragKfStart.x = kf ? kf.offsetX : 0;
+            dragKfStart.y = kf ? kf.offsetY : 0;
+        });
+        container.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const data = config[currentKey];
+            data.scale = e.deltaY < 0 ? Math.min(10.0, data.scale * 1.1) : Math.max(0.2, data.scale / 1.1);
+            draw(); updateOverlay(); pushHistory(); saveToLocalStorage();
+        }, { passive: false });
+
+        timelineTrack.addEventListener('click', (e) => {
+            if (isDraggingSeKf || isDraggingKf) return;
+            const rect = timelineTrack.getBoundingClientRect();
+            const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+            const data = config[currentKey];
+            currentFrame = percentToFrame(x / rect.width, getTotalFrames(data));
+            draw(); updateTimelineUI();
+        });
+
+        function playSeTest(audioPath, volume = 1.0, rate = 1.0) {
+            if (!audioPath) return;
+            const aud = new Audio(audioPath);
+            aud.volume = typeof volume === 'number' ? volume : 1.0;
+            aud.playbackRate = typeof rate === 'number' ? rate : 1.0;
+            aud.play().catch(() => {});
+        }
+
+        function playAudioAtFrame(frame) {
+            const data = config[currentKey];
+            if (!data || !Array.isArray(data.audioKeyframes)) return;
+            data.audioKeyframes.forEach(akf => {
+                if (akf.frame === frame && akf.audio) {
+                    const audioInstance = new Audio(akf.audio);
+                    audioInstance.volume = typeof akf.volume === 'number' ? akf.volume : 1.0;
+                    audioInstance.playbackRate = typeof akf.playbackRate === 'number' ? akf.playbackRate : 1.0;
+                    audioInstance.play().catch(() => {});
+                }
+            });
+        }
+
+        function tickAnimation(timestamp) {
+            if (!isPlaying) return;
+            const data = config[currentKey];
+            let intervalMultiplier = 1.0;
+            if (data.pingpong && typeof data.pingpongEase === 'number' && data.pingpongEase > 0) {
+                const totalFrames = getTotalFrames(data);
+                if (totalFrames > 1) {
+                    // 折り返し地点 (0 と totalFrames - 1) までの距離を算出
+                    const distToEdge = Math.min(currentFrame, (totalFrames - 1) - currentFrame);
+                    if (distToEdge === 0) {
+                        // 端点フレーム: 滞在時間を最大 1.8倍 に引き延ばす
+                        intervalMultiplier = 1.0 + 0.8 * data.pingpongEase;
+                    } else if (distToEdge === 1) {
+                        // 1フレーム手前: 滞在時間を最大 1.4倍 に引き延ばす
+                        intervalMultiplier = 1.0 + 0.4 * data.pingpongEase;
+                    } else if (distToEdge === 2) {
+                        // 2フレーム手前: 滞在時間を最大 1.15倍 に引き延ばす
+                        intervalMultiplier = 1.0 + 0.15 * data.pingpongEase;
+                    }
+                }
+            }
+            const interval = (1000 / (parseInt(data.fps) || 12)) * intervalMultiplier;
+            
+            // 再生開始（最初のフレーム）の瞬間に、現在のフレームに配置された音を即時再生
+            if (!lastFrameTime) {
+                lastFrameTime = timestamp;
+                playAudioAtFrame(currentFrame);
+            }
+            
+            const elapsed = timestamp - lastFrameTime;
+            if (elapsed >= interval) {
+                const totalFrames = getTotalFrames(data);
+                const framesToAdvance = Math.floor(elapsed / interval);
+                
+                let nextFrame = currentFrame;
+                for (let f = 0; f < framesToAdvance; f++) {
+                    if (data.pingpong) {
+                        nextFrame = nextFrame + loopDirection;
+                        if (nextFrame >= totalFrames) {
+                            if (totalFrames > 1) {
+                                loopDirection = -1;
+                                nextFrame = totalFrames - 2;
+                            } else {
+                                nextFrame = 0;
+                            }
+                        } else if (nextFrame < 0) {
+                            if (data.loop) {
+                                loopDirection = 1;
+                                nextFrame = Math.min(1, totalFrames - 1);
+                            } else {
+                                isPlaying = false;
+                                document.getElementById('btn-play').textContent = '▶ 再生';
+                                nextFrame = 0;
+                                break;
+                            }
+                        }
+                    } else {
+                        nextFrame = nextFrame + 1;
+                        if (nextFrame >= totalFrames) {
+                            if (data.loop) { nextFrame = 0; }
+                            else {
+                                isPlaying = false;
+                                document.getElementById('btn-play').textContent = '▶ 再生';
+                                nextFrame = totalFrames - 1;
+                                break;
+                            }
+                        }
+                    }
+                }
+                currentFrame = nextFrame;
+                lastFrameTime = timestamp - (elapsed % interval);
+                
+                if (isPlaying) {
+                    playAudioAtFrame(currentFrame);
+                }
+                
+                draw(); updateTimelineUI();
+            }
+            animationId = requestAnimationFrame(tickAnimation);
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'z') { e.preventDefault(); undo(); }
+            else if (e.ctrlKey && e.key === 'y') { e.preventDefault(); redo(); }
+            else if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'SELECT' || document.activeElement.tagName === 'TEXTAREA') {
+                    return;
+                }
+                e.preventDefault();
+                const data = config[currentKey];
+                if (data.positionKeyframes && data.positionKeyframes[selectedKfIndex]) {
+                    const kf = data.positionKeyframes[selectedKfIndex];
+                    const step = e.shiftKey ? 10 : 1;
+                    if (e.key === 'ArrowUp') kf.offsetY -= step;
+                    if (e.key === 'ArrowDown') kf.offsetY += step;
+                    if (e.key === 'ArrowLeft') kf.offsetX -= step;
+                    if (e.key === 'ArrowRight') kf.offsetX += step;
+                    draw(); updateOverlay(); updateKfList();
+                }
+            }
+        });
+        window.addEventListener('keyup', (e) => {
+            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'SELECT' || document.activeElement.tagName === 'TEXTAREA') {
+                    return;
+                }
+                pushHistory(); saveToLocalStorage();
+            }
+        });
+        document.getElementById('btn-undo').addEventListener('click', undo);
+        document.getElementById('btn-redo').addEventListener('click', redo);
+        function pauseAllVideos() {
+            spriteImages.forEach(img => {
+                if (img && img.isVideo && img.element) {
+                    img.element.pause();
+                }
+            });
+        }
+        document.getElementById('btn-play').addEventListener('click', () => {
+            if (isPlaying) {
+                isPlaying = false; document.getElementById('btn-play').textContent = '▶ 再生';
+                pauseAllVideos();
+                cancelAnimationFrame(animationId);
+            } else {
+                isPlaying = true; document.getElementById('btn-play').textContent = '⏸ 一時停止';
+                lastFrameTime = 0; animationId = requestAnimationFrame(tickAnimation);
+            }
+        });
+        document.getElementById('btn-stop').addEventListener('click', () => {
+            isPlaying = false; document.getElementById('btn-play').textContent = '▶ 再生';
+            pauseAllVideos();
+            cancelAnimationFrame(animationId); currentFrame = 0; draw(); updateTimelineUI();
+        });
+        document.getElementById('btn-prev').addEventListener('click', () => {
+            isPlaying = false; document.getElementById('btn-play').textContent = '▶ 再生';
+            pauseAllVideos();
+            cancelAnimationFrame(animationId);
+            const totalFrames = getTotalFrames(config[currentKey]);
+            currentFrame = (currentFrame - 1 + totalFrames) % totalFrames;
+            draw(); updateTimelineUI();
+        });
+        document.getElementById('btn-next').addEventListener('click', () => {
+            isPlaying = false; document.getElementById('btn-play').textContent = '▶ 再生';
+            pauseAllVideos();
+            cancelAnimationFrame(animationId);
+            currentFrame = (currentFrame + 1) % getTotalFrames(config[currentKey]);
+            draw(); updateTimelineUI();
+        });
+        document.getElementById('btn-trigger-se').addEventListener('click', () => {
+            const data = config[currentKey];
+            if (!data || !Array.isArray(data.audioKeyframes)) return;
+            if (selectedSeKfIndex >= 0 && data.audioKeyframes[selectedSeKfIndex]) {
+                const akf = data.audioKeyframes[selectedSeKfIndex];
+                playSeTest(akf.audio, akf.volume, akf.playbackRate);
+            } else {
+                data.audioKeyframes.forEach(akf => {
+                    if (akf.frame === currentFrame && akf.audio) {
+                        playSeTest(akf.audio, akf.volume, akf.playbackRate);
+                    }
+                });
+            }
+        });
+        document.getElementById('btn-reset-pos').addEventListener('click', () => {
+            config[currentKey].positionKeyframes = [{ frame: 0, offsetX: 0, offsetY: 0 }];
+            config[currentKey].scale = 2.0;
+            selectedKfIndex = 0;
+            rebuildTimeline(); updateKfList(); draw(); updateOverlay(); pushHistory(); saveToLocalStorage();
+        });
+        
+        document.getElementById('btn-add-kf').addEventListener('click', addKfAtCurrentFrame);
+        document.getElementById('btn-add-se-kf').addEventListener('click', addSeKfAtCurrentFrame);
+        
+        selectImage.addEventListener('change', () => {
+            config[currentKey].images = [selectImage.value]; loadImages(config[currentKey].images); pushHistory(); saveToLocalStorage();
+        });
+        
+        selectAudio.addEventListener('change', () => {
+            const data = config[currentKey];
+            if (!Array.isArray(data.audioKeyframes)) data.audioKeyframes = [];
+            
+            // 選択中の音声キーフレームがある場合はその音声を変更
+            if (selectedSeKfIndex >= 0 && data.audioKeyframes[selectedSeKfIndex]) {
+                data.audioKeyframes[selectedSeKfIndex].audio = selectAudio.value;
+                rebuildTimeline();
+                selectSeKf(selectedSeKfIndex);
+                pushHistory();
+                saveToLocalStorage();
+            }
+        });
+        
+        gridCols.addEventListener('change', () => {
+            config[currentKey].cols = parseInt(gridCols.value) || 1;
+            currentFrame = 0; rebuildTimeline(); draw(); pushHistory(); saveToLocalStorage();
+        });
+        gridRows.addEventListener('change', () => {
+            config[currentKey].rows = parseInt(gridRows.value) || 1;
+            currentFrame = 0; rebuildTimeline(); draw(); pushHistory(); saveToLocalStorage();
+        });
+        inputBlankFrames.addEventListener('change', () => {
+            config[currentKey].leadingBlankFrames = Math.max(0, parseInt(inputBlankFrames.value) || 0);
+            currentFrame = 0; rebuildTimeline(); draw(); pushHistory(); saveToLocalStorage();
+        });
+        inputSkipFrames.addEventListener('change', () => {
+            config[currentKey].trailingSkipFrames = Math.max(0, parseInt(inputSkipFrames.value) || 0);
+            currentFrame = 0; rebuildTimeline(); draw(); pushHistory(); saveToLocalStorage();
+        });
+        inputFps.addEventListener('change', () => {
+            const fpsVal = Math.max(1, parseInt(inputFps.value) || 12);
+            config[currentKey].fps = fpsVal;
+            document.getElementById('val-fps-display').textContent = fpsVal;
+            rebuildTimeline(); updateTimelineUI(); draw(); pushHistory(); saveToLocalStorage();
+        });
+        checkLoop.addEventListener('change', () => {
+            config[currentKey].loop = checkLoop.checked; pushHistory(); saveToLocalStorage();
+        });
+        checkPingpong.addEventListener('change', () => {
+            config[currentKey].pingpong = checkPingpong.checked; pushHistory(); saveToLocalStorage();
+        });
+        inputPingpongEase.addEventListener('input', () => {
+            const easeVal = parseFloat(inputPingpongEase.value);
+            config[currentKey].pingpongEase = easeVal;
+            valPingpongEase.textContent = Math.round(easeVal * 100) + '%';
+        });
+        inputPingpongEase.addEventListener('change', () => {
+            pushHistory(); saveToLocalStorage();
+        });
+        inputCrossfade.addEventListener('change', () => {
+            config[currentKey].crossfadeFrames = Math.max(0, parseInt(inputCrossfade.value) || 0);
+            draw(); pushHistory(); saveToLocalStorage();
+        });
+        selectGridView.addEventListener('change', () => { draw(); });
+        selectOnionSkin.addEventListener('change', () => { draw(); });
+        selectKey.addEventListener('change', () => {
+            currentKey = selectKey.value; selectedKfIndex = 0; selectedSeKfIndex = -1; currentFrame = 0; loadCurrentConfigValues();
+            saveToLocalStorage();
+        });
+        
+        // Edit current SE keyframe inputs
+        editSeAudio.addEventListener('change', () => {
+            const data = config[currentKey];
+            if (selectedSeKfIndex >= 0 && data.audioKeyframes[selectedSeKfIndex]) {
+                data.audioKeyframes[selectedSeKfIndex].audio = editSeAudio.value;
+                rebuildTimeline(); selectSeKf(selectedSeKfIndex); pushHistory(); saveToLocalStorage();
+            }
+        });
+        editSeVolume.addEventListener('input', () => {
+            const data = config[currentKey];
+            if (selectedSeKfIndex >= 0 && data.audioKeyframes[selectedSeKfIndex]) {
+                const vol = parseFloat(editSeVolume.value);
+                data.audioKeyframes[selectedSeKfIndex].volume = vol;
+                valEditSeVolume.textContent = Math.round(vol * 100) + '%';
+            }
+        });
+        editSeVolume.addEventListener('change', () => { pushHistory(); saveToLocalStorage(); updateSeKfList(); });
+        editSeRate.addEventListener('input', () => {
+            const data = config[currentKey];
+            if (selectedSeKfIndex >= 0 && data.audioKeyframes[selectedSeKfIndex]) {
+                const rate = parseFloat(editSeRate.value);
+                data.audioKeyframes[selectedSeKfIndex].playbackRate = rate;
+                valEditSeRate.textContent = rate.toFixed(2) + 'x';
+            }
+        });
+        editSeRate.addEventListener('change', () => { pushHistory(); saveToLocalStorage(); updateSeKfList(); });
+
+        document.getElementById('btn-add-key').addEventListener('click', () => {
+            const newKey = prompt('新しいアニメーションキーを入力してください：');
+            if (newKey && newKey.trim() !== '') {
+                if (config[newKey]) { alert('そのキーは既に存在します。'); return; }
+                config[newKey] = {
+                    images: [selectImage.value],
+                    cols: parseInt(gridCols.value) || 5, rows: parseInt(gridRows.value) || 5,
+                    leadingBlankFrames: 0,
+                    positionKeyframes: [{ frame: 0, offsetX: 0, offsetY: 0 }],
+                    audioKeyframes: [{ frame: 0, audio: selectAudio.value || "../assets/audio/se/0010_slash_light.mp3", volume: 1.0, playbackRate: 1.0 }],
+                    scale: 2.0, fps: parseInt(inputFps.value) || 12,
+                    loop: checkLoop.checked,
+                    pingpong: checkPingpong.checked,
+                    crossfadeFrames: parseInt(inputCrossfade.value) || 0
+                };
+                currentKey = newKey; selectedKfIndex = 0; selectedSeKfIndex = 0; currentFrame = 0;
+                updateKeyDropdown(); loadCurrentConfigValues(); pushHistory(); saveToLocalStorage();
+            }
+        });
+        document.getElementById('btn-del-key').addEventListener('click', () => {
+            const keys = Object.keys(config);
+            if (keys.length <= 1) { alert('最後のアニメーションは削除できません。'); return; }
+            if (confirm('アニメーション「' + currentKey + '」を削除しますか？')) {
+                delete config[currentKey];
+                currentKey = Object.keys(config)[0];
+                selectedKfIndex = 0; selectedSeKfIndex = -1; currentFrame = 0;
+                updateKeyDropdown(); loadCurrentConfigValues(); pushHistory(); saveToLocalStorage();
+            }
+        });
+        document.getElementById('btn-export').addEventListener('click', () => {
+            const a = document.createElement('a');
+            a.href = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(config, null, 2));
+            a.download = 'animation_settings.json'; a.click();
+        });
+        const fileInput = document.getElementById('file-input');
+        document.getElementById('btn-import').addEventListener('click', () => { fileInput.click(); });
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const parsed = JSON.parse(event.target.result);
+                    if (typeof parsed === 'object' && parsed !== null) {
+                        config = parsed;
+                        migrateConfig(config); normalizeConfigAssetPaths(config);
+                        currentKey = Object.keys(config)[0] || 'slash';
+                        selectedKfIndex = 0; selectedSeKfIndex = -1; currentFrame = 0;
+                        updateKeyDropdown(); loadCurrentConfigValues();
+                        pushHistory(); saveToLocalStorage();
+                        alert('設定ファイルを正常に読み込みました。');
+                    } else { alert('無効なJSONフォーマットです。'); }
+                } catch(err) { alert('JSONのパースに失敗しました。'); }
+            };
+            reader.readAsText(file);
+        });
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
+            localStorage.setItem('sprite_tester_theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+        });
+        document.getElementById('btn-clear-cache').addEventListener('click', () => {
+            if (confirm('保存されているカスタム設定（キーフレーム、分割数、ブレンドフレーム数等）を全て消去し、初期状態にリセットしますか？')) {
+                localStorage.removeItem('sprite_tester_config');
+                localStorage.removeItem('sprite_tester_current_key');
+                alert('設定をリセットしました。');
+                location.reload();
+            }
+        });
+        const savedTheme = localStorage.getItem('sprite_tester_theme');
+        if (savedTheme === 'light') document.body.classList.add('light-theme');
+        window.addEventListener('resize', resizeCanvas);
+
+        // DOMバインド完了後にlocalStorageから安全にロード
+        const savedConfig = localStorage.getItem('sprite_tester_config');
+        if (savedConfig) {
+            try {
+                const parsed = JSON.parse(savedConfig);
+                if (parsed && typeof parsed === 'object' && Object.keys(parsed).length > 0) {
+                    migrateConfig(parsed);
+                    normalizeConfigAssetPaths(parsed);
+                    
+                    // アセット画像から自動生成された最新のconfigをベースに、ユーザーの変更値のみをマージ
+                    Object.keys(config).forEach(key => {
+                        if (parsed[key]) {
+                            const p = parsed[key];
+                            // 位置KFのマージ
+                            if (p.positionKeyframes && p.positionKeyframes.length > 0) {
+                                config[key].positionKeyframes = p.positionKeyframes;
+                            }
+                            // 音声KFのマージ
+                            if (p.audioKeyframes && p.audioKeyframes.length > 0) {
+                                // 古いデータで音声が defaultAudio (0010_slash_light.mp3) に固定されており、
+                                // 最新の config[key] にはアセットスキャンによる正しい音声が設定されている場合、
+                                // ユーザーが明示的に変更していない（frameが0、かつ音量・速度がデフォルト）であれば、自動マッチングされた正しい音声のままにする
+                                const initialAkf = config[key].audioKeyframes[0];
+                                const hasUserEdit = p.audioKeyframes.some(akf => 
+                                    akf.frame !== 0 || 
+                                    akf.volume !== 1.0 || 
+                                    akf.playbackRate !== 1.0 ||
+                                    (initialAkf && akf.audio !== initialAkf.audio && akf.audio !== "../assets/audio/se/0010_slash_light.mp3")
+                                );
+                                
+                                if (hasUserEdit || !initialAkf) {
+                                    config[key].audioKeyframes = p.audioKeyframes;
+                                }
+                            }
+                            if (p.images && p.images.length > 0) {
+                                const initialImages = config[key] ? config[key].images : null;
+                                if (initialImages && initialImages.length > p.images.length) {
+                                    // 最新のアセットスキャン結果に存在する画像数の方が多い場合は、最新を優先
+                                } else {
+                                    config[key].images = p.images;
+                                }
+                            }
+                            if (typeof p.scale === 'number') config[key].scale = p.scale;
+                            if (typeof p.fps === 'number') config[key].fps = p.fps;
+                            if (typeof p.leadingBlankFrames === 'number') config[key].leadingBlankFrames = p.leadingBlankFrames;
+                            if (typeof p.trailingSkipFrames === 'number') config[key].trailingSkipFrames = p.trailingSkipFrames;
+                            if (typeof p.cols === 'number') config[key].cols = p.cols;
+                            if (typeof p.rows === 'number') config[key].rows = p.rows;
+                            if (typeof p.loop === 'boolean') config[key].loop = p.loop;
+                            if (typeof p.pingpong === 'boolean') config[key].pingpong = p.pingpong;
+                            if (typeof p.pingpongEase === 'number') config[key].pingpongEase = p.pingpongEase;
+                            if (typeof p.crossfadeFrames === 'number') config[key].crossfadeFrames = p.crossfadeFrames;
+                        }
+                    });
+                }
+            } catch(e) { console.error('Failed to parse saved config', e); }
+        }
+        const savedKey = localStorage.getItem('sprite_tester_current_key');
+        if (savedKey && config[savedKey]) {
+            currentKey = savedKey;
+        } else {
+            currentKey = Object.keys(config)[0] || 'slash';
+        }
+        if (!config[currentKey]) {
+            config[currentKey] = {
+                images: ["../assets/images/anime/0010_slash_light_5x5.webp"],
+                cols: 5, rows: 5,
+                leadingBlankFrames: 0,
+                positionKeyframes: [{ frame: 0, offsetX: 0, offsetY: 0 }],
+                audioKeyframes: [{ frame: 4, audio: "../assets/audio/se/0010_slash_light.mp3", volume: 1.0, playbackRate: 1.0 }],
+                scale: 2.0, fps: 12, loop: true, pingpong: false, pingpongEase: 0.0, crossfadeFrames: 0
+            };
+        }
+        updateKeyDropdown();
+        pushHistory();
+        loadCurrentConfigValues();
+    </script>
+</body>
+</html>

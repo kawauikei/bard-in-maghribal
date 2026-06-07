@@ -1,0 +1,691 @@
+ICON_SHEET_META
+tile_size=128
+columns=8
+rows=8
+index_rule=index is left-to-right, top-to-bottom
+col=index%8
+row=floor(index/8)
+
+A_UI_RESOURCE_RESULT_64
+0 ui.lock 閉じた南京錠
+1 ui.unlock 開いた南京錠
+2 ui.new NEW/新規バッジ
+3 ui.play 再生ボタン
+4 ui.replay リプレイ/ループ
+5 ui.close 閉じる/X
+6 ui.help ヘルプ/？
+7 ui.settings 設定/歯車
+8 ui.fullscreen 全画面
+9 ui.audio 音量
+10 ui.back 戻る/左矢印
+11 ui.next 次へ/右矢印
+12 ui.confirm 決定/チェック
+13 ui.cancel キャンセル/禁止
+14 ui.tips チップス/本
+15 ui.controls 操作/スライダー
+16 res.gold 金/コイン袋
+17 res.fame 名声/メダル
+18 res.growth 成長/結晶芽
+19 res.equipment 装備/盾剣
+20 res.upgrade 強化/宝石
+21 result.success 成功
+22 result.great_success 大成功
+23 result.failure 失敗
+24 item.key 鍵
+25 item.treasure_chest 宝箱
+26 item.scroll 巻物
+27 item.potion ポーション
+28 item.ring 指輪
+29 item.pendant ペンダント
+30 item.lantern ランタン
+31 item.spellbook 魔導書
+32 item.sword 剣
+33 item.shield 盾
+34 item.boots ブーツ
+35 item.gloves 手袋/篭手
+36 item.circlet サークレット/兜
+37 item.cloak 外套
+38 item.staff 杖
+39 item.orb オーブ/水晶
+40 music.frame_drum フレームドラム
+41 music.darbuka ダラブッカ
+42 music.oud ウード
+43 music.qanun カーヌーン
+44 song.march マーチ
+45 song.waltz ワルツ
+46 song.nocturne ノクターン
+47 theme.star_spirit 星霊
+48 attr.brave 勇猛
+49 attr.elegant 優美
+50 attr.mystic 神秘
+51 minigame.brave_debuff 勇猛デバフ
+52 minigame.elegant_judgement 優美判定
+53 minigame.mystic_crest 神秘紋章
+54 minigame.combo コンボ補助
+55 minigame.mystic_noise 神秘ノイズ
+56 region.capital 王都
+57 region.frontier_village 辺境の村
+68 region.labyrinth 迷宮
+59 region.port_town 港町
+60 event.escort 護衛
+61 event.performance 演奏
+62 event.ancient_song 古歌/遺物
+63 collection.archive コレクション/書庫
+
+B_ITEM_EQUIPMENT_64
+0 weapon.short_sword 短剣/短い剣
+1 weapon.curved_saber 曲刀
+2 weapon.ornate_dagger 装飾短剣
+3 weapon.spear 槍
+4 weapon.magic_staff 魔法杖
+5 weapon.battle_axe 斧
+6 weapon.war_hammer 戦槌
+7 weapon.bow 弓
+8 armor.round_shield 丸盾
+9 armor.kite_shield カイトシールド
+10 armor.buckler 小盾
+11 armor.light_helmet 軽兜
+12 armor.circlet サークレット
+13 armor.bracers 腕輪/腕防具
+14 armor.gloves 手袋
+15 armor.boots ブーツ
+16 equip.cloak 外套
+17 equip.sash_belt 帯/ベルト
+18 equip.robe ローブ
+19 equip.scarf スカーフ
+20 accessory.ring 指輪
+21 accessory.pendant ペンダント
+22 accessory.amulet アミュレット
+23 accessory.earrings イヤリング
+24 consumable.potion_red 赤ポーション
+25 consumable.potion_blue 青ポーション
+26 consumable.potion_green 緑ポーション
+27 consumable.medicine_vial 薬瓶
+28 consumable.food_basket 食料籠
+29 consumable.bread パン
+30 consumable.tea_cup 茶/カップ
+31 consumable.water_flask 水筒
+32 treasure.small_chest 小宝箱
+33 treasure.coin_pouch コイン袋
+34 treasure.gold_stack 金貨
+35 treasure.jewel_box 宝石箱
+36 gem.blue 青宝石
+37 gem.green 緑宝石
+38 gem.pearl_moonstone 真珠/月長石
+39 treasure.golden_goblet 金杯
+40 book.scroll 巻物
+41 book.sealed_scroll 封印巻物
+42 book.map 地図
+43 book.spellbook 魔導書
+44 book.old_grimoire 古い魔導書
+45 book.music_score 楽譜本
+46 book.notebook ノート
+47 book.sealed_letter 封書
+48 material.enhancement_crystal 強化結晶
+49 material.brave_shard 勇猛欠片
+50 material.elegant_shard 優美欠片
+51 material.mystic_shard 神秘欠片
+52 material.gold_gear 金歯車
+53 material.silver_gear 銀歯車
+54 material.magic_thread 魔法糸
+55 material.rune_stone ルーン石
+56 relic.ornate_key 装飾鍵
+57 relic.ancient_tablet 古代石板
+58 relic.mask 仮面
+59 relic.lantern ランタン
+60 relic.incense_burner 香炉
+61 relic.star_compass 星の羅針盤
+62 reward.sealed_bag 報酬袋
+63 reward.luxury_chest 豪華宝箱
+
+C_MUSIC_TAG_64
+0 instrument.frame_drum フレームドラム
+1 instrument.darbuka ダラブッカ
+2 instrument.oud ウード
+3 instrument.lute リュート
+4 instrument.qanun カーヌーン
+5 instrument.santur サントゥール
+6 instrument.bell ベル
+7 instrument.wind_chime ウィンドチャイム
+8 instrument.ney ネイ/笛
+9 music.tuning_fork 音叉
+10 music.metronome メトロノーム
+11 music.score_scroll 楽譜巻物
+12 music.songbook 歌本
+13 music.conductor_baton 指揮棒
+14 music.stage_lantern 舞台灯
+15 music.singing_charm 歌唱チャーム
+16 song.march マーチ
+17 song.anthem アンセム
+18 song.waltz ワルツ
+19 song.tango タンゴ
+20 song.nocturne ノクターン
+21 song.chant チャント
+22 song.festival 祝祭曲
+23 song.lullaby 子守歌
+24 theme.hot_sand 熱砂
+25 theme.rose 薔薇
+26 theme.star_spirit 星霊
+27 theme.wind 風
+28 theme.water 水
+29 theme.flame 炎
+30 theme.memory 記憶
+31 theme.dream 夢
+32 main_theme.sandstorm 砂嵐
+33 main_theme.triumph 凱旋
+34 main_theme.kingdom 王国
+35 main_theme.guard 護衛
+36 main_theme.duel 決闘
+37 main_theme.fortress 要塞
+38 main_theme.arena 闘技場
+39 main_theme.expedition 遠征
+40 main_theme.garden 花園
+41 main_theme.court 宮廷
+42 main_theme.festival 祝祭
+43 main_theme.dance 舞
+44 main_theme.salon 社交
+45 main_theme.trade 交易
+46 main_theme.rose_palace 薔薇宮
+47 main_theme.moon_dance 月舞
+48 main_theme.moon_night 月夜
+49 main_theme.ancient 古代
+50 main_theme.illusion 幻影
+51 main_theme.spirit 精霊
+52 main_theme.prayer 祈り
+53 main_theme.relic 遺物
+54 main_theme.omen 兆し
+55 main_theme.labyrinth_melody 迷宮旋律
+56 music.track_select 楽曲選択
+57 music.now_playing 再生中
+58 music.lyrics 歌詞
+59 music.bpm BPM/拍
+60 music.offset_timing タイミング補正
+61 music.difficulty 難度
+62 music.note_density ノーツ密度
+63 music.special_match 特効一致
+
+D_REGION_EVENT_64
+0 region.capital 王都
+1 region.frontier_village 辺境の村
+2 region.labyrinth 迷宮
+3 region.sage_tower 賢者の塔
+4 region.port_town 港町
+5 region.rock_fortress 巨岩の要塞
+6 region.silent_cathedral 静謐の聖堂
+7 region.brass_wilderness 真鍮の荒野
+8 region.forgotten_castle 忘れられた古城
+9 region.ancient_cemetery 太古の墓地
+10 region.noisy_arena 喧騒の闘技場
+11 region.green_hideaway 緑の隠れ里
+12 subregion.royal_palace 王宮
+13 subregion.jungle_path 密林道
+14 subregion.old_library 古書庫
+15 subregion.market_street 市場通り
+16 time.morning 朝
+17 time.noon 昼
+18 time.evening 夕方
+19 time.night 夜
+20 weather.clear 晴れ
+21 weather.sand_wind 砂風
+22 weather.mist 霧
+23 atmosphere.sacred_light 聖なる光
+24 event.escort 護衛
+25 event.rescue 救助
+26 event.subjugation 討伐
+27 event.duel 決闘
+28 event.defense 防衛
+29 event.expedition 遠征
+30 event.crisis 危機
+31 event.maze_investigation 迷宮調査
+32 event.performance 演奏
+33 event.dance 舞
+34 event.ceremony 祭礼
+35 event.festival 祝祭
+36 event.salon 社交
+37 event.trade_entertainment 交易興行
+38 event.reputation 評判
+39 event.banquet 宴席
+40 event.ancient_song 古歌
+41 event.spirit 精霊
+42 event.prayer 祈り
+43 event.dream 夢
+44 event.memory 記憶
+45 event.curse 呪い
+46 event.relic 遺物
+47 event.omen 兆し
+48 rank.daily rank1 日常
+49 rank.local_core rank2 地域中核
+50 rank.major rank3 大事件
+51 rank.world_truth rank4 世界核心
+52 risk.low 低リスク
+53 risk.medium 中リスク
+54 risk.high 高リスク
+55 reward.high 高報酬
+56 tier.tutorial チュートリアル
+57 tier.beginner 初心者
+58 tier.intermediate 中級
+59 tier.endgame 終盤
+60 tier.free_run 自由行
+61 scenario.unlock シナリオ解放
+62 scenario.clear シナリオクリア
+63 scenario.locked シナリオロック
+
+E_MINIGAME_64
+0 input.brave 勇猛入力
+1 input.elegant 優美入力
+2 input.mystic 神秘入力
+3 input.ready 入力可能
+4 input.cooldown クールダウン
+5 input.disabled 入力不可
+6 timing.perfect パーフェクトタイミング
+7 timing.bad バッドタイミング
+8 ult.ready ULT可能
+9 ult.used ULT使用済み
+10 support.song 支援歌
+11 support.charge 支援チャージ
+12 support.burst 支援バースト
+13 support.cooldown_reduce CD短縮
+14 support.auto 自動支援
+15 support.emergency 緊急支援
+16 brave.debuff.attack_down 攻撃力低下
+17 brave.debuff.range_down 攻撃範囲低下
+18 brave.debuff.interval_down 攻撃間隔悪化
+19 brave.debuff.stack_1 デバフ1
+20 brave.debuff.stack_2 デバフ2
+21 brave.debuff.stack_3 デバフ3
+22 brave.debuff.cleanse デバフ解除
+23 brave.debuff.immunity デバフ無効
+24 brave.wave.1 wave1
+25 brave.wave.2 wave2
+26 brave.wave.boss boss_wave
+27 brave.wave.clear wave突破
+28 brave.enemy_hp 敵HP
+29 brave.remaining_time 残り時間
+30 brave.frontline_advance 戦線前進
+31 brave.ally_attack 仲間攻撃
+32 brave.request.brave 勇猛支援要請
+33 brave.request.elegant 優美支援要請
+34 brave.request.mystic 神秘支援要請
+35 brave.request.cleanse 解除要請
+36 brave.request.buff 強化要請
+37 brave.request.guard 防御要請
+38 brave.request.rescue 救援要請
+39 brave.request.boss_target ボス標的
+40 elegant.judge.perfect PERFECT
+41 elegant.judge.great GREAT
+42 elegant.judge.good GOOD
+43 elegant.judge.bad BAD
+44 elegant.judge.miss MISS
+45 elegant.combo COMBO
+46 elegant.max_combo 最大COMBO
+47 elegant.fever FEVER
+48 elegant.note.brave 勇猛ノーツ
+49 elegant.note.elegant 優美ノーツ
+50 elegant.note.mystic 神秘ノーツ
+51 elegant.miss_stock ミス蓄積
+52 elegant.miss_cleanse ミス一ギャラ
+53 elegant.auto_perfect 自動PERFECT
+54 elegant.judgment_line 判定ライン
+55 elegant.ult_sweep ULT一掃
+56 mystic.gauge.brave 勇猛紋章ゲージ
+57 mystic.gauge.elegant 優美紋章ゲージ
+58 mystic.gauge.mystic 神秘紋章ゲージ
+59 mystic.gauge.stable 安定
+60 mystic.gauge.unstable 不安定
+61 mystic.gauge.collapse_warning 崩壊警告
+62 mystic.noise 神秘ノイズ
+63 mystic.noise_clear ノイズ軽減
+
+icon_sheet_01_minigame_ui
+0 play 再生
+1 pause 一時停止
+2 retry リトライ
+3 next 次へ
+4 back 戻る
+5 close 閉じる
+6 help ヘルプ
+7 settings 設定
+8 timer タイマー
+9 score スコア
+10 goal 目標
+11 combo コンボ
+12 reward 報酬
+13 bonus ボーナス
+14 warning 警告
+15 special_effect 特効
+16 highest_judgment 最高判定
+17 good_judgment 良判定
+18 miss ミス
+19 correct 正解
+20 wrong 不正解
+21 success 成功
+22 failure 失敗
+23 result リザルト
+24 brave_input 勇猛入力
+25 elegant_input 優美入力
+26 mystic_input 神秘入力
+27 three_attribute 三属性
+28 input_ready 入力可能
+29 input_locked 入力ロック
+30 timing_mark タイミング
+31 judgment_line 判定ライン
+32 brave_note 勇猛ノーツ
+33 elegant_note 優美ノーツ
+34 mystic_note 神秘ノーツ
+35 generic_note 汎用ノーツ
+36 buff_chance_note バフチャンスノーツ
+37 danger_note 危険ノーツ
+38 chain_note チェインノーツ
+39 finish_note フィニッシュノーツ
+40 enemy_hp 敵HP
+41 damage ダメージ
+42 hit 命中
+43 evasion 回避
+44 attack_up 攻撃上昇
+45 accuracy_up 命中上昇
+46 speed_up 速度上昇
+47 defeat 撃破
+48 rhythm リズム
+49 beat 拍
+50 tempo テンポ
+51 note_hit ノーツ成功
+52 note_miss ノーツ失敗
+53 sustain 継続
+54 focus 集中
+55 finale フィナーレ
+56 target_marker ターゲット
+57 guard ガード
+58 shield_break ガード破壊
+59 recovery 回復
+60 correct_point 正解点
+61 rhythm_point リズム点
+62 speed_point スピード点
+63 checkpoint チェックポイント
+
+icon_sheet_02_card_event_code
+0 region_marker 地域マーカー
+1 region_match 地域一致
+2 axis_match 属性一致
+3 special_effect_match 特効一致
+4 candidate 候補
+5 party 編成
+6 promotion 昇格
+7 story_unlock 短編解放
+8 brave_axis 勇猛属性
+9 elegant_axis 優美属性
+10 mystic_axis 神秘属性
+11 balanced_axis バランス
+12 random_setting ランダム設定
+13 fixed_setting 固定設定
+14 internal_bonus 内部ボーナス
+15 support_bonus 支援ボーナス
+16 capital 王都
+17 border_village 辺境の村
+18 labyrinth 迷宮
+19 sage_tower 賢者の塔
+20 harbor_town 港町
+21 rock_fortress 巨岩の要塞
+22 quiet_sanctuary 静謐の聖堂
+23 brass_wasteland 真鍮の荒野
+24 forgotten_castle 忘れられた古城
+25 ancient_graveyard 太古の墓地
+26 noisy_arena 喧騒の闘技場
+27 hidden_green_village 緑の隠れ里
+28 escort 護衛
+29 rescue 救助
+30 defense 防衛
+31 subjugation 討伐
+32 duel 決闘
+33 expedition 探索同行
+34 performance 演奏
+35 dance 舞
+36 ceremony 儀礼
+37 festival 祭り
+38 salon 夜会
+39 trade_entertainment 商談興行
+40 reputation 評判
+41 ancient_song 古歌
+42 spirit 精霊
+43 prayer 祈り
+44 dream 夢
+45 memory 記憶
+46 curse 呪い
+47 relic 遺物
+48 omen 予兆
+49 crisis 危機/災害
+50 rumor 噂/導線
+51 special_shop 特殊：買い物/強化
+52 special_luck 特殊：幸運
+53 special_misfortune 特殊：不運
+54 special_rumor 特殊：ヒント
+55 special_wander 特殊：不思議な出会い
+56 rank1_daily rank1 土地の日常
+57 rank2_core rank2 地域の中核
+58 rank3_high rank3 高位依頼
+59 rank4_truth rank4 世界核心
+60 rare_event レエアベント
+61 route_hint ルート導線
+62 requirement_met 条件達成
+63 requirement_unmet 条件未達
+
+icon_sheet_03_music_bonus_code
+0 track_card 楽曲カード
+1 instrument_slot 楽器スロット
+2 song_type_slot 曲種スロット
+3 theme_slot テーマスロット
+4 full_request_match 全リクエスト一致
+5 two_request_match 2要素一致
+6 one_request_match 1要素一致
+7 no_request_match 一致なし
+8 track_candidate 楽曲候補
+9 track_selected 楽曲採用
+10 track_compare 楽曲比較
+11 track_reroll 楽曲再抽選
+12 track_lock 楽曲固定
+13 surface_side 表面コード
+14 reverse_side 裏面コード
+15 request_bonus リクエストボーナス
+16 instrument_101 101 フレームドラム
+17 instrument_102 102 エレキギター
+18 instrument_201 201 ウード
+19 instrument_202 202 ピアノ
+20 instrument_301 301 カーヌーン
+21 instrument_302 302 チェレスタ
+22 instrument_401 401 ブラスセクション
+23 instrument_402 402 ティンパニ
+24 instrument_501 501 カマンチェ
+25 instrument_502 502 アコーディオン
+26 instrument_601 601 チェロ
+27 instrument_602 602 グロッケンシュピール
+28 song_type_111 111 マーチ
+29 song_type_112 112 アンセム
+30 song_type_211 211 ワルツ
+31 song_type_212 212 タンゴ
+32 song_type_311 311 ノクターン
+33 song_type_312 312 チャント
+34 song_type_411 411 アユーブ
+35 song_type_412 412 サイディ
+36 song_type_511 511 十拍サマアイ
+37 song_type_512 512 重い八拍舞曲
+38 song_type_611 611 祈祷トランス
+39 song_type_612 612 単拍の呪歌
+40 theme_121 121 熱砂
+41 theme_122 122 砂嵐
+42 theme_123 123 凱旋
+43 theme_221 221 薔薇
+44 theme_222 222 香辛市場
+45 theme_223 223 婚礼行列
+46 theme_321 321 星図観測
+47 theme_322 322 禁書目録
+48 theme_323 323 森の交信
+49 theme_421 421 オアシス
+50 theme_422 422 隊商
+51 theme_423 423 宿命
+52 theme_521 521 幻の舞台
+53 theme_522 522 旅芸人宿
+54 theme_523 523 香油取引
+55 theme_621 621 墓標読解
+56 theme_622 622 破れた古文書
+57 theme_623 623 予知夢の記録
+58 track_preview 試聴
+59 track_play 演奏開始
+60 track_result 演奏結果
+61 high_score_track 楽曲ハイスコア
+62 companion_event_unlock 仲間イベント解放
+63 used_track_history 使用曲履歴
+
+icon_sheet_04_resource_equipment_collection
+0 gold 金
+1 fame 名声
+2 meta_points メタポイント
+3 collection_unlock コレクション解放
+4 collection_purchase コレクション購入
+5 inheritance_upgrade 永続強化
+6 run_reward ラン報酬
+7 clear_reward クリア報酬
+8 equip_gold_plus 装備：金+
+9 equip_fame_plus 装備：名声+
+10 equip_brave_plus 装備：勇猛+
+11 equip_elegant_plus 装備：優美+
+12 equip_mystic_plus 装備：神秘+
+13 equipped_item 装備中
+14 unequipped_item 未装備
+15 item_compare 装備比較
+16 free_reroll_plus 永続：無料リロール+1
+17 event_quality_up 永続：通常候補の質アップ
+18 rare_rate_up 永続：レア候補率アップ
+19 gold_bonus 永続：金ボーナス
+20 fame_bonus 永続：名声ボーナス
+21 special_effect_hint 永続：特効表示補助
+22 draw_support 永続：候補抽選補助
+23 failure_relief 永続：失敗軽減
+24 collection_music コレクション：音楽
+25 collection_still コレクション：スチル
+26 collection_normal_event コレクション：通常イベント
+27 collection_companion_event コレクション：仲間イベント
+28 collection_candidate_card コレクション：候補キャラカード
+29 collection_promotion_event コレクション：候補キャラ昇格イベント
+30 collection_high_score コレクション：ハイスコア履歴
+31 collection_complete コレクション完成
+32 shop ショップ
+33 buy 購入
+34 sell 売却
+35 upgrade 強化
+36 exchange 交換
+37 discount 割引
+38 stock 在庫
+39 sold_out 売り切れ
+40 scenario_unlock シナリオ解放
+41 scenario_clear シナリオクリア
+42 tutorial_seen チュートリアル閲覧済み
+43 tips_unlock チップス解放
+44 truth_revealed 三姉妹の真実
+45 free_run_unlock フリーラン解放
+46 main_save メインセーブ
+47 run_save ラン中セーブ
+48 brave_param 勇猛パラメタ
+49 elegant_param 優美パラメタ
+50 mystic_param 神秘パラメタ
+51 brave_slot 勇猛仲間枠
+52 elegant_slot 優美仲間枠
+53 mystic_slot 神秘仲間枠
+54 average_value 平均値
+55 genre_bonus ジャンル補正
+56 special_shop_service 特殊サービス：買い物/強化
+57 special_luck_service 特殊サービス：幸運
+58 special_misfortune_service 特殊サービス：不運
+59 special_rumor_service 特殊サービス：ヒント
+60 special_wander_service 特殊サービス：不思議な出会い
+61 autopilot_result オートパイロット結果
+62 clear_rate クリア率
+63 run_history ラン履歴
+
+rune_tablet_mystic_core_4x4
+0 crescent_dot crescent_dot
+1 pillar_dot pillar_dot
+2 ring_dot ring_dot
+3 branch_dot branch_dot
+4 crescent_broken crescent_broken
+5 pillar_broken pillar_broken
+6 ring_broken ring_broken
+7 branch_broken branch_broken
+8 crescent_stroke crescent_stroke
+9 pillar_stroke pillar_stroke
+10 ring_stroke ring_stroke
+11 branch_stroke branch_stroke
+12 crescent_double crescent_double
+13 pillar_double pillar_double
+14 ring_double ring_double
+15 branch_double branch_double
+
+ui_chip_protagonist_4x4
+0 normal 通常
+1 joy 喜び
+2 explanation 説明
+3 caution 注意
+4 right_point 右指差し
+5 left_point 左指差し
+6 down_point 下指差し
+7 ok OK・肯定
+8 doubt 疑問・困り
+9 detail 補足・聞く
+10 wait 時間・待機
+11 treasure 報酬・宝箱
+12 growth 成長・上昇
+13 map 地図・案内
+14 loop 更新・ループ
+15 congrats 完了・祝福
+
+ui_chip_friend_dancer_4x4
+0 normal 通常
+1 joy 喜び
+2 explanation 説明
+3 caution 注意
+4 right_point 右指差し
+5 left_point 左指差し
+6 down_point 下指差し
+7 ok OK・肯定
+8 doubt 疑問・困り
+9 detail 補足・聞く
+10 wait 時間・待機
+11 treasure 報酬・宝箱
+12 growth 成長・上昇
+13 map 地図・案内
+14 loop 更新・ループ
+15 congrats 完了・祝福
+
+ui_chip_friend_hunter_4x4
+0 normal 通常
+1 joy 喜び
+2 explanation 説明
+3 caution 注意
+4 right_point 右指差し
+5 left_point 左指差し
+6 down_point 下指差し
+7 ok OK・肯定
+8 doubt 疑問・困り
+9 detail 補足・聞く
+10 wait 時間・待機
+11 treasure 報酬・宝箱
+12 growth 成長・上昇
+13 map 地図・案内
+14 loop 更新・ループ
+15 congrats 完了・祝福
+
+ui_chip_friend_scholar_4x4
+0 normal 通常
+1 joy 喜び
+2 explanation 説明
+3 caution 注意
+4 right_point 右指差し
+5 left_point 左指差し
+6 down_point 下指差し
+7 ok OK・肯定
+8 doubt 疑問・困り
+9 detail 補足・聞く
+10 wait 時間・待機
+11 treasure 報酬・宝箱
+12 growth 成長・上昇
+13 map 地図・案内
+14 loop 更新・ループ
+15 congrats 完了・祝福

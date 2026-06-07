@@ -1,0 +1,47 @@
+{
+  "total_prompts": 144,
+  "theme_count": 72,
+  "region_count": 72,
+  "inspection_rounds": [
+    {
+      "round": 1,
+      "title_duplicate_count": 0,
+      "full_lyrics_duplicate_count": 0,
+      "repeated_full_ending_count": 0,
+      "repeated_individual_line_count": 330,
+      "forbidden_o_word_hit_count": 0,
+      "kanji_katakana_latin_lyric_count": 0
+    },
+    {
+      "round": 2,
+      "title_duplicate_count": 0,
+      "full_lyrics_duplicate_count": 0,
+      "repeated_full_ending_count": 0,
+      "repeated_individual_line_count": 330,
+      "forbidden_o_word_hit_count": 0,
+      "kanji_katakana_latin_lyric_count": 0
+    },
+    {
+      "round": 3,
+      "title_duplicate_count": 0,
+      "full_lyrics_duplicate_count": 0,
+      "repeated_full_ending_count": 0,
+      "repeated_individual_line_count": 330,
+      "forbidden_o_word_hit_count": 0,
+      "kanji_katakana_latin_lyric_count": 0
+    }
+  ],
+  "title_duplicate_count": 0,
+  "full_lyrics_duplicate_count": 0,
+  "repeated_full_ending_count": 0,
+  "repeated_individual_line_count": 330,
+  "forbidden_o_word_hits": [],
+  "kanji_katakana_latin_lyric_ids": [],
+  "repair_count_after_normalization": 48,
+  "notes": [
+    "検査を3回繰り返し、完全重複、末尾4行重複、禁止語、歌詞内の漢字/カタカナ/英字を確認。",
+    "歌詞ブロックから漢字・カタカナ・英字を除去。",
+    "行単位重複は完全ゼロではないため repeated_lyric_lines.csv に出力。",
+    "前回の重複回避用固定末尾は廃止。"
+  ]
+}

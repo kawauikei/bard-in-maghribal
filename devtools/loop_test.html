@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BGM Crossfade Loop Tester</title>
+  <style>
+    :root {
+      --bg-color: #0b0c10;
+      --card-bg: #1f2833;
+      --text-color: #c5c6c7;
+      --accent-color: #66fcf1;
+      --accent-dark: #45f3e5;
+      --highlight: #1f2833;
+      --danger: #ff7675;
+      --info: #a29bfe;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(102, 252, 241, 0.1);
+    }
+
+    h1 {
+      color: #fff;
+      font-size: 2.2rem;
+      margin-top: 0;
+      margin-bottom: 10px;
+      text-align: center;
+      background: linear-gradient(45deg, var(--accent-color), #a29bfe);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .description {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #888;
+      margin-bottom: 30px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      background: #0f1319;
+      border: 1px solid #333;
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.3s;
+      cursor: pointer;
+    }
+
+    select:focus {
+      border-color: var(--accent-color);
+    }
+
+    .player-card {
+      background: #121820;
+      border-radius: 12px;
+      padding: 24px;
+      margin-top: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .track-info {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 15px;
+      border-radius: 8px;
+    }
+
+    .info-item {
+      text-align: center;
+    }
+
+    .info-label {
+      font-size: 0.8rem;
+      color: #888;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .info-value {
+      font-size: 1.05rem;
+      color: #fff;
+      font-weight: 600;
+      font-family: monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .track-type-badge {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      background-color: var(--info);
+      color: #000;
+      font-family: sans-serif;
+    }
+
+    .progress-container {
+      width: 100%;
+      height: 12px;
+      background: #333;
+      border-radius: 6px;
+      position: relative;
+      margin: 24px 0;
+      cursor: pointer;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-color), #4834d4);
+      width: 0%;
+      border-radius: 6px;
+    }
+
+    .loop-marker {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      z-index: 10;
+    }
+
+    #marker-start {
+      background-color: var(--accent-color);
+      box-shadow: 0 0 8px var(--accent-color);
+    }
+
+    #marker-end {
+      background-color: var(--danger);
+      box-shadow: 0 0 8px var(--danger);
+    }
+
+    .loop-marker::after {
+      content: attr(data-label);
+      position: absolute;
+      top: -20px;
+      transform: translateX(-50%);
+      font-size: 0.7rem;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    #marker-start::after {
+      color: var(--accent-color);
+    }
+
+    #marker-end::after {
+      color: var(--danger);
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    button {
+      background: transparent;
+      border: 2px solid var(--accent-color);
+      color: var(--accent-color);
+      padding: 12px 30px;
+      font-size: 1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+      outline: none;
+    }
+
+    button:hover {
+      background: var(--accent-color);
+      color: #000;
+      box-shadow: 0 0 15px rgba(102, 252, 241, 0.4);
+    }
+
+    .btn-play {
+      background: var(--accent-color);
+      color: #000;
+    }
+
+    .btn-play:hover {
+      background: var(--accent-dark);
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .slider-container {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .slider-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .slider-value {
+      font-size: 0.9rem;
+      font-family: monospace;
+      color: var(--accent-color);
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      background: #333;
+      border-radius: 3px;
+      outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent-color);
+      cursor: pointer;
+      box-shadow: 0 0 5px rgba(102, 252, 241, 0.5);
+    }
+
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #555;
+      transition: .4s;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--accent-color);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+
+    .status-text {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--accent-color);
+      margin-top: 15px;
+      min-height: 20px;
+      font-family: monospace;
+    }
+
+    .channels-status {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 15px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+    }
+
+    .channel-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .led {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #555;
+    }
+
+    .led.active {
+      background-color: var(--accent-color);
+      box-shadow: 0 0 8px var(--accent-color);
+    }
+
+    .led.fade {
+      background-color: #f1c40f;
+      box-shadow: 0 0 8px #f1c40f;
+    }
+    .hidden {
+      display: none;
+    }
+
+    .font-mono {
+      font-family: monospace;
+    }
+
+    .bpm-label {
+      font-size: 0.75rem;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>BGM Crossfade Loop Tester</h1>
+    <div class="description">
+      自動推定されたBPMを基に、ループ範囲を音楽的な「小節グリッド」に吸着（クオンタイズ）し、フェード時の拍のズレを防ぎます。
+    </div>
+
+    <div class="form-group">
+      <label for="bgm-select">BGMの選択 (.mp3)</label>
+      <select id="bgm-select">
+        <option value="">-- 曲を選択してください --</option>
+      </select>
+    </div>
+
+    <div class="player-card hidden" id="player-container">
+      <div class="track-info">
+        <div class="info-item">
+          <div class="info-label">Loop Start (In)</div>
+          <div class="info-value" id="val-start">-</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Active Pos</div>
+          <div class="info-value" id="val-current">0.00s</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Loop End (Out)</div>
+          <div class="info-value" id="val-end">-</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Tempo / Type</div>
+          <div class="info-value">
+            <span id="val-bpm" class="font-mono">-</span><span class="bpm-label">BPM</span>
+            <span class="track-type-badge" id="val-type">-</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="progress-container" id="progress-wrapper">
+        <div class="progress-bar" id="progress-bar"></div>
+        <div class="loop-marker" id="marker-start" data-label="Loop In"></div>
+        <div class="loop-marker" id="marker-end" data-label="Loop Out"></div>
+      </div>
+
+      <div class="controls">
+        <button id="btn-play-pause" class="btn-play">Play</button>
+        <button id="btn-stop">Stop</button>
+      </div>
+
+      <div class="settings-grid">
+        <div class="slider-container">
+          <div class="slider-header">
+            <span class="slider-title">クロスフェード時間</span>
+            <span class="slider-value" id="fade-time-val">2.0秒</span>
+          </div>
+          <input type="range" id="fade-time-slider" min="0.5" max="5.0" step="0.1" value="2.0">
+        </div>
+
+        <div class="toggle-container">
+          <span>クロスフェードループ有効</span>
+          <label class="switch">
+            <input type="checkbox" id="loop-toggle" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="channels-status">
+        <div class="channel-indicator">
+          <div class="led" id="led-a"></div>
+          <span>Channel A (Volume: <span id="vol-a">0%</span>)</span>
+        </div>
+        <div class="channel-indicator">
+          <div class="led" id="led-b"></div>
+          <span>Channel B (Volume: <span id="vol-b">0%</span>)</span>
+        </div>
+      </div>
+
+      <div class="status-text" id="status-display"></div>
+    </div>
+  </div>
+
+  <script>
+    // 自動解析スクリプトにより、以下のプレースホルダーにJSONオブジェクトが書き込まれます。
+    const BGM_LOOPS = /* LOOP_DATA_PLACEHOLDER */ {
+  "bgm_collection_01_Maps_of_Yesterday.mp3": {
+    "loopStart": 8.0001,
+    "loopEnd": 26.6677,
+    "duration": 30.7722,
+    "bpm": 90.0,
+    "fadeDuration": 1.42,
+    "trackType": "Percussive (Beat)"
+  },
+  "bgm_companion_01_The_Open_Ledger.mp3": {
+    "loopStart": 7.1635,
+    "loopEnd": 28.6546,
+    "duration": 30.7722,
+    "bpm": 67.0,
+    "fadeDuration": 1.9,
+    "trackType": "Percussive (Beat)"
+  },
+  "bgm_menu_01_Morning_at_the_Gate.mp3": {
+    "loopStart": 13.5202,
+    "loopEnd": 27.0416,
+    "duration": 30.7722,
+    "bpm": 71.0,
+    "fadeDuration": 1.77,
+    "trackType": "Percussive (Beat)"
+  },
+  "bgm_phase_01_Where_the_River_Bends.mp3": {
+    "loopStart": 0.033,
+    "loopEnd": 25.9459,
+    "duration": 29.7273,
+    "bpm": 111.0,
+    "fadeDuration": 1.16,
+    "trackType": "Percussive (Beat)"
+  },
+  "bgm_story_anger_01_The_Measured_Path.mp3": {
+    "loopStart": 13.7166,
+    "loopEnd": 27.4273,
+    "duration": 30.6678,
+    "bpm": 70.0,
+    "fadeDuration": 1.79,
+    "trackType": "Percussive (Beat)"
+  },
+  "bgm_story_failure_01_The_Basin_Road.mp3": {
+    "loopStart": 4.2112,
+    "loopEnd": 28.0711,
+    "duration": 30.4065,
+    "bpm": 171.0,
+    "fadeDuration": 0.77,
+    "trackType": "Percussive (Beat)"
+  },
+  "bgm_story_fun_01_Coins_Across_the_Counter.mp3": {
+    "loopStart": 12.5217,
+    "loopEnd": 27.1306,
+    "duration": 30.7722,
+    "bpm": 115.0,
+    "fadeDuration": 1.11,
+    "trackType": "Percussive (Beat)"
+  },
+  "bgm_story_joy_01_Across_the_Dry_Sea.mp3": {
+    "loopStart": 3.8088,
+    "loopEnd": 26.6659,
+    "duration": 30.72,
+    "bpm": 63.0,
+    "fadeDuration": 1.95,
+    "trackType": "Percussive (Beat)"
+  },
+  "bgm_story_neutral_01_The_Merchant_s_Hour.mp3": {
+    "loopStart": 7.3473,
+    "loopEnd": 26.9355,
+    "duration": 30.3543,
+    "bpm": 98.0,
+    "fadeDuration": 1.3,
+    "trackType": "Percussive (Beat)"
+  },
+  "bgm_story_neutral_02_A_Quiet_Agreement.mp3": {
+    "loopStart": 0.0366,
+    "loopEnd": 28.6271,
+    "duration": 30.7722,
+    "bpm": 109.0,
+    "fadeDuration": 1.12,
+    "trackType": "Percussive (Beat)"
+  },
+  "bgm_story_neutral_03_Beneath_a_Copper_Sky.mp3": {
+    "loopStart": 5.3331,
+    "loopEnd": 26.6671,
+    "duration": 30.7722,
+    "bpm": 90.0,
+    "fadeDuration": 1.43,
+    "trackType": "Percussive (Beat)"
+  },
+  "bgm_story_sorrow_01_Threshold_of_the_Horizon.mp3": {
+    "loopStart": 2.6659,
+    "loopEnd": 28.0021,
+    "duration": 30.7722,
+    "bpm": 180.0,
+    "fadeDuration": 0.76,
+    "trackType": "Percussive (Beat)"
+  },
+  "bgm_story_success_01_The_Golden_Threshold.mp3": {
+    "loopStart": 4.324,
+    "loopEnd": 25.9468,
+    "duration": 29.649,
+    "bpm": 111.0,
+    "fadeDuration": 1.22,
+    "trackType": "Percussive (Beat)"
+  },
+  "bgm_story_surprise_01_The_Pattern_Underfoot.mp3": {
+    "loopStart": 0.0381,
+    "loopEnd": 26.9156,
+    "duration": 30.7722,
+    "bpm": 107.0,
+    "fadeDuration": 1.19,
+    "trackType": "Percussive (Beat)"
+  },
+  "bgm_title_01_Beneath_the_Gilded_Arch.mp3": {
+    "loopStart": 6.6057,
+    "loopEnd": 28.6259,
+    "duration": 30.7722,
+    "bpm": 109.0,
+    "fadeDuration": 1.17,
+    "trackType": "Percussive (Beat)"
+  }
+};
+
+    const select = document.getElementById('bgm-select');
+    const playerContainer = document.getElementById('player-container');
+    const btnPlayPause = document.getElementById('btn-play-pause');
+    const btnStop = document.getElementById('btn-stop');
+    const loopToggle = document.getElementById('loop-toggle');
+    const fadeSlider = document.getElementById('fade-time-slider');
+    const fadeValue = document.getElementById('fade-time-val');
+    const progressBar = document.getElementById('progress-bar');
+    const progressWrapper = document.getElementById('progress-wrapper');
+    const statusDisplay = document.getElementById('status-display');
+
+    const valStart = document.getElementById('val-start');
+    const valCurrent = document.getElementById('val-current');
+    const valEnd = document.getElementById('val-end');
+    const valBpm = document.getElementById('val-bpm');
+    const valType = document.getElementById('val-type');
+
+    const markerStart = document.getElementById('marker-start');
+    const markerEnd = document.getElementById('marker-end');
+
+    const ledA = document.getElementById('led-a');
+    const ledB = document.getElementById('led-b');
+    const volAVal = document.getElementById('vol-a');
+    const volBVal = document.getElementById('vol-b');
+
+    // 2系統のAudio要素
+    let audioA = new Audio();
+    let audioB = new Audio();
+    audioA.preload = 'auto';
+    audioB.preload = 'auto';
+
+    let loopStart = 0;
+    let loopEnd = 0;
+    let duration = 0;
+    
+    let isPlaying = false;
+    let activeChannel = 'A'; // 'A' or 'B'
+    let crossfadeTriggered = false;
+    let fadeDuration = 2.0; 
+    let fadeStartTime = 0;
+    let animationFrameId = null;
+
+    // プルダウンメニューにBGMリストを追加
+    Object.keys(BGM_LOOPS).forEach(filename => {
+      const option = document.createElement('option');
+      option.value = filename;
+      option.textContent = filename;
+      select.appendChild(option);
+    });
+
+    fadeSlider.addEventListener('input', (e) => {
+      fadeDuration = parseFloat(e.target.value);
+      fadeValue.textContent = fadeDuration.toFixed(1) + '秒';
+    });
+
+    // 曲選択時
+    select.addEventListener('change', (e) => {
+      stopBGM();
+
+      const filename = e.target.value;
+      if (!filename) {
+        playerContainer.classList.add('hidden');
+        return;
+      }
+
+      const loopInfo = BGM_LOOPS[filename];
+      loopStart = loopInfo.loopStart;
+      loopEnd = loopInfo.loopEnd;
+      duration = loopInfo.duration;
+      
+      // 曲の推奨フェード時間とタイプを自動適用
+      const recommendedFade = loopInfo.fadeDuration || 2.0;
+      fadeDuration = recommendedFade;
+      fadeSlider.value = recommendedFade;
+      fadeValue.textContent = recommendedFade.toFixed(1) + '秒';
+
+      const trackType = loopInfo.trackType || "Melodic (Mixed)";
+      valType.textContent = trackType;
+
+      // BPM表示
+      valBpm.textContent = loopInfo.bpm || "-";
+
+      // 表示の更新
+      valStart.textContent = loopStart.toFixed(2) + 's';
+      valEnd.textContent = loopEnd.toFixed(2) + 's';
+      
+      markerStart.style.left = (loopStart / duration * 100) + '%';
+      markerEnd.style.left = (loopEnd / duration * 100) + '%';
+
+      // 双方のソースを設定
+      const srcPath = '../assets/audio/bgm/' + filename;
+      audioA.src = srcPath;
+      audioB.src = srcPath;
+      audioA.load();
+      audioB.load();
+
+      // ボリューム初期化
+      audioA.volume = 1.0;
+      audioB.volume = 0.0;
+
+      playerContainer.classList.remove('hidden');
+      updateUI();
+    });
+
+    function updateUI() {
+      if (duration === 0) return;
+      
+      const activeAudio = activeChannel === 'A' ? audioA : audioB;
+      const current = activeAudio.currentTime;
+      valCurrent.textContent = current.toFixed(2) + 's';
+      progressBar.style.width = (current / duration * 100) + '%';
+
+      // チャンネルLEDの更新
+      if (activeChannel === 'A') {
+        ledA.className = crossfadeTriggered ? 'led fade' : 'led active';
+        ledB.className = crossfadeTriggered ? 'led fade' : 'led';
+      } else {
+        ledA.className = crossfadeTriggered ? 'led fade' : 'led';
+        ledB.className = crossfadeTriggered ? 'led fade' : 'led active';
+      }
+
+      // ボリュームインジケータ更新
+      volAVal.textContent = Math.round(audioA.volume * 100) + '%';
+      volBVal.textContent = Math.round(audioB.volume * 100) + '%';
+    }
+
+    // ミリ秒精度での監視 tick
+    function tick() {
+      if (!isPlaying) return;
+
+      const activeAudio = activeChannel === 'A' ? audioA : audioB;
+      const inactiveAudio = activeChannel === 'A' ? audioB : audioA;
+
+      const current = activeAudio.currentTime;
+      
+      // UIの描画更新
+      updateUI();
+
+      // クロスフェード進行管理
+      if (crossfadeTriggered) {
+        const elapsed = (performance.now() - fadeStartTime) / 1000;
+        
+        if (elapsed >= fadeDuration) {
+          // フェード完了
+          activeAudio.pause();
+          activeAudio.currentTime = 0;
+          activeAudio.volume = 0.0;
+          
+          inactiveAudio.volume = 1.0;
+          
+          // チャンネルのスワップ
+          activeChannel = activeChannel === 'A' ? 'B' : 'A';
+          crossfadeTriggered = false;
+          statusDisplay.textContent = 'Crossfade complete. Active: ' + activeChannel;
+          setTimeout(() => { if (!crossfadeTriggered) statusDisplay.textContent = ''; }, 2000);
+        } else {
+          // フェード中（等パワーサイン・コサイン曲線）
+          const ratio = Math.max(0.0, Math.min(1.0, elapsed / fadeDuration));
+          activeAudio.volume = Math.cos(ratio * Math.PI / 2);
+          inactiveAudio.volume = Math.sin(ratio * Math.PI / 2);
+        }
+      } else {
+        // クロスフェードのトリガー判定（Loop Out から fadeDuration 秒手前）
+        if (loopToggle.checked && current >= (loopEnd - fadeDuration)) {
+          crossfadeTriggered = true;
+          fadeStartTime = performance.now();
+          statusDisplay.textContent = 'Crossfading... Active: ' + activeChannel + ' -> ' + (activeChannel === 'A' ? 'B' : 'A');
+          
+          // もう一方のプレイヤーをループ開始位置から再生開始
+          inactiveAudio.currentTime = loopStart;
+          inactiveAudio.volume = 0.0;
+          inactiveAudio.play().catch(err => {
+            console.error("Fade play error:", err);
+            crossfadeTriggered = false;
+          });
+        }
+      }
+
+      // フォールバック安全対策
+      if (current >= loopEnd && !crossfadeTriggered) {
+        activeAudio.currentTime = loopStart;
+      }
+
+      animationFrameId = requestAnimationFrame(tick);
+    }
+
+    btnPlayPause.addEventListener('click', () => {
+      if (!audioA.src || !audioB.src) return;
+
+      if (isPlaying) {
+        audioA.pause();
+        audioB.pause();
+        btnPlayPause.textContent = 'Play';
+        btnPlayPause.className = '';
+        isPlaying = false;
+        cancelAnimationFrame(animationFrameId);
+      } else {
+        const activeAudio = activeChannel === 'A' ? audioA : audioB;
+        const inactiveAudio = activeChannel === 'A' ? audioB : audioA;
+
+        activeAudio.volume = 1.0;
+        inactiveAudio.volume = 0.0;
+
+        activeAudio.play().then(() => {
+          btnPlayPause.textContent = 'Pause';
+          btnPlayPause.className = 'btn-play';
+          isPlaying = true;
+          tick();
+        }).catch(err => {
+          alert('再生エラー: ' + err.message);
+        });
+      }
+    });
+
+    function stopBGM() {
+      audioA.pause();
+      audioA.currentTime = 0;
+      audioA.volume = 1.0;
+
+      audioB.pause();
+      audioB.currentTime = 0;
+      audioB.volume = 0.0;
+      
+      btnPlayPause.textContent = 'Play';
+      btnPlayPause.className = 'btn-play';
+      isPlaying = false;
+      activeChannel = 'A';
+      crossfadeTriggered = false;
+      cancelAnimationFrame(animationFrameId);
+      updateUI();
+      statusDisplay.textContent = '';
+    }
+
+    btnStop.addEventListener('click', stopBGM);
+
+    // シーク機能
+    progressWrapper.addEventListener('click', (e) => {
+      if (duration === 0) return;
+      const rect = progressWrapper.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const percentage = clickX / rect.width;
+      const targetTime = percentage * duration;
+
+      const activeAudio = activeChannel === 'A' ? audioA : audioB;
+      
+      if (crossfadeTriggered) {
+        audioA.pause();
+        audioB.pause();
+        audioA.volume = activeChannel === 'A' ? 1.0 : 0.0;
+        audioB.volume = activeChannel === 'A' ? 0.0 : 1.0;
+        crossfadeTriggered = false;
+      }
+      
+      activeAudio.currentTime = targetTime;
+      updateUI();
+    });
+  </script>
+</body>
+</html>
