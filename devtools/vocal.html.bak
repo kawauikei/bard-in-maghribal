@@ -353,9 +353,8 @@
 
 <!-- 演奏動画プレビューウィジェット (左上) -->
 <div class="perf-video-container expanded" id="perf-video-widget" title="クリックでサイズ切り替え (80px / 200px / 360px)">
-    <video id="perf-video-player" loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; display: none;"></video>
     <canvas id="perf-sprite-canvas" style="width: 100%; height: 100%; display: block; background: #f4ecd8;"></canvas>
-    <div class="perf-video-badge" id="perf-video-badge">静止画スプライト</div>
+    <div class="perf-video-badge" id="perf-video-badge">演奏アニメーション</div>
 </div>
 
 <!-- 演奏者静止画検証パネル -->
@@ -366,13 +365,6 @@
     </h3>
     
     <div class="perf-sprite-row">
-        <div class="perf-sprite-col">
-            <span class="perf-sprite-label">表示モード:</span>
-            <select class="perf-sprite-select" id="perf-display-mode">
-                <option value="sprite" selected>静止画スプライト</option>
-                <option value="video">従来動画 (MP4)</option>
-            </select>
-        </div>
         <div class="perf-sprite-col">
             <span class="perf-sprite-label">トランジション:</span>
             <select class="perf-sprite-select" id="perf-trans-mode">
@@ -459,7 +451,6 @@
         <div class="header-left" style="position: relative;">
             <div class="header-brand" style="display: flex; align-items: center; gap: 0.75rem;">
                 <h1>Bard Console</h1>
-                <span id="header-fps-display" style="font-size:0.75rem; color:var(--primary); background:#e0e7ff; padding: 2px 6px; border-radius: 4px; font-weight:600; white-space:nowrap; display:none;"></span>
                 <span id="header-singing-display" style="font-size:0.75rem; color:#fff; background:#ec4899; padding: 2px 8px; border-radius: 12px; font-weight:700; white-space:nowrap; display:none; align-items:center; gap:4px; transition: background 0.4s ease, box-shadow 0.4s ease; box-shadow: 0 0 8px rgba(236,72,153,0.6);"></span>
                 <span id="header-excitement-display" style="font-size:0.75rem; color:#fff; background:#f97316; padding: 2px 8px; border-radius: 12px; font-weight:700; white-space:nowrap; display:none; align-items:center; gap:4px; transition: opacity 0.4s ease; box-shadow: 0 0 8px rgba(249,115,22,0.6);">UP</span>
                 <span id="header-chorus-display" style="font-size:0.75rem; color:#fff; background:#8b5cf6; padding: 2px 8px; border-radius: 12px; font-weight:700; white-space:nowrap; display:none; align-items:center; gap:4px; transition: opacity 0.4s ease; box-shadow: 0 0 8px rgba(139,92,246,0.6);">CHORUS</span>
@@ -3439,6 +3430,582 @@
                 "bpms": {
                     "song_602_512_423水面と隠した宿命.mp3": 60.0
                 }
+            },
+            {
+                "id": "song_special_01_brave",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_01_brave",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "王宮近衛の行進と絶対の誓い",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_01_brave.txt",
+                "promptContent": "ID: song_special_01_brave\n\n【前提】\n地域: 王都\n属性: 勇猛 （勇猛/優美/神秘）\n主題: 王宮近衛の行進と絶対の誓い\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 王都の情景と、勇猛の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_01_elegant",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_01_elegant",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "華やかな夜会の舞と眩い装飾",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_01_elegant.txt",
+                "promptContent": "ID: song_special_01_elegant\n\n【前提】\n地域: 王都\n属性: 優美 （勇猛/優美/神秘）\n主題: 華やかな夜会の舞と眩い装飾\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 王都の情景と、優美の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_01_mystic",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_01_mystic",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "王宮の裏に隠された星図と密談",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_01_mystic.txt",
+                "promptContent": "ID: song_special_01_mystic\n\n【前提】\n地域: 王都\n属性: 神秘 （勇猛/優美/神秘）\n主題: 王宮の裏に隠された星図と密談\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 王都の情景と、神秘の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_02_brave",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_02_brave",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "巨木を守る狩人の鋭い矢",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_02_brave.txt",
+                "promptContent": "ID: song_special_02_brave\n\n【前提】\n地域: 辺境の村\n属性: 勇猛 （勇猛/優美/神秘）\n主題: 巨木を守る狩人の鋭い矢\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 辺境の村の情景と、勇猛の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_02_elegant",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_02_elegant",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "村の祭り囃子と木漏れ日の舞",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_02_elegant.txt",
+                "promptContent": "ID: song_special_02_elegant\n\n【前提】\n地域: 辺境の村\n属性: 優美 （勇猛/優美/神秘）\n主題: 村の祭り囃子と木漏れ日の舞\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 辺境の村の情景と、優美の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_02_mystic",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_02_mystic",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "滝裏に眠る精霊との静かな対話",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_02_mystic.txt",
+                "promptContent": "ID: song_special_02_mystic\n\n【前提】\n地域: 辺境の村\n属性: 神秘 （勇猛/優美/神秘）\n主題: 滝裏に眠る精霊との静かな対話\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 辺境の村の情景と、神秘の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_03_brave",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_03_brave",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "未踏の深部を切り拓く力",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_03_brave.txt",
+                "promptContent": "ID: song_special_03_brave\n\n【前提】\n地域: 迷宮\n属性: 勇猛 （勇猛/優美/神秘）\n主題: 未踏の深部を切り拓く力\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 迷宮の情景と、勇猛の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_03_elegant",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_03_elegant",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "迷宮酒場の退廃的な賑わいと歌",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_03_elegant.txt",
+                "promptContent": "ID: song_special_03_elegant\n\n【前提】\n地域: 迷宮\n属性: 優美 （勇猛/優美/神秘）\n主題: 迷宮酒場の退廃的な賑わいと歌\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 迷宮の情景と、優美の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_03_mystic",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_03_mystic",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "壁画に隠された古い呪文と罠",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_03_mystic.txt",
+                "promptContent": "ID: song_special_03_mystic\n\n【前提】\n地域: 迷宮\n属性: 神秘 （勇猛/優美/神秘）\n主題: 壁画に隠された古い呪文と罠\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 迷宮の情景と、神秘の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_04_brave",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_04_brave",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "塔門を魔物から死守する魔法兵",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_04_brave.txt",
+                "promptContent": "ID: song_special_04_brave\n\n【前提】\n地域: 賢者の塔\n属性: 勇猛 （勇猛/優美/神秘）\n主題: 塔門を魔物から死守する魔法兵\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 賢者の塔の情景と、勇猛の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_04_elegant",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_04_elegant",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "講堂に響く柔らかな講義の歌",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_04_elegant.txt",
+                "promptContent": "ID: song_special_04_elegant\n\n【前提】\n地域: 賢者の塔\n属性: 優美 （勇猛/優美/神秘）\n主題: 講堂に響く柔らかな講義の歌\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 賢者の塔の情景と、優美の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_04_mystic",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_04_mystic",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "禁書庫の奥深くにある禁断の目録",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_04_mystic.txt",
+                "promptContent": "ID: song_special_04_mystic\n\n【前提】\n地域: 賢者の塔\n属性: 神秘 （勇猛/優美/神秘）\n主題: 禁書庫の奥深くにある禁断の目録\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 賢者の塔の情景と、神秘の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_05_brave",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_05_brave",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "海賊を退ける波止場の激しい戦い",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_05_brave.txt",
+                "promptContent": "ID: song_special_05_brave\n\n【前提】\n地域: 港町\n属性: 勇猛 （勇猛/優美/神秘）\n主題: 海賊を退ける波止場の激しい戦い\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 港町の情景と、勇猛の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_05_elegant",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_05_elegant",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "大交易祭の喧騒と海面を照らす光",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_05_elegant.txt",
+                "promptContent": "ID: song_special_05_elegant\n\n【前提】\n地域: 港町\n属性: 優美 （勇猛/優美/神秘）\n主題: 大交易祭の喧騒と海面を照らす光\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 港町の情景と、優美の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_05_mystic",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_05_mystic",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "波音に混じる古代の海鳴りと伝承",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_05_mystic.txt",
+                "promptContent": "ID: song_special_05_mystic\n\n【前提】\n地域: 港町\n属性: 神秘 （勇猛/優美/神秘）\n主題: 波音に混じる古代の海鳴りと伝承\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 港町の情景と、神秘の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_06_brave",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_06_brave",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "砂埃舞う砦の激しい防衛戦",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_06_brave.txt",
+                "promptContent": "ID: song_special_06_brave\n\n【前提】\n地域: 巨岩の要塞\n属性: 勇猛 （勇猛/優美/神秘）\n主題: 砂埃舞う砦の激しい防衛戦\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 巨岩の要塞の情景と、勇猛の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_06_elegant",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_06_elegant",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "兵士の心を慰労する旗影の舞",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_06_elegant.txt",
+                "promptContent": "ID: song_special_06_elegant\n\n【前提】\n地域: 巨岩の要塞\n属性: 優美 （勇猛/優美/神秘）\n主題: 兵士の心を慰労する旗影の舞\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 巨岩の要塞の情景と、優美の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_06_mystic",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_06_mystic",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "岩壁に深く刻まれた古い陣形図",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_06_mystic.txt",
+                "promptContent": "ID: song_special_06_mystic\n\n【前提】\n地域: 巨岩の要塞\n属性: 神秘 （勇猛/優美/神秘）\n主題: 岩壁に深く刻まれた古い陣形図\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 巨岩の要塞の情景と、神秘の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_07_brave",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_07_brave",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "巡礼路を脅かす魔物の討伐",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_07_brave.txt",
+                "promptContent": "ID: song_special_07_brave\n\n【前提】\n地域: 静謐の聖堂\n属性: 勇猛 （勇猛/優美/神秘）\n主題: 巡礼路を脅かす魔物の討伐\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 静謐の聖堂の情景と、勇猛の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_07_elegant",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_07_elegant",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "祭礼を彩る穏やかで美しい聖歌",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_07_elegant.txt",
+                "promptContent": "ID: song_special_07_elegant\n\n【前提】\n地域: 静謐の聖堂\n属性: 優美 （勇猛/優美/神秘）\n主題: 祭礼を彩る穏やかで美しい聖歌\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 静謐の聖堂の情景と、優美の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_07_mystic",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_07_mystic",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "葬送の儀礼と死者へ捧げる祈り",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_07_mystic.txt",
+                "promptContent": "ID: song_special_07_mystic\n\n【前提】\n地域: 静謐の聖堂\n属性: 神秘 （勇猛/優美/神秘）\n主題: 葬送の儀礼と死者へ捧げる祈り\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 静謐の聖堂の情景と、神秘の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_08_brave",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_08_brave",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "砂嵐を切り裂く堅牢な隊商の盾",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_08_brave.txt",
+                "promptContent": "ID: song_special_08_brave\n\n【前提】\n地域: 真鍮の荒野\n属性: 勇猛 （勇猛/優美/神秘）\n主題: 砂嵐を切り裂く堅牢な隊商の盾\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 真鍮の荒野の情景と、勇猛の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_08_elegant",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_08_elegant",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "焚き火を囲む熱狂的で情熱的な踊り",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_08_elegant.txt",
+                "promptContent": "ID: song_special_08_elegant\n\n【前提】\n地域: 真鍮の荒野\n属性: 優美 （勇猛/優美/神秘）\n主題: 焚き火を囲む熱狂的で情熱的な踊り\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 真鍮の荒野の情景と、優美の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_08_mystic",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_08_mystic",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "星明かりだけが示す隠された砂の道",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_08_mystic.txt",
+                "promptContent": "ID: song_special_08_mystic\n\n【前提】\n地域: 真鍮の荒野\n属性: 神秘 （勇猛/優美/神秘）\n主題: 星明かりだけが示す隠された砂の道\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 真鍮の荒野の情景と、神秘の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_09_brave",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_09_brave",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "亡霊騎士との果てなき孤独な決闘",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_09_brave.txt",
+                "promptContent": "ID: song_special_09_brave\n\n【前提】\n地域: 忘れられた古城\n属性: 勇猛 （勇猛/優美/神秘）\n主題: 亡霊騎士との果てなき孤独な決闘\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 忘れられた古城の情景と、勇猛の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_09_elegant",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_09_elegant",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "誰もいない広間で踊る孤独な舞踏",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_09_elegant.txt",
+                "promptContent": "ID: song_special_09_elegant\n\n【前提】\n地域: 忘れられた古城\n属性: 優美 （勇猛/優美/神秘）\n主題: 誰もいない広間で踊る孤独な舞踏\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 忘れられた古城の情景と、優美の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_09_mystic",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_09_mystic",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "呪われた仮面が囁く古城の秘密",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_09_mystic.txt",
+                "promptContent": "ID: song_special_09_mystic\n\n【前提】\n地域: 忘れられた古城\n属性: 神秘 （勇猛/優美/神秘）\n主題: 呪われた仮面が囁く古城の秘密\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 忘れられた古城の情景と、神秘の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_10_brave",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_10_brave",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "遺跡を荒らす盗掘者との死闘",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_10_brave.txt",
+                "promptContent": "ID: song_special_10_brave\n\n【前提】\n地域: 太古の墓地\n属性: 勇猛 （勇猛/優美/神秘）\n主題: 遺跡を荒らす盗掘者との死闘\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 太古の墓地の情景と、勇猛の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_10_elegant",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_10_elegant",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "死者を悼む静寂の中の朗読",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_10_elegant.txt",
+                "promptContent": "ID: song_special_10_elegant\n\n【前提】\n地域: 太古の墓地\n属性: 優美 （勇猛/優美/神秘）\n主題: 死者を悼む静寂の中の朗読\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 太古の墓地の情景と、優美の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_10_mystic",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_10_mystic",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "墓標に刻まれた太古の支配の記録",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_10_mystic.txt",
+                "promptContent": "ID: song_special_10_mystic\n\n【前提】\n地域: 太古の墓地\n属性: 神秘 （勇猛/優美/神秘）\n主題: 墓標に刻まれた太古の支配の記録\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 太古の墓地の情景と、神秘の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_11_brave",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_11_brave",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "王者が血を流す熱狂の闘技",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_11_brave.txt",
+                "promptContent": "ID: song_special_11_brave\n\n【前提】\n地域: 喧騒の闘技場\n属性: 勇猛 （勇猛/優美/神秘）\n主題: 王者が血を流す熱狂の闘技\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 喧騒の闘技場の情景と、勇猛の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_11_elegant",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_11_elegant",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "闘士の入場を飾る華麗なファンファーレ",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_11_elegant.txt",
+                "promptContent": "ID: song_special_11_elegant\n\n【前提】\n地域: 喧騒の闘技場\n属性: 優美 （勇猛/優美/神秘）\n主題: 闘士の入場を飾る華麗なファンファーレ\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 喧騒の闘技場の情景と、優美の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_11_mystic",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_11_mystic",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "砂に残された不吉で難解な占い円陣",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_11_mystic.txt",
+                "promptContent": "ID: song_special_11_mystic\n\n【前提】\n地域: 喧騒の闘技場\n属性: 神秘 （勇猛/優美/神秘）\n主題: 砂に残された不吉で難解な占い円陣\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 喧騒の闘技場の情景と、神秘の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_12_brave",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_12_brave",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "侵入者を正確に射抜く水路の弓手",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_12_brave.txt",
+                "promptContent": "ID: song_special_12_brave\n\n【前提】\n地域: 緑の隠れ里\n属性: 勇猛 （勇猛/優美/神秘）\n主題: 侵入者を正確に射抜く水路の弓手\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 緑の隠れ里の情景と、勇猛の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_12_elegant",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_12_elegant",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "精霊樹の下で奏でる美しい弦楽器",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_12_elegant.txt",
+                "promptContent": "ID: song_special_12_elegant\n\n【前提】\n地域: 緑の隠れ里\n属性: 優美 （勇猛/優美/神秘）\n主題: 精霊樹の下で奏でる美しい弦楽器\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 緑の隠れ里の情景と、優美の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。",
+                "generated": [],
+                "bpms": {}
+            },
+            {
+                "id": "song_special_12_mystic",
+                "pattern": "theme",
+                "regionCode": "0",
+                "region": "",
+                "title": "song_special_12_mystic",
+                "instrument": "",
+                "songType": "",
+                "mainTheme": "葉陰で精霊と密かに交わす言葉",
+                "supportTheme": "",
+                "lyrics": "",
+                "promptFile": "../prompts/vocal/song_special_12_mystic.txt",
+                "promptContent": "ID: song_special_12_mystic\n\n【前提】\n地域: 緑の隠れ里\n属性: 神秘 （勇猛/優美/神秘）\n主題: 葉陰で精霊と密かに交わす言葉\n用途: 音ゲー用BGM。特定の編成条件を満たした時のみ出現する「全属性ボーナス付与のご当地楽曲」。無音厳禁。\n時間: 65〜75秒。曲が盛り上がっている途中で終わらせない。\nボーカル: 華奢で可憐な若い女性。\n抑揚: 緑の隠れ里の情景と、神秘の特色を強く打ち出し、ドラマチックに盛り上げる。\n\n【楽曲用プロンプトルール】\n1. 地域の情景と属性の雰囲気を融合させた歌詞を作成してください。\n2. 歌詞ブロックはすべてひらがなで作成してください。漢字とカタカナ、句読点「、」「。」は禁止です。\n3. 半角スペースと短い改行でリズムを作ってください。\n4. 楽器名や曲調を直接歌詞本文に入れないでください。\n5. 上記で歌詞と歌唱指定のプロンプトを整備し、プロンプトに則った楽曲生成まで実行してください。\n```\n\n---\n**💡 運用アドバイス**\nもしローカルエージェントにスクリプトを書いてもらって個別のテキストファイル（例: `public/assets/audio/vocal/prompts/song_special_01_brave.txt`）として出力させたい場合は、このテキストブロック全体をそのままエージェントに渡し、「これをパースして `ID` の名前を付けた個別のテキストファイルに保存するPythonスクリプトを書いて実行して」と指示するだけで一括配置が完了します。",
+                "generated": [],
+                "bpms": {}
             }
         ];
 
@@ -3817,14 +4384,12 @@
 
         // ---- 演奏動画＆静止画スプライト検証機能 ──
         const perfWidget = document.getElementById('perf-video-widget');
-        const perfPlayer = document.getElementById('perf-video-player');
         const perfSpriteCanvas = document.getElementById('perf-sprite-canvas');
         const perfSpriteCtx = perfSpriteCanvas.getContext('2d');
         const perfMinimap = document.getElementById('perf-sprite-minimap');
         const perfMinimapCtx = perfMinimap.getContext('2d');
 
         // UI inputs
-        const perfDisplayMode = document.getElementById('perf-display-mode');
         const perfTransMode = document.getElementById('perf-trans-mode');
         const perfDebounceSec = document.getElementById('perf-debounce-sec');
         const perfTransMs = document.getElementById('perf-trans-ms');
@@ -3847,8 +4412,6 @@
         let currentSpriteLoaded = false;
         let cellWidth = 0;
         let cellHeight = 0;
-        let perfVideoLoaded = false;
-        let perfVideoFps = 16;
         
         // Verification State variables
         let activeState = 'BGM';
@@ -3883,21 +4446,6 @@
             "アコーディオン": "../assets/images/game/play502.webp",
             "チェロ": "../assets/images/game/play601.webp",
             "グロッケンシュピール": "../assets/images/game/play602.webp"
-        };
-
-        const instrumentVideoMap = {
-            "フレームドラム": "../assets/images/game/play101.mp4",
-            "エレキギター": "../assets/images/game/play102.mp4",
-            "ウード": "../assets/images/game/play201.mp4",
-            "ピアノ": "../assets/images/game/play202.mp4",
-            "カーヌーン": "../assets/images/game/play301.mp4",
-            "チェレスタ": "../assets/images/game/play302.mp4",
-            "ブラスセクション": "../assets/images/game/play401.mp4",
-            "ティンパニ": "../assets/images/game/play402.mp4",
-            "カマンチェ": "../assets/images/game/play501.mp4",
-            "アコーディオン": "../assets/images/game/play502.mp4",
-            "チェロ": "../assets/images/game/play601.mp4",
-            "グロッケンシュピール": "../assets/images/game/play602.mp4"
         };
 
         function updateVideoOffset() {
@@ -4226,7 +4774,7 @@
                         drawMinimap();
                     }
                     drawMainSprite();
-                } else if (perfDisplayMode.value === 'sprite' && currentTrackId !== null && !audio.paused) {
+                } else if (currentTrackId !== null && !audio.paused) {
                     drawMainSprite();
                 }
                 
@@ -4346,39 +4894,6 @@
         // Initialize display info
         updateCellDisplayInfo();
 
-        // Mode toggling
-        perfDisplayMode.addEventListener('change', () => {
-            const mode = perfDisplayMode.value;
-            if (mode === 'sprite') {
-                perfSpriteCanvas.style.display = 'block';
-                perfPlayer.style.display = 'none';
-                const badgeEl = document.getElementById('perf-video-badge');
-                if (badgeEl) badgeEl.textContent = '静止画スプライト';
-                document.getElementById('perf-minimap-section').style.display = 'flex';
-                perfPlayer.pause();
-                loadSpriteSheet(perfSpritePath.value);
-            } else {
-                perfSpriteCanvas.style.display = 'none';
-                perfPlayer.style.display = 'block';
-                const badgeEl = document.getElementById('perf-video-badge');
-                document.getElementById('perf-minimap-section').style.display = 'none';
-                if (perfVideoLoaded && !audio.paused) {
-                    perfPlayer.play().catch(e => console.log("Video play on mode change failed:", e));
-                }
-                const t = tracks.find(x => x.id === currentTrackId);
-                if (t) {
-                    const selectedFile = selectedTrackVersions[currentTrackId] || t.generated[0];
-                    let trackBpm = 120;
-                    if (t.bpms && t.bpms[selectedFile]) {
-                        trackBpm = t.bpms[selectedFile];
-                    }
-                    if (badgeEl) badgeEl.textContent = `${perfVideoFps}FPS ループ (BPM:${trackBpm})`;
-                } else {
-                    if (badgeEl) badgeEl.textContent = 'BPM未設定';
-                }
-            }
-        });
-
         // Path change
         perfSpritePath.addEventListener('change', () => {
             loadSpriteSheet(perfSpritePath.value);
@@ -4496,60 +5011,18 @@
             triggerRandomCellForState('BGM');
 
             // 楽器に対応するアセットを切り替え表示
-            const videoUrl = instrumentVideoMap[t.instrument];
             const spriteUrl = instrumentSpriteMap[t.instrument] || "../assets/images/game/play101.webp";
 
             perfWidget.style.display = 'block';
             updateVideoOffset();
 
-            let trackBpm = 120;
-            if (t.bpms && t.bpms[selectedFile]) {
-                trackBpm = t.bpms[selectedFile];
+            perfSpriteCanvas.style.display = 'block';
+            const badgeEl = document.getElementById('perf-video-badge');
+            if (badgeEl) {
+                badgeEl.textContent = '演奏アニメーション';
             }
-            perfVideoFps = Math.min(52, Math.max(28, Math.round(28 + (trackBpm - 60) * 0.2)));
-            const infoText = `${perfVideoFps}FPS ループ (BPM:${trackBpm})`;
             
-            const headerFpsEl = document.getElementById('header-fps-display');
-            if (headerFpsEl) {
-                headerFpsEl.textContent = infoText;
-                headerFpsEl.style.display = 'inline-block';
-            }
-
-            if (perfDisplayMode.value === 'sprite') {
-                perfSpriteCanvas.style.display = 'block';
-                perfPlayer.style.display = 'none';
-                const badgeEl = document.getElementById('perf-video-badge');
-                if (badgeEl) {
-                    badgeEl.textContent = '静止画スプライト';
-                }
-                
-                perfPlayer.pause();
-                perfVideoLoaded = false;
-                loadSpriteSheet(spriteUrl, true);
-            } else {
-                perfSpriteCanvas.style.display = 'none';
-                perfPlayer.style.display = 'block';
-                const badgeEl = document.getElementById('perf-video-badge');
-                if (badgeEl) {
-                    badgeEl.textContent = infoText;
-                }
-
-                if (videoUrl) {
-                    perfVideoLoaded = false;
-                    perfPlayer.src = videoUrl;
-                    perfPlayer.load();
-                    perfPlayer.onloadedmetadata = () => {
-                        perfVideoLoaded = true;
-                        perfPlayer.playbackRate = perfVideoFps / 24;
-                        if (!audio.paused) {
-                            perfPlayer.play().catch(e => console.log("Video play on playTrack failed:", e));
-                        }
-                    };
-                } else {
-                    perfPlayer.pause();
-                    perfVideoLoaded = false;
-                }
-            }
+            loadSpriteSheet(spriteUrl, true);
         }
 
         function changeTrackVersion(id, filename) {
@@ -4567,29 +5040,8 @@
                 
                 const t = tracks.find(x => x.id === id);
                 if (t) {
-                    let trackBpm = 120;
-                    if (t.bpms && t.bpms[filename]) {
-                        trackBpm = t.bpms[filename];
-                    }
-                    perfVideoFps = Math.min(52, Math.max(28, Math.round(28 + (trackBpm - 60) * 0.2)));
-                    const infoText = `${perfVideoFps}FPS ループ (BPM:${trackBpm})`;
-                    
-                    const badgeEl = document.getElementById('perf-video-badge');
-                    if (badgeEl && perfDisplayMode.value !== 'sprite') {
-                        badgeEl.textContent = infoText;
-                    }
-                    const headerFpsEl = document.getElementById('header-fps-display');
-                    if (headerFpsEl) {
-                        headerFpsEl.textContent = infoText;
-                        headerFpsEl.style.display = 'inline-block';
-                    }
-                    
-                    if (perfDisplayMode.value === 'sprite') {
-                        const spriteUrl = instrumentSpriteMap[t.instrument] || "../assets/images/game/play101.webp";
-                        loadSpriteSheet(spriteUrl, true);
-                    } else if (perfVideoLoaded) {
-                        perfPlayer.playbackRate = perfVideoFps / 24;
-                    }
+                    const spriteUrl = instrumentSpriteMap[t.instrument] || "../assets/images/game/play101.webp";
+                    loadSpriteSheet(spriteUrl, true);
                     updateDebouncedTimeline();
                 }
             }
@@ -4691,15 +5143,9 @@
 
         audio.addEventListener('play', () => {
             document.getElementById('global-play-pause').textContent = '⏸️';
-            if (perfDisplayMode.value === 'video' && perfVideoLoaded && perfWidget.style.display !== 'none') {
-                perfPlayer.play().catch(e => console.log("Video play on audio play failed:", e));
-            }
         });
         audio.addEventListener('pause', () => {
             document.getElementById('global-play-pause').textContent = '▶️';
-            if (perfDisplayMode.value === 'video' && perfVideoLoaded && perfWidget.style.display !== 'none') {
-                perfPlayer.pause();
-            }
         });
         audio.addEventListener('ended', () => {
             if (isLooping) return;

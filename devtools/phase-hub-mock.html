@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Phase Hub Mock - Bard in Maghribal</title>
+<style>
+  /* 基本リセットと画面固定 */
+  body { margin: 0; padding: 0; background: #000; color: #eee; overflow: hidden; font-family: "Noto Serif JP", serif; }
+  #wrapper { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; }
+  
+  /* 1920x1080 固定キャンバス (contain scale対象) */
+  #app-container {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    background-color: #1a1a1a;
+    /* 本来はここにフェーズ背景スチルを設定します。例: S01_ELEGANT_PORT_MARKET.webp */
+    background-image: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.8)), url('https://picsum.photos/1920/1080/222/555?text=S01_ELEGANT_PORT_MARKET+(Phase+Background)');
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    transform-origin: center center;
+  }
+
+  /* 共通UIパーツ */
+  .panel {
+    background: rgba(20, 20, 20, 0.85);
+    border: 2px solid #a88b56; /* 真鍮/ゴールド風の縁取り */
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  }
+
+  .btn {
+    background: linear-gradient(to bottom, #4a3b2c, #2a2015);
+    border: 2px solid #a88b56;
+    color: #f0e6d2;
+    padding: 10px 20px;
+    font-size: 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+  }
+  .btn:hover { background: linear-gradient(to bottom, #6a5540, #3a2d1d); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(168,139,86,0.4); }
+  .btn:active { transform: translateY(1px); }
+
+  /* ヘッダー領域 (ステータス・リソース) */
+  #header {
+    position: absolute; top: 20px; left: 20px; right: 20px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .location-info { font-size: 28px; font-weight: bold; color: #fff; text-shadow: 2px 2px 4px #000; }
+  .resource-info { display: flex; gap: 30px; font-size: 24px; color: #ffd700; }
+  .resource-item { display: flex; align-items: center; gap: 10px; text-shadow: 1px 1px 2px #000; }
+  .param-info { display: flex; gap: 20px; font-size: 22px; }
+  .param-brave { color: #ff7676; } .param-elegant { color: #76aaff; } .param-mystic { color: #76ffaa; }
+
+  /* イベント候補カード領域 */
+  #event-cards-container {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -40%);
+    display: flex; gap: 40px; justify-content: center; align-items: center;
+  }
+
+  .event-card {
+    width: 320px; height: 480px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    align-items: center; text-align: center;
+    background: linear-gradient(to bottom, rgba(40,40,40,0.9), rgba(10,10,10,0.95));
+    border: 3px solid #555;
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  .event-card:hover { transform: translateY(-10px) scale(1.02); box-shadow: 0 10px 30px rgba(0,0,0,0.8); border-color: #a88b56; }
+  
+  /* カードの属性ごとの装飾 */
+  .card-brave { border-top: 6px solid #b22222; }
+  .card-elegant { border-top: 6px solid #4169e1; }
+  .card-mystic { border-top: 6px solid #2e8b57; }
+
+  .event-icon {
+    width: 100px; height: 100px;
+    background: #333; border: 2px solid #777; border-radius: 50%;
+    margin-top: 20px; display: flex; align-items: center; justify-content: center; font-size: 40px;
+  }
+  .event-type { font-size: 18px; color: #aaa; margin-top: 15px; letter-spacing: 2px; }
+  .event-title { font-size: 26px; color: #fff; font-weight: bold; margin: 10px 0; }
+  .event-desc { font-size: 16px; color: #ccc; line-height: 1.5; flex-grow: 1; margin-top: 20px; }
+  .event-reward { font-size: 18px; color: #ffd700; background: rgba(0,0,0,0.5); padding: 8px 15px; border-radius: 20px; width: 80%; }
+
+  /* アクション領域 (リロール等) */
+  #action-area {
+    position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 15px;
+  }
+  .reroll-count { font-size: 18px; color: #ccc; text-shadow: 1px 1px 2px #000; }
+  #btn-reroll { font-size: 24px; padding: 15px 40px; background: linear-gradient(to bottom, #2c3b4a, #151d2a); border-color: #568ba8; }
+  #btn-reroll:hover { background: linear-gradient(to bottom, #40556a, #1d283a); box-shadow: 0 4px 10px rgba(86,139,168,0.4); }
+
+  /* ボトムナビゲーション (編成等) */
+  #bottom-nav {
+    position: absolute; bottom: 30px; left: 30px; right: 30px;
+    display: flex; justify-content: space-between; align-items: flex-end;
+  }
+</style>
+</head>
+<body>
+
+<div id="wrapper">
+  <div id="app-container">
+    
+    <!-- ヘッダー：場所、リソース、パラメータ -->
+    <div id="header">
+      <div class="panel">
+        <div class="location-info">第1章：港町 - フェーズ 2 / 3</div>
+      </div>
+      <div class="panel param-info">
+        <div class="param-brave">⚔️ 勇猛: Lv 2</div>
+        <div class="param-elegant">🌹 優美: Lv 3</div>
+        <div class="param-mystic">👁️ 神秘: Lv 1</div>
+      </div>
+      <div class="panel resource-info">
+        <div class="resource-item"><span>💰</span> 250 G</div>
+        <div class="resource-item"><span>👑</span> 名声 45</div>
+      </div>
+    </div>
+
+    <!-- イベント候補表示領域 (通常イベント3種) -->
+    <div id="event-cards-container">
+      
+      <!-- 勇猛イベント候補 -->
+      <div class="event-card card-brave">
+        <div class="event-icon">⚔️</div>
+        <div>
+          <div class="event-type">ESCORT (護衛)</div>
+          <div class="event-title">波止場の治安維持</div>
+        </div>
+        <div class="event-desc">
+          港のならず者たちが積み荷を狙っている。<br>
+          剣と歌で彼らを追い払い、<br>商人たちの安全を確保しよう。
+        </div>
+        <div class="event-reward">勇猛 EXP + / 金 +</div>
+      </div>
+
+      <!-- 優美イベント候補 -->
+      <div class="event-card card-elegant">
+        <div class="event-icon">🎭</div>
+        <div>
+          <div class="event-type">PERFORMANCE (演奏)</div>
+          <div class="event-title">海鳥亭の余興</div>
+        </div>
+        <div class="event-desc">
+          船乗りたちで賑わう酒場。<br>
+          波の音に負けない華やかな演奏で、<br>客の心を掴みチップを稼ごう。
+        </div>
+        <div class="event-reward">優美 EXP + / 金 ++</div>
+      </div>
+
+      <!-- 神秘イベント候補 -->
+      <div class="event-card card-mystic">
+        <div class="event-icon">📜</div>
+        <div>
+          <div class="event-type">ANCIENT SONG (古歌)</div>
+          <div class="event-title">潮騒譜の欠片</div>
+        </div>
+        <div class="event-desc">
+          古い水夫が口ずさむ奇妙な歌。<br>
+          その旋律の裏に隠された、<br>海鳴りのような古い記憶を読み解く。
+        </div>
+        <div class="event-reward">神秘 EXP ++ / 名声 +</div>
+      </div>
+
+    </div>
+
+    <!-- リロール(再抽選)ボタン -->
+    <div id="action-area">
+      <div class=\"reroll-count\">無料リロール残り：2 回</div>
+      <button class=\"btn\" id=\"btn-reroll\">🔄 候補を再抽選する</button>
+    </div>
+
+    <!-- 仲間編成・メニュー等 -->
+    <div id=\"bottom-nav\">
+      <button class=\"btn\">⚙️ システムメニュー</button>
+      <button class=\"btn\" style=\"padding: 15px 30px; font-size: 22px;\">👥 仲間・編成 (Companion Manage)</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // 1920x1080 contain scale ロジック
+  function resize() {
+    const container = document.getElementById('app-container');
+    const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    container.style.transform = `scale(${scale})`;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+</script>
+</body>
+</html>

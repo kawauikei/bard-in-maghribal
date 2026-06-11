@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Effect Tester - Bard in Maghribal</title>
+<style>
+  /* 基本リセットと画面固定 */
+  body { margin: 0; padding: 0; background: #000; color: #eee; overflow: hidden; font-family: sans-serif; }
+  #wrapper { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; }
+  
+  /* 1920x1080 固定キャンバス (contain scale対象) */
+  #app-container {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    background: #1a1a1a;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    transform-origin: center center;
+  }
+  
+  #canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: auto; cursor: crosshair; }
+  
+  /* UIパネル (右側固定) */
+  #ui-panel {
+    position: absolute; top: 20px; right: 20px; width: 320px;
+    background: rgba(20, 20, 20, 0.9); border: 1px solid #444; border-radius: 8px;
+    padding: 15px; z-index: 10; font-size: 14px; pointer-events: auto;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  #ui-panel h3 { margin: 0 0 10px 0; font-size: 16px; color: #fff; text-align: center; }
+  .control-group { display: flex; justify-content: space-between; align-items: center; }
+  .control-group label { flex: 1; }
+  .control-group input, .control-group select { flex: 1; padding: 4px; background: #333; color: #fff; border: 1px solid #666; border-radius: 4px; }
+  .control-group input[type="range"] { flex: 1.5; }
+  .btn { padding: 8px; background: #4a4a4a; color: #fff; border: none; border-radius: 4px; cursor: pointer; text-align: center; }
+  .btn:hover { background: #666; }
+  
+  /* デモ用背景画像 (CSSで切り替え) */
+  .bg-tavern { background: linear-gradient(to bottom, #433, #211) !important; }
+  .bg-arena { background: linear-gradient(to bottom, #532, #210) !important; }
+  .bg-mystic { background: linear-gradient(to bottom, #134, #012) !important; }
+</style>
+</head>
+<body>
+
+<div id="wrapper">
+  <div id="app-container">
+    <canvas id="canvas" width="1920" height="1080"></canvas>
+    
+    <div id="ui-panel">
+      <h3>Bard in Maghribal<br>Effect Tester</h3>
+      
+      <div class="control-group">
+        <label>Preset:</label>
+        <select id="sel-preset">
+          <option value="Text Scatter">1. Text Scatter</option>
+          <option value="Rune Scatter">2. Rune Scatter</option>
+          <option value="Music Notes">3. Music Notes</option>
+          <option value="Screen Fade">4. Screen Fade</option>
+          <option value="Wipe Transition">5. Wipe Transition</option>
+          <option value="UI Pop">6. UI Pop</option>
+          <option value="Success Burst">7. Success Burst</option>
+          <option value="Failure Dust">8. Failure Dust</option>
+        </select>
+      </div>
+      
+      <hr style="border-color: #444; width: 100%;">
+      
+      <div class="control-group"><label>Count:</label><input type="number" id="in-count" value="30"></div>
+      <div class="control-group"><label>Duration:</label><input type="number" id="in-duration" value="60"></div>
+      <div class="control-group"><label>Speed:</label><input type="range" id="in-speed" min="1" max="20" step="1" value="5"></div>
+      <div class="control-group"><label>Gravity:</label><input type="range" id="in-gravity" min="-1" max="2" step="0.05" value="0.1"></div>
+      <div class="control-group"><label>Spread:</label><input type="range" id="in-spread" min="10" max="360" step="10" value="360"></div>
+      <div class="control-group"><label>Font Size:</label><input type="number" id="in-size" value="24"></div>
+      <div class="control-group"><label>Color:</label><input type="color" id="in-color" value="#ffffff"></div>
+      <div class="control-group">
+        <label>Chars:</label>
+        <input type="text" id="in-chars" value="あいうえお">
+      </div>
+      
+      <div class="control-group">
+        <label>Background:</label>
+        <select id="sel-bg">
+          <option value="">Default (Dark)</option>
+          <option value="bg-tavern">Tavern (Brave)</option>
+          <option value="bg-arena">Arena (Brave)</option>
+          <option value="bg-mystic">Mystic Tower</option>
+        </select>
+      </div>
+      
+      <div class="control-group">
+        <label><input type="checkbox" id="chk-auto"> Auto Repeat</label>
+        <label><input type="checkbox" id="chk-randomize"> Randomize</label>
+      </div>
+      
+      <button class="btn" id="btn-fire">Fire Effect (Center)</button>
+      <button class="btn" id="btn-clear">Clear Screen</button>
+      
+      <div style="font-size: 11px; color: #aaa; margin-top: 10px;">
+        ※ Canvas内をクリック/タップでもエフェクトが発火します。<br>
+        ※ Wipe Transitionは「砂風ワイプ」を想定しています。
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // 1920x1080 contain scale ロジック
+  function resize() {
+    const container = document.getElementById('app-container');
+    const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    container.style.transform = `scale(${scale})`;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // キャンバス設定
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  
+  // パーティクル管理
+  let particles = [];
+  let screenEffects = [];
+
+  // 記号プール定義 (仕様書準拠)
+  const POOL = {
+    text: "吟遊詩人物語砂風星",
+    mystic: "◇◆✦✧✶✷＊",
+    music: "♪♫♬♩♭♮♯",
+    sparkle: "✦✧✶✷☆★＊",
+    fail: "・｡ﾟ"
+  };
+
+  // プリセット定義
+  const presets = {
+    "Text Scatter": { count: 30, duration: 60, speed: 5, gravity: 0.1, spread: 360, size: 24, color: '#ffffff', chars: POOL.text, isScreen: false },
+    "Rune Scatter": { count: 40, duration: 80, speed: 4, gravity: 0.05, spread: 360, size: 30, color: '#20b2aa', chars: POOL.mystic, isScreen: false }, // 神秘カラー
+    "Music Notes": { count: 20, duration: 100, speed: 3, gravity: -0.05, spread: 180, size: 40, color: '#87cefa', chars: POOL.music, isScreen: false }, // 優美カラー、上に舞う
+    "Screen Fade": { duration: 60, color: '#000000', isScreen: true, type: 'fade' },
+    "Wipe Transition": { duration: 90, color: '#d2b48c', isScreen: true, type: 'wipe' }, // 砂色
+    "UI Pop": { count: 12, duration: 40, speed: 6, gravity: 0.2, spread: 360, size: 20, color: '#ffd700', chars: '✦✧', isScreen: false },
+    "Success Burst": { count: 80, duration: 90, speed: 12, gravity: 0.4, spread: 360, size: 35, color: '#ff6347', chars: POOL.sparkle, isScreen: false }, // 勇猛カラー
+    "Failure Dust": { count: 60, duration: 80, speed: 2, gravity: 0.6, spread: 120, size: 15, color: '#a9a9a9', chars: POOL.fail, isScreen: false } // 下に崩れ落ちる
+  };
+
+  // UI要素
+  const selPreset = document.getElementById('sel-preset');
+  const inCount = document.getElementById('in-count');
+  const inDuration = document.getElementById('in-duration');
+  const inSpeed = document.getElementById('in-speed');
+  const inGravity = document.getElementById('in-gravity');
+  const inSpread = document.getElementById('in-spread');
+  const inSize = document.getElementById('in-size');
+  const inColor = document.getElementById('in-color');
+  const inChars = document.getElementById('in-chars');
+  const chkAuto = document.getElementById('chk-auto');
+  const chkRandomize = document.getElementById('chk-randomize');
+  const selBg = document.getElementById('sel-bg');
+
+  // UIへの反映
+  function loadPreset(name) {
+    const p = presets[name];
+    if (!p) return;
+    if (!p.isScreen) {
+      inCount.value = p.count;
+      inGravity.value = p.gravity;
+      inSpread.value = p.spread;
+      inSize.value = p.size;
+      inChars.value = p.chars;
+      inSpeed.value = p.speed;
+    }
+    inDuration.value = p.duration;
+    inColor.value = p.color;
+  }
+
+  selPreset.addEventListener('change', (e) => loadPreset(e.target.value));
+  selBg.addEventListener('change', (e) => {
+    document.getElementById('app-container').className = e.target.value;
+  });
+
+  // 初期ロード
+  loadPreset("Text Scatter");
+
+  // パーティクルクラス
+  class Particle {
+    constructor(x, y, vx, vy, text, color, size, life) {
+      this.x = x; this.y = y; this.vx = vx; this.vy = vy;
+      this.text = text; this.color = color; this.size = size;
+      this.life = life; this.maxLife = life;
+      this.rotation = Math.random() * Math.PI * 2;
+      this.rotSpeed = (Math.random() - 0.5) * 0.2;
+    }
+    update(gravity) {
+      this.x += this.vx;
+      this.y += this.vy;
+      this.vy += gravity;
+      this.rotation += this.rotSpeed;
+      this.life--;
+    }
+    draw(ctx) {
+      const alpha = Math.max(0, this.life / this.maxLife);
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = this.color;
+      ctx.font = `${this.size}px sans-serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rotation);
+      ctx.fillText(this.text, 0, 0);
+      ctx.rotate(-this.rotation);
+      ctx.translate(-this.x, -this.y);
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  // 画面全体エフェクトクラス
+  class ScreenEffect {
+    constructor(type, duration, color) {
+      this.type = type;
+      this.duration = duration;
+      this.maxDuration = duration;
+      this.color = color;
+    }
+    update() {
+      this.duration--;
+    }
+    draw(ctx) {
+      const progress = 1 - (this.duration / this.maxDuration);
+      ctx.fillStyle = this.color;
+      
+      if (this.type === 'fade') {
+        // 暗転・フェード
+        ctx.globalAlpha = Math.sin(progress * Math.PI); // In and Out
+        ctx.fillRect(0, 0, 1920, 1080);
+      } else if (this.type === 'wipe') {
+        // 砂風ワイプ (左から右へノイズ混じりの帯が流れるイメージの簡略版)
+        ctx.globalAlpha = 1;
+        const width = 1920 * progress * 1.5;
+        // 先端をギザギザに見せるための複数矩形
+        for(let i=0; i<10; i++){
+            ctx.fillRect(0, i * 108, width - (Math.random() * 200), 108);
+        }
+      }
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  // 発火ロジック
+  function fire(x, y) {
+    const presetName = selPreset.value;
+    const p = presets[presetName];
+    
+    let duration = parseInt(inDuration.value);
+    let color = inColor.value;
+
+    if (chkRandomize.checked) {
+      color = `hsl(${Math.random() * 360}, 80%, 60%)`;
+      duration += (Math.random() - 0.5) * 20;
+    }
+
+    if (p.isScreen) {
+      screenEffects.push(new ScreenEffect(p.type, duration, color));
+      return;
+    }
+
+    const count = parseInt(inCount.value);
+    const speed = parseFloat(inSpeed.value);
+    const gravity = parseFloat(inGravity.value);
+    const spread = parseFloat(inSpread.value);
+    const size = parseInt(inSize.value);
+    const chars = inChars.value;
+
+    // Music Notes用 (下から上へ扇形に拡散)
+    const angleOffset = presetName === "Music Notes" || presetName === "Failure Dust" ? -Math.PI/2 : 0;
+
+    for (let i = 0; i < count; i++) {
+      const angle = angleOffset + (Math.random() - 0.5) * (spread * Math.PI / 180);
+      const v = Math.random() * speed;
+      const vx = Math.cos(angle) * v;
+      const vy = Math.sin(angle) * v;
+      const char = chars.charAt(Math.floor(Math.random() * chars.length));
+      
+      let sSize = size + (Math.random() - 0.5) * 10;
+      if(chkRandomize.checked) sSize *= (0.5 + Math.random());
+
+      particles.push(new Particle(x, y, vx, vy, char, color, sSize, duration));
+    }
+  }
+
+  // マウスイベント
+  canvas.addEventListener('mousedown', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = 1920 / rect.width;
+    const scaleY = 1080 / rect.height;
+    const x = (e.clientX - rect.left) * scaleX;
+    const y = (e.clientY - rect.top) * scaleY;
+    fire(x, y);
+  });
+
+  // ボタンイベント
+  document.getElementById('btn-fire').addEventListener('click', () => fire(1920/2, 1080/2));
+  document.getElementById('btn-clear').addEventListener('click', () => { particles = []; screenEffects = []; });
+
+  // メインループ
+  let frameCount = 0;
+  function loop() {
+    ctx.clearRect(0, 0, 1920, 1080);
+
+    const gravity = parseFloat(inGravity.value);
+
+    // パーティクル処理
+    for (let i = particles.length - 1; i >= 0; i--) {
+      particles[i].update(gravity);
+      particles[i].draw(ctx);
+      if (particles[i].life <= 0) particles.splice(i, 1);
+    }
+
+    // 画面エフェクト処理
+    for (let i = screenEffects.length - 1; i >= 0; i--) {
+      screenEffects[i].update();
+      screenEffects[i].draw(ctx);
+      if (screenEffects[i].duration <= 0) screenEffects.splice(i, 1);
+    }
+
+    // Auto Repeat
+    if (chkAuto.checked && frameCount % 60 === 0) {
+      fire(1920/2 + (Math.random()-0.5)*500, 1080/2 + (Math.random()-0.5)*300);
+    }
+
+    frameCount++;
+    requestAnimationFrame(loop);
+  }
+  
+  loop();
+</script>
+</body>
+</html>
