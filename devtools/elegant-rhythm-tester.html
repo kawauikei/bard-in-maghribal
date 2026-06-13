@@ -176,9 +176,9 @@ input {
     top: 28px;
     right: 32px;
     z-index: 30;
-    width: 720px;
+    width: 880px;
     display: grid;
-    grid-template-columns: 1.5fr 0.74fr 0.75fr 1fr 0.92fr;
+    grid-template-columns: 1.35fr 0.64fr 0.72fr 0.86fr 0.8fr 0.76fr;
     gap: 12px;
     padding: 14px;
     border-radius: 8px;
@@ -232,6 +232,27 @@ input[type="range"]:disabled {
     cursor: not-allowed;
 }
 
+.input-status {
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 0 10px;
+    border: 1px solid rgba(148, 163, 184, 0.28);
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.92);
+    color: #f8fafc;
+    font-size: 14px;
+    font-weight: 900;
+}
+
+.input-status span:last-child {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+}
+
 .range-head {
     display: flex;
     justify-content: space-between;
@@ -246,15 +267,16 @@ input[type="range"]:disabled {
 }
 
 .toolbar-actions {
-    grid-column: 4 / 6;
+    grid-column: 5 / 7;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 10px;
     align-items: end;
 }
 
 .btn-primary,
-.btn-secondary {
+.btn-secondary,
+.bind-key-btn {
     height: 38px;
     border-radius: 6px;
     border: 1px solid transparent;
@@ -275,9 +297,72 @@ input[type="range"]:disabled {
     border-color: var(--line);
 }
 
+.bind-key-btn {
+    width: 100%;
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.12);
+    font-size: 12px;
+    letter-spacing: 0;
+}
+
+.bind-key-btn.waiting {
+    color: #07111f;
+    background: var(--gold);
+}
+
 .btn-primary:hover,
-.btn-secondary:hover {
+.btn-secondary:hover,
+.bind-key-btn:hover {
     transform: translateY(-1px);
+}
+
+#key-config-panel {
+    position: absolute;
+    top: 160px;
+    right: 32px;
+    z-index: 29;
+    width: 430px;
+    display: grid;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 8px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.26);
+    backdrop-filter: blur(18px);
+}
+
+.key-config-title {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.bind-row {
+    display: grid;
+    grid-template-columns: 62px 1fr 118px;
+    gap: 8px;
+    align-items: center;
+}
+
+.bind-row strong {
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.bind-row.brave strong { color: var(--brave); }
+.bind-row.elegant strong { color: var(--elegant); }
+.bind-row.mystic strong { color: var(--mystic); }
+
+.bind-row select {
+    height: 34px;
+    font-size: 12px;
+}
+
+body[data-input-mode="touch"] #key-config-panel {
+    display: none;
 }
 
 #field {
@@ -452,6 +537,51 @@ input[type="range"]:disabled {
     transform: translateY(-50%);
     background: rgba(255, 255, 255, 0.08);
     box-shadow: 0 0 30px currentColor, inset 0 0 18px currentColor;
+}
+
+body[data-input-mode="mouse"] .input-btn {
+    pointer-events: none;
+    opacity: 0.42;
+}
+
+.touch-lane-hitarea {
+    position: absolute;
+    left: 0;
+    right: 112px;
+    height: 128px;
+    transform: translateY(-50%);
+    z-index: 32;
+    border: 0;
+    padding: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: currentColor;
+    cursor: pointer;
+    display: none;
+    touch-action: manipulation;
+}
+
+.touch-lane-hitarea::after {
+    content: "";
+    position: absolute;
+    inset: 10px 0;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    transition: background 80ms ease, border-color 80ms ease, box-shadow 80ms ease;
+}
+
+.touch-lane-hitarea:active::after {
+    background: rgba(255,255,255,0.08);
+    border-color: currentColor;
+    box-shadow: inset 0 0 22px currentColor;
+}
+
+.touch-lane-hitarea.mystic { top: 17%; color: var(--mystic); }
+.touch-lane-hitarea.elegant { top: 50%; color: var(--elegant); }
+.touch-lane-hitarea.brave { top: 83%; color: var(--brave); }
+
+body[data-input-mode="touch"] .touch-lane-hitarea {
+    display: block;
 }
 
 .timing-rail {
@@ -749,8 +879,9 @@ input[type="range"]:disabled {
             </div>
             <div class="control-group">
                 <label for="input-mode-select">Input</label>
-                <select id="input-mode-select">
-                    <option value="mouse" selected>Mouse</option>
+                <div class="input-status" id="input-mode-status"><strong>PC</strong><span>AUTO</span></div>
+                <select id="input-mode-select" hidden>
+                    <option value="mouse" selected>PC</option>
                     <option value="touch">Touch</option>
                 </select>
             </div>
@@ -765,6 +896,41 @@ input[type="range"]:disabled {
             <div class="toolbar-actions">
                 <button id="play-btn" class="btn-primary">PLAY</button>
                 <button id="calibrate-btn" class="btn-secondary">SYNC</button>
+                <button id="fullscreen-btn" class="btn-secondary">FULL</button>
+            </div>
+        </div>
+
+        <div id="key-config-panel">
+            <div class="key-config-title">PC Key Config</div>
+            <div class="bind-row brave" data-bind-row="brave">
+                <strong>勇猛</strong>
+                <button class="bind-key-btn" data-key-bind="brave" type="button">D</button>
+                <select class="mouse-bind-select" data-mouse-bind="brave">
+                    <option value="none">No Mouse</option>
+                    <option value="0">Left Click</option>
+                    <option value="1">Middle Click</option>
+                    <option value="2">Right Click</option>
+                </select>
+            </div>
+            <div class="bind-row elegant" data-bind-row="elegant">
+                <strong>優美</strong>
+                <button class="bind-key-btn" data-key-bind="elegant" type="button">F</button>
+                <select class="mouse-bind-select" data-mouse-bind="elegant">
+                    <option value="none">No Mouse</option>
+                    <option value="0">Left Click</option>
+                    <option value="1">Middle Click</option>
+                    <option value="2">Right Click</option>
+                </select>
+            </div>
+            <div class="bind-row mystic" data-bind-row="mystic">
+                <strong>神秘</strong>
+                <button class="bind-key-btn" data-key-bind="mystic" type="button">J</button>
+                <select class="mouse-bind-select" data-mouse-bind="mystic">
+                    <option value="none">No Mouse</option>
+                    <option value="0">Left Click</option>
+                    <option value="1">Middle Click</option>
+                    <option value="2">Right Click</option>
+                </select>
             </div>
         </div>
 
@@ -787,6 +953,9 @@ input[type="range"]:disabled {
             <div class="lane-path brave"></div>
             <div id="judgment-line"></div>
             <div id="notes-layer"></div>
+            <button class="touch-lane-hitarea mystic" data-attr="mystic" aria-label="Mystic lane"></button>
+            <button class="touch-lane-hitarea elegant" data-attr="elegant" aria-label="Elegant lane"></button>
+            <button class="touch-lane-hitarea brave" data-attr="brave" aria-label="Brave lane"></button>
             <button class="input-btn mystic" data-attr="mystic" aria-label="Mystic"><span class="btn-icon"></span></button>
             <button class="input-btn elegant" data-attr="elegant" aria-label="Elegant"><span class="btn-icon"></span></button>
             <button class="input-btn brave" data-attr="brave" aria-label="Brave"><span class="btn-icon"></span></button>
@@ -858,12 +1027,26 @@ const RESULT_GRACE_SEC = 2.0;
 const COUNTDOWN_SEC = 3.0;
 const APPROACH_SEC = 1.25;
 const LATE_MISS_MARGIN_SEC = 0.18;
+const SETTINGS_STORAGE_KEY = "elegant_rhythm_tester_settings_v2";
+const DEFAULT_BINDINGS = {
+    brave: { key: "KeyD", mouse: "0" },
+    elegant: { key: "KeyF", mouse: "2" },
+    mystic: { key: "KeyJ", mouse: "1" }
+};
+const KEY_LABELS = {
+    Space: "Space",
+    ArrowUp: "Up",
+    ArrowDown: "Down",
+    ArrowLeft: "Left",
+    ArrowRight: "Right"
+};
 
 const gameContainer = document.getElementById("game-container");
 const player = document.getElementById("bgm-player");
 const trackSelect = document.getElementById("track-select");
 const densitySelect = document.getElementById("density-select");
 const inputModeSelect = document.getElementById("input-mode-select");
+const inputModeStatus = document.getElementById("input-mode-status");
 const windowSelect = document.getElementById("window-select");
 const speedInput = document.getElementById("note-speed-input");
 const speedVal = document.getElementById("speed-val");
@@ -875,6 +1058,7 @@ const seVol = document.getElementById("se-vol");
 const seVolVal = document.getElementById("se-vol-val");
 const playBtn = document.getElementById("play-btn");
 const calibrateBtn = document.getElementById("calibrate-btn");
+const fullscreenBtn = document.getElementById("fullscreen-btn");
 const notesLayer = document.getElementById("notes-layer");
 const laneContainer = document.getElementById("lane-container");
 const countdownOverlay = document.getElementById("countdown-overlay");
@@ -911,6 +1095,139 @@ let greats = 0;
 let goods = 0;
 let misses = 0;
 let lateHits = [];
+let keyBindings = JSON.parse(JSON.stringify(DEFAULT_BINDINGS));
+let waitingBindAttr = "";
+
+function cloneDefaultBindings() {
+    return JSON.parse(JSON.stringify(DEFAULT_BINDINGS));
+}
+
+function isTouchDevice() {
+    const mobileUA = /Android|iPhone|iPad|iPod|Mobile|Windows Phone/i.test(navigator.userAgent);
+    const compactTouch = navigator.maxTouchPoints > 0 &&
+        window.matchMedia("(pointer: coarse)").matches &&
+        Math.min(window.innerWidth, window.innerHeight) <= 820;
+    return mobileUA || compactTouch;
+}
+
+function readSavedSettings() {
+    try {
+        return JSON.parse(localStorage.getItem(SETTINGS_STORAGE_KEY) || "{}");
+    } catch {
+        return {};
+    }
+}
+
+function normalizeBindings(raw) {
+    const next = cloneDefaultBindings();
+    for (const attr of Object.keys(next)) {
+        if (!raw || typeof raw[attr] !== "object") continue;
+        if (typeof raw[attr].key === "string" && raw[attr].key) next[attr].key = raw[attr].key;
+        if (typeof raw[attr].mouse === "string") next[attr].mouse = raw[attr].mouse;
+    }
+    return next;
+}
+
+function saveSettings() {
+    const settings = {
+        track: trackSelect.value,
+        density: densitySelect.value,
+        window: windowSelect.value,
+        speed: speedInput.value,
+        offset: offsetInput.value,
+        bgm: bgmVol.value,
+        bindings: keyBindings
+    };
+    localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(settings));
+}
+
+function applySavedSettings() {
+    const settings = readSavedSettings();
+    if (settings.density) densitySelect.value = settings.density;
+    if (settings.window) windowSelect.value = settings.window;
+    if (settings.speed) speedInput.value = settings.speed;
+    if (settings.offset) offsetInput.value = settings.offset;
+    if (settings.bgm) bgmVol.value = settings.bgm;
+    keyBindings = normalizeBindings(settings.bindings);
+}
+
+function keyLabel(code) {
+    if (KEY_LABELS[code]) return KEY_LABELS[code];
+    if (/^Key[A-Z]$/.test(code)) return code.slice(3);
+    if (/^Digit\d$/.test(code)) return code.slice(5);
+    if (/^Numpad\d$/.test(code)) return `Num ${code.slice(6)}`;
+    return code.replace(/^(Key|Digit|Numpad)/, "");
+}
+
+function setInputMode(mode) {
+    inputModeSelect.value = mode;
+    document.body.dataset.inputMode = mode;
+    inputModeStatus.querySelector("strong").textContent = mode === "touch" ? "TOUCH" : "PC";
+    inputModeStatus.querySelector("span").textContent = mode === "touch" ? "LANE" : "KEY+MOUSE";
+}
+
+function updateInputModeFromDevice() {
+    setInputMode(isTouchDevice() ? "touch" : "mouse");
+}
+
+function refreshBindingUI() {
+    for (const attr of Object.keys(keyBindings)) {
+        const keyBtn = document.querySelector(`[data-key-bind="${attr}"]`);
+        const mouseSelect = document.querySelector(`[data-mouse-bind="${attr}"]`);
+        if (keyBtn) keyBtn.textContent = keyLabel(keyBindings[attr].key);
+        if (mouseSelect) mouseSelect.value = keyBindings[attr].mouse;
+    }
+}
+
+function syncControlLabels() {
+    noteSpeed = Number(speedInput.value);
+    speedVal.textContent = `${noteSpeed} px/s`;
+    const offsetValue = Number(offsetInput.value);
+    offsetVal.textContent = `${offsetValue > 0 ? "+" : ""}${offsetValue} ms`;
+    bgmVolVal.textContent = `${bgmVol.value}%`;
+    seVolVal.textContent = seVol.value === "0" ? "OFF" : `${seVol.value}%`;
+}
+
+function isSettingsTarget(target) {
+    return Boolean(target.closest("#settings-ui, #key-config-panel, .modal-overlay"));
+}
+
+function getAttributeForKey(code) {
+    return Object.keys(keyBindings).find((attr) => keyBindings[attr].key === code) || "";
+}
+
+function getAttributeForMouse(button) {
+    const value = String(button);
+    return Object.keys(keyBindings).find((attr) => keyBindings[attr].mouse === value) || "";
+}
+
+function setKeyBinding(attr, code) {
+    for (const other of Object.keys(keyBindings)) {
+        if (other !== attr && keyBindings[other].key === code) keyBindings[other].key = "";
+    }
+    keyBindings[attr].key = code;
+    waitingBindAttr = "";
+    document.querySelectorAll(".bind-key-btn").forEach((btn) => btn.classList.remove("waiting"));
+    refreshBindingUI();
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+    saveSettings();
+}
+
+function setMouseBinding(attr, buttonValue) {
+    for (const other of Object.keys(keyBindings)) {
+        if (other !== attr && keyBindings[other].mouse === buttonValue && buttonValue !== "none") {
+            keyBindings[other].mouse = "none";
+        }
+    }
+    keyBindings[attr].mouse = buttonValue;
+    refreshBindingUI();
+    saveSettings();
+}
+
+applySavedSettings();
+updateInputModeFromDevice();
+refreshBindingUI();
+syncControlLabels();
 
 function resizeGame() {
     const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
@@ -919,7 +1236,10 @@ function resizeGame() {
     gameContainer.style.height = "1080px";
 }
 
-window.addEventListener("resize", resizeGame);
+window.addEventListener("resize", () => {
+    resizeGame();
+    updateInputModeFromDevice();
+});
 resizeGame();
 
 function cleanSongName(name) {
@@ -951,6 +1271,10 @@ function populateTracks() {
         opt.title = fileName;
         trackSelect.appendChild(opt);
     });
+    const savedTrack = Number(readSavedSettings().track);
+    if (Number.isInteger(savedTrack) && savedTrack >= 0 && savedTrack < tracksData.length) {
+        trackSelect.value = String(savedTrack);
+    }
 }
 
 function selectTrack(idx) {
@@ -1011,6 +1335,7 @@ function updateHUD() {
 bgmVol.addEventListener("input", () => {
     bgmVolVal.textContent = `${bgmVol.value}%`;
     player.volume = Number(bgmVol.value) / 100;
+    saveSettings();
 });
 
 seVol.addEventListener("input", () => {
@@ -1020,24 +1345,33 @@ seVol.addEventListener("input", () => {
 speedInput.addEventListener("input", () => {
     noteSpeed = Number(speedInput.value);
     speedVal.textContent = `${noteSpeed} px/s`;
+    saveSettings();
 });
 
 offsetInput.addEventListener("input", () => {
     const value = Number(offsetInput.value);
     offsetVal.textContent = `${value > 0 ? "+" : ""}${value} ms`;
+    saveSettings();
 });
 
-trackSelect.addEventListener("change", () => selectTrack(Number(trackSelect.value)));
+trackSelect.addEventListener("change", () => {
+    selectTrack(Number(trackSelect.value));
+    saveSettings();
+});
 
 densitySelect.addEventListener("change", () => {
     if (!isPlaying) {
         resetRunStats();
         updateHUD();
     }
+    saveSettings();
 });
+
+windowSelect.addEventListener("change", saveSettings);
 
 playBtn.addEventListener("click", () => {
     isPlaying ? stopGame() : startGame();
+    playBtn.blur();
 });
 
 calibrateBtn.addEventListener("click", () => {
@@ -1045,6 +1379,34 @@ calibrateBtn.addEventListener("click", () => {
     offsetVal.textContent = "0 ms";
     lastJudge.textContent = "SYNC READY";
     setMeter(2, "#38bdf8");
+    saveSettings();
+});
+
+fullscreenBtn.addEventListener("click", () => {
+    if (!document.fullscreenElement) {
+        gameContainer.requestFullscreen().catch(() => {});
+    } else {
+        document.exitFullscreen().catch(() => {});
+    }
+    fullscreenBtn.blur();
+});
+
+document.addEventListener("fullscreenchange", () => {
+    fullscreenBtn.textContent = document.fullscreenElement ? "EXIT" : "FULL";
+    resizeGame();
+});
+
+document.querySelectorAll(".bind-key-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+        waitingBindAttr = btn.dataset.keyBind;
+        document.querySelectorAll(".bind-key-btn").forEach((item) => item.classList.remove("waiting"));
+        btn.classList.add("waiting");
+        btn.textContent = "Press key";
+    });
+});
+
+document.querySelectorAll(".mouse-bind-select").forEach((select) => {
+    select.addEventListener("change", () => setMouseBinding(select.dataset.mouseBind, select.value));
 });
 
 function startGame() {
@@ -1281,49 +1643,39 @@ document.querySelectorAll(".input-btn").forEach((btn) => {
     btn.addEventListener("contextmenu", (e) => e.preventDefault());
 });
 
-let mouseLeftDown = false;
-let mouseRightDown = false;
-let mouseChordMystic = false;
+document.querySelectorAll(".touch-lane-hitarea").forEach((lane) => {
+    lane.addEventListener("pointerdown", (e) => {
+        if (inputModeSelect.value !== "touch") return;
+        e.preventDefault();
+        flashButton(lane.dataset.attr);
+    });
+    lane.addEventListener("pointerup", (e) => {
+        if (inputModeSelect.value !== "touch") return;
+        e.preventDefault();
+        judgeInput(lane.dataset.attr);
+    });
+    lane.addEventListener("contextmenu", (e) => e.preventDefault());
+});
 
 function isMouseInputBlocked(target) {
-    return Boolean(target.closest("#settings-ui, .modal-overlay"));
+    return isSettingsTarget(target);
 }
 
 document.addEventListener("mousedown", (e) => {
     if (inputModeSelect.value !== "mouse" || isMouseInputBlocked(e.target)) return;
-    if (e.button === 0) mouseLeftDown = true;
-    if (e.button === 2) mouseRightDown = true;
-    if (mouseLeftDown && mouseRightDown) mouseChordMystic = true;
-    if (e.button === 1) {
+    const attr = getAttributeForMouse(e.button);
+    if (attr) {
         e.preventDefault();
-        flashButton("mystic");
+        flashButton(attr);
     }
 });
 
 document.addEventListener("mouseup", (e) => {
     if (inputModeSelect.value !== "mouse" || isMouseInputBlocked(e.target)) return;
-    e.preventDefault();
-
-    if (e.button === 1) {
-        judgeInput("mystic");
-        return;
-    }
-
-    if (mouseChordMystic && (e.button === 0 || e.button === 2)) {
-        judgeInput("mystic");
-        mouseChordMystic = false;
-        mouseLeftDown = false;
-        mouseRightDown = false;
-        return;
-    }
-
-    if (e.button === 0) {
-        mouseLeftDown = false;
-        judgeInput("brave");
-    }
-    if (e.button === 2) {
-        mouseRightDown = false;
-        judgeInput("elegant");
+    const attr = getAttributeForMouse(e.button);
+    if (attr) {
+        e.preventDefault();
+        judgeInput(attr);
     }
 });
 
@@ -1333,10 +1685,32 @@ document.addEventListener("contextmenu", (e) => {
 
 document.addEventListener("keydown", (e) => {
     if (e.repeat) return;
+    if (waitingBindAttr) {
+        e.preventDefault();
+        if (e.code !== "Escape") setKeyBinding(waitingBindAttr, e.code);
+        else {
+            waitingBindAttr = "";
+            refreshBindingUI();
+            document.querySelectorAll(".bind-key-btn").forEach((btn) => btn.classList.remove("waiting"));
+        }
+        return;
+    }
     if (e.key === "Escape") {
         if (!isPlaying) return;
         isPaused ? resumeGame() : pauseGame();
+        return;
     }
+    if (inputModeSelect.value !== "mouse") return;
+    const attr = getAttributeForKey(e.code);
+    if (attr) {
+        e.preventDefault();
+        judgeInput(attr);
+    }
+});
+
+document.addEventListener("keyup", (e) => {
+    if (inputModeSelect.value !== "mouse") return;
+    if (getAttributeForKey(e.code)) e.preventDefault();
 });
 
 function updateNotes() {
@@ -1694,7 +2068,7 @@ function loadTracksWhenReady() {
         tracksData = tracks;
         songEmotionsData = typeof songEmotions !== "undefined" ? songEmotions : {};
         populateTracks();
-        selectTrack(0);
+        selectTrack(Number(trackSelect.value) || 0);
     } else {
         trackTitle.textContent = "Waiting for rhythm_data.js...";
         setTimeout(loadTracksWhenReady, 100);
