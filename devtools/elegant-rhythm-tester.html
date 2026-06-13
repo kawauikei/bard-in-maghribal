@@ -406,16 +406,6 @@ input[type="range"]:disabled {
     will-change: transform;
 }
 
-.note::before {
-    content: "";
-    position: absolute;
-    inset: 7px;
-    border-radius: 50%;
-    background: currentColor;
-    opacity: 0.18;
-    filter: blur(10px);
-}
-
 .note-icon,
 .btn-icon {
     position: relative;
@@ -451,7 +441,7 @@ input[type="range"]:disabled {
     background: rgba(8, 18, 32, 0.94);
     box-shadow: 0 18px 35px rgba(0,0,0,0.38), inset 0 0 24px rgba(255,255,255,0.04);
     cursor: pointer;
-    transition: transform 70ms ease, box-shadow 70ms ease;
+    transition: box-shadow 70ms ease, background 70ms ease;
 }
 
 .input-btn.mystic { top: 17%; color: var(--mystic); }
@@ -459,8 +449,9 @@ input[type="range"]:disabled {
 .input-btn.brave { top: 83%; color: var(--brave); }
 .input-btn.active,
 .input-btn:active {
-    transform: translateY(-50%) scale(0.91);
-    box-shadow: 0 0 34px currentColor, inset 0 0 24px currentColor;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 30px currentColor, inset 0 0 18px currentColor;
 }
 
 .timing-rail {
@@ -619,7 +610,7 @@ input[type="range"]:disabled {
     font-size: 150px;
     font-weight: 900;
     text-shadow: 0 0 42px rgba(168, 85, 247, 0.82);
-    animation: countPulse 820ms ease-out infinite;
+    animation: countPulse 1000ms ease-out infinite;
 }
 
 #countdown-overlay.approach {
@@ -749,8 +740,8 @@ input[type="range"]:disabled {
                 </select>
             </div>
             <div class="control-group">
-                <div class="range-head"><label for="note-speed-input">Speed</label><span class="range-val" id="speed-val">520 px/s</span></div>
-                <input type="range" id="note-speed-input" min="260" max="920" value="520" step="20">
+                <div class="range-head"><label for="note-speed-input">Speed</label><span class="range-val" id="speed-val">180 px/s</span></div>
+                <input type="range" id="note-speed-input" min="180" max="620" value="180" step="20">
             </div>
             <div class="control-group">
                 <div class="range-head"><label for="offset">Offset</label><span class="range-val" id="offset-val">0 ms</span></div>
@@ -759,9 +750,8 @@ input[type="range"]:disabled {
             <div class="control-group">
                 <label for="input-mode-select">Input</label>
                 <select id="input-mode-select">
-                    <option value="hybrid" selected>Lane + Keys</option>
-                    <option value="buttons">Buttons + Keys</option>
-                    <option value="mouse">Lane Only</option>
+                    <option value="mouse" selected>Mouse</option>
+                    <option value="touch">Touch</option>
                 </select>
             </div>
             <div class="control-group">
@@ -863,8 +853,9 @@ const ICON_POS = {
 const AUDIO_BASE_DIR = "../assets/audio/vocal/";
 const SPRITE_BASE_DIR = "../assets/images/game/";
 const JUDGMENT_X_RATIO = 0.74;
-const LOOKAHEAD_SEC = 2.15;
-const COUNTDOWN_SEC = 2.2;
+const NOTE_SPAWN_X_RATIO = 0.03;
+const RESULT_GRACE_SEC = 2.0;
+const COUNTDOWN_SEC = 3.0;
 const APPROACH_SEC = 1.25;
 const LATE_MISS_MARGIN_SEC = 0.18;
 
@@ -1281,62 +1272,81 @@ function missNote(note) {
 document.querySelectorAll(".input-btn").forEach((btn) => {
     btn.addEventListener("pointerdown", (e) => {
         e.preventDefault();
-        judgeInput(btn.dataset.attr);
+        if (inputModeSelect.value === "touch") flashButton(btn.dataset.attr);
+    });
+    btn.addEventListener("pointerup", (e) => {
+        e.preventDefault();
+        if (inputModeSelect.value === "touch") judgeInput(btn.dataset.attr);
     });
     btn.addEventListener("contextmenu", (e) => e.preventDefault());
 });
 
-gameContainer.addEventListener("pointerdown", (e) => {
-    if (inputModeSelect.value === "buttons") return;
-    if (e.target.closest("button, select, input")) return;
-    const attr = getPointerLaneAttribute(e);
-    if (attr) {
+let mouseLeftDown = false;
+let mouseRightDown = false;
+let mouseChordMystic = false;
+
+function isMouseInputBlocked(target) {
+    return Boolean(target.closest("#settings-ui, .modal-overlay"));
+}
+
+document.addEventListener("mousedown", (e) => {
+    if (inputModeSelect.value !== "mouse" || isMouseInputBlocked(e.target)) return;
+    if (e.button === 0) mouseLeftDown = true;
+    if (e.button === 2) mouseRightDown = true;
+    if (mouseLeftDown && mouseRightDown) mouseChordMystic = true;
+    if (e.button === 1) {
         e.preventDefault();
-        judgeInput(attr);
+        flashButton("mystic");
     }
 });
 
-gameContainer.addEventListener("contextmenu", (e) => {
-    if (inputModeSelect.value !== "buttons" && !e.target.closest("button, select, input")) e.preventDefault();
+document.addEventListener("mouseup", (e) => {
+    if (inputModeSelect.value !== "mouse" || isMouseInputBlocked(e.target)) return;
+    e.preventDefault();
+
+    if (e.button === 1) {
+        judgeInput("mystic");
+        return;
+    }
+
+    if (mouseChordMystic && (e.button === 0 || e.button === 2)) {
+        judgeInput("mystic");
+        mouseChordMystic = false;
+        mouseLeftDown = false;
+        mouseRightDown = false;
+        return;
+    }
+
+    if (e.button === 0) {
+        mouseLeftDown = false;
+        judgeInput("brave");
+    }
+    if (e.button === 2) {
+        mouseRightDown = false;
+        judgeInput("elegant");
+    }
 });
 
-gameContainer.addEventListener("wheel", (e) => {
-    if (inputModeSelect.value === "buttons") return;
-    if (e.target.closest("button, select, input")) return;
-    if (e.deltaY < 0) judgeInput("mystic");
-    if (e.deltaY > 0) judgeInput("brave");
-}, { passive: true });
-
-function getPointerLaneAttribute(event) {
-    const rect = laneContainer.getBoundingClientRect();
-    if (event.clientY < rect.top || event.clientY > rect.bottom) return null;
-    const y = Math.max(0, Math.min(rect.height, event.clientY - rect.top));
-    const ratio = y / rect.height;
-    if (ratio < 0.34) return "mystic";
-    if (ratio < 0.67) return "elegant";
-    return "brave";
-}
+document.addEventListener("contextmenu", (e) => {
+    if (inputModeSelect.value === "mouse" && !isMouseInputBlocked(e.target)) e.preventDefault();
+});
 
 document.addEventListener("keydown", (e) => {
     if (e.repeat) return;
     if (e.key === "Escape") {
         if (!isPlaying) return;
         isPaused ? resumeGame() : pauseGame();
-        return;
     }
-    if (inputModeSelect.value === "mouse") return;
-    const key = e.key.toLowerCase();
-    if (key === "d" || key === "arrowleft") judgeInput("brave");
-    if (key === "f" || key === "arrowdown") judgeInput("elegant");
-    if (key === "j" || key === "arrowup" || key === "arrowright") judgeInput("mystic");
 });
 
 function updateNotes() {
     const laneWidth = laneContainer.clientWidth;
     const judgmentX = laneWidth * JUDGMENT_X_RATIO;
+    const spawnX = laneWidth * NOTE_SPAWN_X_RATIO;
+    const travelTime = Math.max(0.1, (judgmentX - spawnX) / noteSpeed);
     for (const note of currentNotes) {
         if (note.hit || note.missed) continue;
-        if (note.time <= gameTime + LOOKAHEAD_SEC) {
+        if (note.time <= gameTime + travelTime) {
             if (!note.dom) {
                 const el = document.createElement("div");
                 el.className = `note ${note.attribute}`;
@@ -1355,6 +1365,14 @@ function updateNotes() {
     }
 }
 
+function getTrackEndTime() {
+    const lastNoteTime = currentNotes.length ? currentNotes[currentNotes.length - 1].time : 0;
+    if (Number.isFinite(player.duration) && player.duration > 0) {
+        return player.duration + RESULT_GRACE_SEC;
+    }
+    return lastNoteTime + RESULT_GRACE_SEC + 1.0;
+}
+
 function updateGameLoop(now) {
     if (!isPlaying || isPaused) return;
 
@@ -1364,8 +1382,8 @@ function updateGameLoop(now) {
         gameTime = -APPROACH_SEC;
         countdownOverlay.classList.add("active");
         countdownOverlay.classList.remove("approach");
-        if (left > 1.45) countdownText.textContent = "3";
-        else if (left > 0.75) countdownText.textContent = "2";
+        if (left > 2.0) countdownText.textContent = "3";
+        else if (left > 1.0) countdownText.textContent = "2";
         else if (left > 0) countdownText.textContent = "1";
         else {
             isCountingDown = false;
@@ -1383,13 +1401,13 @@ function updateGameLoop(now) {
         if (elapsed >= APPROACH_SEC) {
             isApproaching = false;
             countdownOverlay.classList.remove("approach");
-            countdownText.textContent = "START";
+            countdownOverlay.classList.remove("active");
+            countdownText.textContent = "";
             songStartPerformance = performance.now();
             player.currentTime = 0;
             player.muted = false;
             player.volume = Number(bgmVol.value) / 100;
             if (player.paused) player.play().catch(() => {});
-            setTimeout(() => countdownOverlay.classList.remove("active"), 460);
         }
     } else {
         const virtualTime = (performance.now() - songStartPerformance) / 1000;
@@ -1399,8 +1417,7 @@ function updateGameLoop(now) {
     if (!isCountingDown) updateNotes();
     updateHUD();
 
-    const allResolved = currentNotes.length && currentNotes.every((note) => note.hit || note.missed);
-    if (player.ended || allResolved) {
+    if (player.ended || gameTime >= getTrackEndTime()) {
         setTimeout(() => { if (isPlaying) displayResults(); }, 650);
         return;
     }
