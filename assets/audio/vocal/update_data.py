@@ -176,8 +176,13 @@ if os.path.exists(prompt_dir):
 if os.path.exists(vocal_dir):
     audio_files = [f for f in os.listdir(vocal_dir) if f.endswith(".mp3")]
     for f in audio_files:
+        # Matches the standard ID prefix e.g. song_101_211_321 followed by optional text or Japanese labels and extension
         match = re.match(r"^(song_[0-9]{3}_[0-9]{3}_[0-9]{3})(.*)\.(mp3)$", f)
         if not match:
+            # Matches special IDs like song_special_01_brave followed by optional Japanese labels and extension
+            match = re.match(r"^(song_special_[0-9]{2}_[a-zA-Z0-9]+)(.*)\.(mp3)$", f)
+        if not match:
+            # Check other patterns if needed
             match = re.match(r"^([0-9A-Za-z]{5,7})__(.+)\.(mp3)$", f)
         if not match:
             continue

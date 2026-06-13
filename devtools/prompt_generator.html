@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sprite Prompt Generator</title>
+<style>
+  body { font-family: sans-serif; padding: 20px; background: #1a1a1a; color: #eee; }
+  h1 { font-size: 1.5rem; color: #fff; margin-bottom: 10px; }
+  .controls { margin-bottom: 15px; padding: 10px; background: #2a2a2a; border-radius: 4px; }
+  .controls label { margin-right: 15px; cursor: pointer; font-weight: bold; }
+  .btn-group { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+  button {
+    padding: 10px 20px; font-size: 1rem; cursor: pointer; border: none; border-radius: 4px;
+    background: #4CAF50; color: white; transition: background 0.2s;
+  }
+  button:hover { background: #45a049; }
+  textarea {
+    width: 100%; height: 400px; padding: 10px; background: #222; color: #fff;
+    border: 1px solid #555; border-radius: 4px; font-family: monospace; resize: vertical;
+  }
+  .toast {
+    visibility: hidden; min-width: 250px; background-color: #333; color: #fff;
+    text-align: center; border-radius: 4px; padding: 16px; position: fixed;
+    z-index: 1; left: 50%; bottom: 30px; transform: translateX(-50%); opacity: 0;
+    transition: opacity 0.3s, visibility 0.3s; box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+  }
+  .toast.show { visibility: visible; opacity: 1; }
+</style>
+</head>
+<body>
+
+<h1>16コマ個別指定プロンプト生成ツール (nano banana2向け)</h1>
+
+<div class="controls">
+  <label><input type="radio" name="attribute" value="brave" checked> ⚔️ Brave (勇猛 / 厚塗り油絵風)</label>
+  <label><input type="radio" name="attribute" value="elegant"> ✨ Elegant (優美 / 透明水彩風)</label>
+  <label><input type="radio" name="attribute" value="mystic"> 🔮 Mystic (神秘 / パステル風)</label>
+</div>
+
+<div class="btn-group">
+  <button onclick="generatePrompt('joy', 'white background, warm color watercolor splash, yellow and pink')">😊 Joy (喜)</button>
+  <button onclick="generatePrompt('anger', 'white background, red and dark watercolor splatter, aggressive brushstrokes')">😡 Anger (怒)</button>
+  <button onclick="generatePrompt('sorrow', 'white background, cool blue and purple watercolor bleed, quiet atmosphere')">😢 Sorrow (哀)</button>
+  <button onclick="generatePrompt('serious', 'white background, sharp navy and crimson watercolor splash')">😐 Serious (真剣)</button>
+  <button onclick="generatePrompt('neutral', 'white background, soft pale green and light blue watercolor splash')">🙂 Neutral (通常)</button>
+</div>
+
+<textarea id="output" readonly placeholder="ボタンをクリックするとプロンプトが生成され、自動的にコピーされます..."></textarea>
+
+<div id="toast" class="toast">クリップボードにコピーしました！</div>
+
+<script>
+// --- データプール定義 ---
+
+// 距離 (各行で必ず4種シャッフルされる)
+const distances = ["close-up", "bust up", "cowboy shot", "knee up"];
+
+// 属性別 画風(スタイル)タグ
+const styleTags = {
+  brave: "thick coating, dramatic lighting, high contrast, sharp focus",
+  elegant: "watercolor (medium), transparent watercolor, soft focus, sparkling, colorful",
+  mystic: "pastel colors, ethereal, soft lighting, glowing, muted colors"
+};
+
+// アングル (共通 + 属性専用)
+const angles = {
+  common: ["front view", "from side", "looking up", "looking down", "profile"],
+  brave: ["dynamic angle", "dutch angle", "from below"],
+  elegant: ["looking at viewer", "graceful angle"],
+  mystic: ["looking down", "mysterious angle"]
+};
+
+// 状態別アクション (共通 + 属性専用)
+const stateData = [
+  { 
+    name: "BGM", 
+    actions: {
+      common: ["closed mouth", "smile", "eyes closed"],
+      brave: ["serious look", "sharp gaze"],
+      elegant: ["gentle smile", "graceful resting"],
+      mystic: ["praying", "quiet pose"]
+    }
+  },
+  { 
+    name: "VOCAL", 
+    actions: {
+      common: ["singing", "hand on chest", "humming"],
+      brave: ["confident singing"],
+      elegant: ["elegant pose", "soft singing"],
+      mystic: ["whispering song"]
+    }
+  },
+  { 
+    name: "CHORUS", 
+    actions: {
+      common: ["singing", "looking away", "eyes closed singing"],
+      brave: ["aggressive pose", "outstretched arm"],
+      elegant: ["dancing", "twirling"],
+      mystic: ["praying", "hands together"]
+    }
+  },
+  { 
+    name: "VOCAL_UP", 
+    actions: {
+      common: ["singing passionately", "open mouth", "reaching out"],
+      brave: ["shouting", "dynamic pose", "intense expression"],
+      elegant: ["emotional singing", "elegant pose", "graceful movement"],
+      mystic: ["ethereal pose", "eyes closed singing", "mystical gesture"]
+    }
+  }
+];
+
+// 視覚効果 (VFX) - 4行目用
+const vfxEffects = ["extreme perspective", "action lines", "dramatic lighting", "spotlight"];
+
+// --- 補助関数 ---
+
+// 配列をシャッフルする
+function shuffle(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// ランダムに1つ選ぶ
+function getRandom(array) {
+  return array[Math.floor(Math.random() * array.length)];
+}
+
+// --- メイン生成ロジック ---
+
+function generatePrompt(emotionId, emotionBgTags) {
+  // 選択された属性を取得
+  const selectedAttr = document.querySelector('input[name="attribute"]:checked').value;
+  const currentStyleTag = styleTags[selectedAttr];
+
+  let prompt = `【全体指示】
+主人公の設定画（protagonist_reference_sheet_all_v1.jpeg）を必ず参照すること。
+若いダークエルフの女性の吟遊詩人（青み銀髪、褐色寄り肌、紫目、エルフ耳、白/アイボリー衣装）。
+人間耳と動物耳が混在する「耳4つ」の描画は禁止。文字、ラベル、UI、枠飾りは一切描かない。
+4x4のグリッド画像（16コマのスプライトシート）を生成してください。
+指定感情: ${emotionId}
+
+Art Style Tags: ${currentStyleTag}
+Background Tags: ${emotionBgTags}
+
+【コマ個別指定】
+`;
+
+  let frameCount = 1;
+  
+  // 選択属性に応じたアングル配列を合成
+  const currentAngles = angles.common.concat(angles[selectedAttr]);
+
+  // 4行ループ
+  for (let row = 0; row < 4; row++) {
+    const state = stateData[row];
+    // 距離4種をかぶりなしでシャッフル
+    const rowDistances = shuffle(distances);
+    
+    // 選択属性に応じたアクション配列を合成
+    const currentActions = state.actions.common.concat(state.actions[selectedAttr]);
+
+    // 4列（4コマ）ループ
+    for (let col = 0; col < 4; col++) {
+      const distance = rowDistances[col];
+      const angle = getRandom(currentAngles);
+      const action = getRandom(currentActions);
+      
+      let vfx = "";
+      // 4行目(VOCAL_UP)は 50% の確率で視覚効果を付与
+      if (row === 3 && Math.random() < 0.5) {
+        vfx = `, ${getRandom(vfxEffects)}`;
+      }
+      
+      // シンプルなタグ結合（余計な日本語説明なし）
+      prompt += `Frame ${frameCount}: ${distance}, ${angle}, ${action}${vfx}\n`;
+      frameCount++;
+    }
+  }
+
+  // テキスト排除を強化したネガティブプロンプト
+  prompt += `
+Negative prompt:
+text, typography, letters, words, speech bubble, watermark, signature, label, UI, borders, panel frames, instruments, lute, flute, weapons, human ears, animal ears, dark background, uneven lighting`;
+
+  const outputEl = document.getElementById("output");
+  outputEl.value = prompt;
+
+  // クリップボードにコピー
+  navigator.clipboard.writeText(prompt).then(() => {
+    showToast();
+  }).catch(err => {
+    console.error("クリップボードへのコピーに失敗しました:", err);
+  });
+}
+
+function showToast() {
+  const toast = document.getElementById("toast");
+  toast.className = "toast show";
+  setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+}
+</script>
+
+</body>
+</html>

@@ -161,7 +161,7 @@ body {
   <div id="right-top">
     <h2>🎨 コンポーザー</h2>
     <div class="hc">
-      <div class="np">出力 <input type="number" id="oc-cols" value="8" min="1" max="32">×<input type="number" id="oc-rows" value="4" min="1" max="16"></div>
+      <div class="np">出力 <span id="oc-cols-display" style="font-weight:bold;color:var(--text);">8</span>×<input type="number" id="oc-rows" value="4" min="1" max="16"></div>
       <button class="btn btn-d" onclick="clearAll()">全消去</button>
       <button class="btn btn-p" onclick="exportPng()">⬇ PNG出力</button>
     </div>
@@ -170,7 +170,7 @@ body {
     <div id="row-labels"></div>
     <div id="out-grid"></div>
   </div>
-  <div id="sbar">配置: <b id="sf">0</b> &nbsp;空き: <b id="se">32</b> &nbsp;合計: <b id="st">32</b></div>
+  <div id="sbar">配置: <b id="sf">0</b> &nbsp;空き: <b id="se">64</b> &nbsp;合計: <b id="st">64</b></div>
 </div>
 
 <div id="drop-overlay">🖼 ドロップして追加</div>
@@ -191,7 +191,7 @@ const ROW_META=[
 ];
 
 let sheets=[], nextId=0;
-let outCols=8, outRows=4;
+let outCols=16, outRows=4;
 // slots[row][col] = null | {canvas,w,h,sheetId,cellIdx}
 let slots=[];
 
@@ -387,8 +387,17 @@ function renderSrcList(){
     });
     // simpler count
     let uc=0;
-    for(const[k,v] of usedMap) if(k.startsWith(`${sheet.id}_`)) uc++;
     hd.innerHTML=`<strong>${sn}</strong><span>${sheet.cols}×${sheet.rows} 採用:${uc}</span>`;
+    
+    // 一括配置ボタンを追加
+    const addAllBtn=document.createElement('button');
+    addAllBtn.className='rm-btn';
+    addAllBtn.textContent='📥';
+    addAllBtn.title='このシートの全セルを一括配置';
+    addAllBtn.style.marginRight='8px';
+    addAllBtn.onclick=()=>addSheetToSlots(sheet.id);
+    hd.appendChild(addAllBtn);
+
     const rm=document.createElement('button');rm.className='rm-btn';rm.textContent='✕';rm.title='削除';
     rm.onclick=()=>removeSheet(sheet.id);
     hd.appendChild(rm);
@@ -505,6 +514,39 @@ function removeSheet(id){
   renderSrcList();renderOutGrid();updateStatus();
 }
 
+function addSheetToSlots(sheetId) {
+  const sheet = sheets.find(s => s.id === sheetId);
+  if (!sheet) return;
+
+  let addedCount = 0;
+  // シートの各行(0~3)について、セルをslotsの対応行の空きに詰めていく
+  for (let r = 0; r < Math.min(sheet.rows, outRows); r++) {
+    const rowCells = sheet.cells.filter(c => c.row === r);
+    rowCells.forEach(cell => {
+      const cellIdx = cell.row * sheet.cols + cell.col;
+      // 重複配置をチェック (同一セルが既に同枠内にある場合はスキップして良いが、ユーザー指示上は「丸ごと追加」)
+      // 単純に空きを探して入れる
+      const emptyCol = slots[r].findIndex(s => s === null);
+      if (emptyCol !== -1 && emptyCol < outCols) {
+        slots[r][emptyCol] = {
+          canvas: cell.canvas,
+          w: sheet.cw,
+          h: sheet.ch,
+          sheetId: sheetId,
+          cellIdx: cellIdx,
+          originalRow: r
+        };
+        addedCount++;
+      }
+    });
+  }
+
+  renderSrcList();
+  renderOutGrid();
+  updateStatus();
+  toast(`${sheet.name} から ${addedCount} セルを一括配置しました`);
+}
+
 // ── Toggle ───────────────────────────────────────
 function toggleCell(sid,cellIdx,srcRow){
   if(srcRow>=outRows){toast(`出力は${outRows}行です`);return;}
@@ -528,19 +570,37 @@ function compactRow(row){
 }
 
 // ── Output grid ──────────────────────────────────
-function computeCellSize(){
+function computeCellSize(cols){
+  const targetCols = cols || outCols;
   const area=document.getElementById('out-area');
   const rl=document.getElementById('row-labels');
   const rlW=62; // row label width
   const availW=area.clientWidth-rlW-30;
   const availH=area.clientHeight-20;
-  const byW=Math.floor(availW/outCols);
+  const byW=Math.floor(availW/targetCols);
   const byH=Math.floor(availH/outRows);
-  return Math.max(40,Math.min(byW,byH,300));
+  return Math.max(30,Math.min(byW,byH,300));
 }
 
 function renderOutGrid(){
-  const cellSize=computeCellSize();
+  // 実際に画像が配置されている最大列数を計算する
+  let maxUsedCol = 0;
+  for (let r = 0; r < outRows; r++) {
+    for (let c = 0; c < outCols; c++) {
+      if (slots[r][c]) {
+        maxUsedCol = Math.max(maxUsedCol, c + 1);
+      }
+    }
+  }
+
+  // 表示する列数: 最低8列。ただし、最大使用列数+1 (最大16列まで)
+  const displayCols = Math.min(16, Math.max(8, maxUsedCol + 1));
+  const cellSize=computeCellSize(displayCols);
+
+  const colsDisp = document.getElementById('oc-cols-display');
+  if (colsDisp) {
+    colsDisp.textContent = maxUsedCol > 8 ? maxUsedCol : 8;
+  }
 
   // row labels
   const rl=document.getElementById('row-labels');
@@ -559,9 +619,9 @@ function renderOutGrid(){
   rl.style.gap='3px';
 
   const g=document.getElementById('out-grid');
-  g.style.gridTemplateColumns=`repeat(${outCols},${cellSize}px)`;
+  g.style.gridTemplateColumns=`repeat(${displayCols},${cellSize}px)`;
   g.innerHTML='';
-  for(let r=0;r<outRows;r++) for(let c=0;c<outCols;c++){
+  for(let r=0;r<outRows;r++) for(let c=0;c<displayCols;c++){
     const s=slots[r]&&slots[r][c];
     const m=ROW_META[r];
     const d=document.createElement('div');
@@ -714,10 +774,6 @@ function updateStatus(){
   document.getElementById('st').textContent=total;
 }
 
-document.getElementById('oc-cols').addEventListener('change',e=>{
-  outCols=Math.max(1,parseInt(e.target.value)||8);e.target.value=outCols;
-  initSlots();renderSrcList();renderOutGrid();updateStatus();
-});
 document.getElementById('oc-rows').addEventListener('change',e=>{
   outRows=Math.max(1,parseInt(e.target.value)||4);e.target.value=outRows;
   initSlots();renderSrcList();renderOutGrid();updateStatus();
@@ -735,16 +791,30 @@ function exportPng(){
   let cw=0,ch=0;
   slots.forEach(r=>r.forEach(s=>{if(s){cw=Math.max(cw,s.w);ch=Math.max(ch,s.h);}}));
   if(!cw){toast('配置済みセルがありません');return;}
+
+  // 9列目(c=8)以降で、画像が配置されている最大列数を探す
+  let maxUsedCol = 0;
+  for (let r = 0; r < outRows; r++) {
+    for (let c = 0; c < outCols; c++) {
+      if (slots[r][c]) {
+        maxUsedCol = Math.max(maxUsedCol, c + 1);
+      }
+    }
+  }
+
+  // 9列目以降に画像がある場合はその最大列数で出力、使われていなければ8列（またはoutColsの上限）にクリップする
+  const colsToExport = maxUsedCol > 8 ? maxUsedCol : Math.min(8, outCols);
+
   const oc=document.createElement('canvas');
-  oc.width=cw*outCols;oc.height=ch*outRows;
+  oc.width=cw*colsToExport;oc.height=ch*outRows;
   const ctx=oc.getContext('2d');ctx.clearRect(0,0,oc.width,oc.height);
-  for(let r=0;r<outRows;r++) for(let c=0;c<outCols;c++){
+  for(let r=0;r<outRows;r++) for(let c=0;c<colsToExport;c++){
     const s=slots[r][c];if(s) ctx.drawImage(s.canvas,c*cw,r*ch);
   }
   oc.toBlob(blob=>{
     const url=URL.createObjectURL(blob);
-    const a=document.createElement('a');a.href=url;a.download=`sprite_${outCols}x${outRows}.png`;a.click();
-    URL.revokeObjectURL(url);toast(`${outCols}×${outRows} PNG 出力完了`);
+    const a=document.createElement('a');a.href=url;a.download=`sprite_${colsToExport}x${outRows}.png`;a.click();
+    URL.revokeObjectURL(url);toast(`${colsToExport}×${outRows} PNG 出力完了`);
   },'image/png');
 }
 
