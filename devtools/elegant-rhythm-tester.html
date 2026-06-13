@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Elegant Rhythm Tester</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,6 +31,7 @@ body {
 }
 
 body {
+    position: relative;
     overflow: hidden;
     background:
         radial-gradient(circle at 20% 16%, rgba(16, 185, 129, 0.18), transparent 28%),
@@ -49,11 +50,14 @@ input {
 }
 
 #game-container {
-    position: relative;
+    position: absolute;
+    left: 50%;
+    top: 50%;
     width: 1920px;
     height: 1080px;
     overflow: hidden;
-    transform-origin: top left;
+    transform-origin: center center;
+    will-change: transform;
     background:
         linear-gradient(180deg, rgba(3, 7, 18, 0.25), rgba(3, 7, 18, 0.8)),
         radial-gradient(circle at 50% 12%, rgba(56, 189, 248, 0.16), transparent 33%),
@@ -176,12 +180,19 @@ input {
     top: 28px;
     right: 32px;
     z-index: 30;
-    width: 880px;
+    width: 1010px;
     display: grid;
-    grid-template-columns: 1.35fr 0.64fr 0.72fr 0.86fr 0.8fr 0.76fr;
+    grid-template-columns: 1.35fr 0.64fr 0.72fr 0.86fr 0.8fr 0.76fr 0.82fr;
     gap: 12px;
     padding: 14px;
     border-radius: 8px;
+}
+
+html:fullscreen,
+html:fullscreen body {
+    width: 100%;
+    height: 100%;
+    background: #030712;
 }
 
 .control-group {
@@ -267,7 +278,7 @@ input[type="range"]:disabled {
 }
 
 .toolbar-actions {
-    grid-column: 5 / 7;
+    grid-column: 5 / 8;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 10px;
@@ -347,6 +358,13 @@ input[type="range"]:disabled {
     align-items: center;
 }
 
+.key-timing-row {
+    display: grid;
+    grid-template-columns: 112px 1fr;
+    gap: 8px;
+    align-items: center;
+}
+
 .bind-row strong {
     font-size: 13px;
     font-weight: 900;
@@ -356,12 +374,17 @@ input[type="range"]:disabled {
 .bind-row.elegant strong { color: var(--elegant); }
 .bind-row.mystic strong { color: var(--mystic); }
 
-.bind-row select {
+.bind-row select,
+.key-timing-row select {
     height: 34px;
     font-size: 12px;
 }
 
 body[data-input-mode="touch"] #key-config-panel {
+    display: none;
+}
+
+body[data-input-mode="touch"] .pc-only-control {
     display: none;
 }
 
@@ -885,6 +908,13 @@ body[data-input-mode="touch"] .touch-lane-hitarea {
                     <option value="touch">Touch</option>
                 </select>
             </div>
+            <div class="control-group pc-only-control">
+                <label for="key-timing-select">Key Judge</label>
+                <select id="key-timing-select">
+                    <option value="down">Input / Press</option>
+                    <option value="up">Release</option>
+                </select>
+            </div>
             <div class="control-group">
                 <div class="range-head"><label for="bgm-vol">BGM</label><span class="range-val" id="bgm-vol-val">80%</span></div>
                 <input type="range" id="bgm-vol" min="0" max="100" value="80">
@@ -1047,6 +1077,7 @@ const trackSelect = document.getElementById("track-select");
 const densitySelect = document.getElementById("density-select");
 const inputModeSelect = document.getElementById("input-mode-select");
 const inputModeStatus = document.getElementById("input-mode-status");
+const keyTimingSelect = document.getElementById("key-timing-select");
 const windowSelect = document.getElementById("window-select");
 const speedInput = document.getElementById("note-speed-input");
 const speedVal = document.getElementById("speed-val");
@@ -1096,7 +1127,9 @@ let goods = 0;
 let misses = 0;
 let lateHits = [];
 let keyBindings = JSON.parse(JSON.stringify(DEFAULT_BINDINGS));
+let keyJudgeTiming = "down";
 let waitingBindAttr = "";
+let visualizerReady = false;
 
 function cloneDefaultBindings() {
     return JSON.parse(JSON.stringify(DEFAULT_BINDINGS));
@@ -1136,6 +1169,7 @@ function saveSettings() {
         speed: speedInput.value,
         offset: offsetInput.value,
         bgm: bgmVol.value,
+        keyJudgeTiming,
         bindings: keyBindings
     };
     localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(settings));
@@ -1148,6 +1182,8 @@ function applySavedSettings() {
     if (settings.speed) speedInput.value = settings.speed;
     if (settings.offset) offsetInput.value = settings.offset;
     if (settings.bgm) bgmVol.value = settings.bgm;
+    keyJudgeTiming = settings.keyJudgeTiming === "up" ? "up" : "down";
+    keyTimingSelect.value = keyJudgeTiming;
     keyBindings = normalizeBindings(settings.bindings);
 }
 
@@ -1230,16 +1266,26 @@ refreshBindingUI();
 syncControlLabels();
 
 function resizeGame() {
-    const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
-    gameContainer.style.transform = `scale(${scale})`;
+    const viewport = window.visualViewport || window;
+    const viewportWidth = viewport.width || window.innerWidth;
+    const viewportHeight = viewport.height || window.innerHeight;
+    const scale = Math.min(viewportWidth / 1920, viewportHeight / 1080);
+    gameContainer.style.transform = `translate(-50%, -50%) scale(${scale})`;
     gameContainer.style.width = "1920px";
     gameContainer.style.height = "1080px";
+    if (visualizerReady) resizeViz();
 }
 
 window.addEventListener("resize", () => {
     resizeGame();
     updateInputModeFromDevice();
 });
+if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", () => {
+        resizeGame();
+        updateInputModeFromDevice();
+    });
+}
 resizeGame();
 
 function cleanSongName(name) {
@@ -1369,6 +1415,11 @@ densitySelect.addEventListener("change", () => {
 
 windowSelect.addEventListener("change", saveSettings);
 
+keyTimingSelect.addEventListener("change", () => {
+    keyJudgeTiming = keyTimingSelect.value === "up" ? "up" : "down";
+    saveSettings();
+});
+
 playBtn.addEventListener("click", () => {
     isPlaying ? stopGame() : startGame();
     playBtn.blur();
@@ -1384,7 +1435,11 @@ calibrateBtn.addEventListener("click", () => {
 
 fullscreenBtn.addEventListener("click", () => {
     if (!document.fullscreenElement) {
-        gameContainer.requestFullscreen().catch(() => {});
+        document.documentElement.requestFullscreen().then(() => {
+            if (screen.orientation && screen.orientation.lock) {
+                screen.orientation.lock("landscape").catch(() => {});
+            }
+        }).catch(() => {});
     } else {
         document.exitFullscreen().catch(() => {});
     }
@@ -1394,6 +1449,9 @@ fullscreenBtn.addEventListener("click", () => {
 document.addEventListener("fullscreenchange", () => {
     fullscreenBtn.textContent = document.fullscreenElement ? "EXIT" : "FULL";
     resizeGame();
+    if (!document.fullscreenElement && screen.orientation && screen.orientation.unlock) {
+        screen.orientation.unlock();
+    }
 });
 
 document.querySelectorAll(".bind-key-btn").forEach((btn) => {
@@ -1704,13 +1762,20 @@ document.addEventListener("keydown", (e) => {
     const attr = getAttributeForKey(e.code);
     if (attr) {
         e.preventDefault();
-        judgeInput(attr);
+        if (keyJudgeTiming === "up") {
+            flashButton(attr);
+        } else {
+            judgeInput(attr);
+        }
     }
 });
 
 document.addEventListener("keyup", (e) => {
     if (inputModeSelect.value !== "mouse") return;
-    if (getAttributeForKey(e.code)) e.preventDefault();
+    const attr = getAttributeForKey(e.code);
+    if (!attr) return;
+    e.preventDefault();
+    if (keyJudgeTiming === "up") judgeInput(attr);
 });
 
 function updateNotes() {
@@ -1985,6 +2050,7 @@ function resizeViz() {
 }
 
 window.addEventListener("resize", resizeViz);
+visualizerReady = true;
 resizeViz();
 
 function drawVisualizer() {
