@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-13T12:45:24.822Z",
+  "updatedAt": "2026-06-14T04:26:52.209Z",
   "assets": [
     "audio/bgm/bgm_collection_01_Maps_of_Yesterday.mp3",
     "audio/bgm/bgm_companion_01_The_Open_Ledger.mp3",
@@ -462,6 +462,9 @@
     "images/stil/T00/T00_BRAVE.webp",
     "images/stil/T00/T00_ELEGANT.webp",
     "images/stil/T00/T00_MYSTIC.webp",
+    "images/ui/title1.webp",
+    "images/ui/title2.webp",
+    "images/ui/window.webp",
     "manifest.json",
     "README.md"
   ]
