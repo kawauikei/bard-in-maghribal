@@ -221,6 +221,94 @@ portrait_audience_B_4x4
 14 special_luck_patron 後援者
 15 special_luck_lost_child 迷子
 
+PORTRAIT_SHEET_META_5X5
+columns=5
+rows=5
+index_rule=index is left-to-right, top-to-bottom (0 to 24)
+col=index%5
+row=floor(index/5)
+
+portrait_audience_region_A_5x5
+0 audience_capital_clerk 下級役人の男性
+1 audience_capital_merchant_wife 商家の夫人
+2 audience_capital_tailor 若い仕立て職人
+3 audience_capital_old_gentleman 白髪の老紳士
+4 audience_capital_errand_boy 使い走りの少年
+5 audience_border_beast_lumberjack 獣人の木こり
+6 audience_border_beast_herbalist 獣人の薬草摘み
+7 audience_border_old_hunter 年長の猟師
+8 audience_border_village_girl 村娘
+9 audience_border_beast_child 獣人の子ども
+10 audience_labyrinth_torch_guide 松明持ちの案内人
+11 audience_labyrinth_porter 荷運び人
+12 audience_labyrinth_relic_scavenger 遺物拾いの女性
+13 audience_labyrinth_tavern_regular 酒場の常連女性
+14 audience_labyrinth_retired_adventurer 引退冒険者
+15 audience_tower_student 一般学徒
+16 audience_tower_clerk 書類係
+17 audience_tower_assistant 研究助手
+18 audience_tower_cleaner 清掃係
+19 audience_tower_old_caretaker 年長の用務員
+20 audience_port_sailor 船乗りの男性
+21 audience_port_fish_seller 魚売りの女性
+22 audience_port_dock_worker 波止場労働者
+23 audience_port_shipwright 船大工
+24 audience_port_apprentice_sailor 見習い水夫
+
+portrait_audience_region_B_5x5
+0 audience_fortress_offduty_guard 非番の兵士
+1 audience_fortress_stonemason 石工の女性
+2 audience_fortress_rope_worker 縄職人
+3 audience_fortress_supply_clerk 補給係
+4 audience_fortress_old_soldier 年長の元兵士
+5 audience_cathedral_pilgrim 素朴な巡礼者
+6 audience_cathedral_believer 信徒女性
+7 audience_cathedral_candle_seller 蝋燭売りの女性
+8 audience_cathedral_bell_keeper 鐘楼係
+9 audience_cathedral_festival_child 祭礼の子ども
+10 audience_brass_caravan_driver 隊商の御者
+11 audience_brass_water_seller 水売り
+12 audience_brass_tent_repairer 天幕修繕人
+13 audience_brass_travel_merchant 旅商人の女性
+14 audience_brass_caravan_child 隊商の子ども
+15 audience_castle_poor_villager 貧しい村人
+16 audience_castle_old_servant 旧家の使用人
+17 audience_castle_former_guard 老いた元衛兵
+18 audience_castle_mask_resident 仮面を持つ住民女性
+19 audience_castle_thin_boy 痩せた少年
+20 audience_graveyard_keeper_assistant 墓守助手
+21 audience_graveyard_moss_gatherer 苔採りの女性
+22 audience_graveyard_ruin_pilgrim 遺跡巡礼者
+23 audience_graveyard_inscription_reader 石碑読みの女性
+24 audience_graveyard_jungle_porter 密林の荷運び人
+
+portrait_audience_region_C_5x5
+0 audience_arena_excited_youth 熱狂する若者
+1 audience_arena_bettor 賭け客
+2 audience_arena_food_seller 飲食売りの女性
+3 audience_arena_scarred_regular 傷のある常連女性
+4 audience_arena_boy 観戦する少年
+5 audience_grove_waterway_keeper エルフの水路係
+6 audience_grove_leaf_weaver 葉織り職人
+7 audience_grove_herbalist エルフの薬草師
+8 audience_grove_elder 年長のエルフ
+9 audience_grove_child エルフの子ども
+10 audience_generic_male_traveler 中年の旅人男性
+11 audience_generic_female_traveler 成人の旅人女性
+12 audience_generic_old_merchant_male 年長の行商人男性
+13 audience_generic_old_merchant_female 年長の行商人女性
+14 audience_generic_young_porter 若い荷運び男性
+15 audience_generic_young_helper 若い手伝い女性
+16 audience_generic_mother 子連れの母親
+17 audience_generic_craftsman_male 日焼けした職人男性
+18 audience_generic_craftswoman 小麦肌の職人女性
+19 audience_generic_old_woman 白髪の老婦人
+20 audience_generic_old_man_staff 杖を持つ老人
+21 audience_generic_reserved_woman 控えめな若い女性
+22 audience_generic_quiet_man 無口な若い男性
+23 audience_generic_boy 一般的な少年
+24 audience_generic_girl 一般的な少女
+
 portrait_special_A_4x4
 0 special_shop_trader 旅商人
 1 special_shop_instrument 楽器商

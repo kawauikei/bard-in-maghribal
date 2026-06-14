@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-14T04:26:52.209Z",
+  "updatedAt": "2026-06-14T16:43:31.033Z",
   "assets": [
     "audio/bgm/bgm_collection_01_Maps_of_Yesterday.mp3",
     "audio/bgm/bgm_companion_01_The_Open_Ledger.mp3",
@@ -337,8 +337,14 @@
     "images/icon/ui_chip_protagonist_4x4.webp",
     "images/portrait/frame.webp",
     "images/portrait/list.txt",
+    "images/portrait/portrait_audiencemob_A_5x5.webp",
+    "images/portrait/portrait_audiencemob_B_5x5.webp",
+    "images/portrait/portrait_audiencemob_C_5x5.webp",
     "images/portrait/portrait_audience_A_4x4.webp",
     "images/portrait/portrait_audience_B_4x4.webp",
+    "images/portrait/portrait_audience_region_A_5x5.webp",
+    "images/portrait/portrait_audience_region_B_5x5.webp",
+    "images/portrait/portrait_audience_region_C_5x5.webp",
     "images/portrait/portrait_candidates_A1_4x4.webp",
     "images/portrait/portrait_candidates_A2_4x4.webp",
     "images/portrait/portrait_candidates_B1_4x4.webp",

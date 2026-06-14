@@ -1135,8 +1135,9 @@
       const col = index % cols;
       const row = Math.floor(index / cols);
       
-      const tw = 512;
-      const th = 512;
+      const atlasSize = 2048;
+      const tw = atlasSize / cols;
+      const th = atlasSize / rows;
       
       const sL = f.sliceL;
       const sT = f.sliceT;
@@ -1205,8 +1206,8 @@
         
         el.style.backgroundImage = `url("${f.sheet}")`;
         
-        const bgW = cols * tw * c.scX;
-        const bgH = rows * th * c.scY;
+        const bgW = atlasSize * c.scX;
+        const bgH = atlasSize * c.scY;
         el.style.backgroundSize = `${bgW}px ${bgH}px`;
         
         const posX = -((col * tw + c.offsetX) * c.scX);

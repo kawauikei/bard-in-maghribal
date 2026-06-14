@@ -58,6 +58,7 @@ input {
     overflow: hidden;
     transform-origin: center center;
     will-change: transform;
+    --stage-bg: url("../assets/images/stil/N00/bg_normal_ancient_graveyard_morning1.webp");
     background:
         linear-gradient(180deg, rgba(3, 7, 18, 0.25), rgba(3, 7, 18, 0.8)),
         radial-gradient(circle at 50% 12%, rgba(56, 189, 248, 0.16), transparent 33%),
@@ -83,20 +84,43 @@ input {
     border-bottom: 1px solid var(--line);
 }
 
+#stage::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(180deg, rgba(3, 7, 18, 0.12), rgba(3, 7, 18, 0.58) 72%, rgba(3, 7, 18, 0.82)),
+        var(--stage-bg) center 42% / cover no-repeat;
+    filter: saturate(0.94) contrast(1.04);
+    transform: scale(1.02);
+}
+
+#stage::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse at 50% 0%, rgba(251, 191, 36, 0.22), transparent 34%),
+        linear-gradient(90deg, rgba(3, 7, 18, 0.58), transparent 18%, transparent 82%, rgba(3, 7, 18, 0.58));
+}
+
 #visualizer-canvas {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
+    z-index: 4;
 }
 
 .stage-title {
+    display: none;
     position: absolute;
     left: 48px;
     bottom: 32px;
-    display: flex;
     flex-direction: column;
     gap: 4px;
+    z-index: 22;
     text-shadow: 0 16px 40px rgba(0,0,0,0.55);
 }
 
@@ -118,21 +142,496 @@ input {
 .stage-title .track-name {
     max-width: 820px;
     color: #dbeafe;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 700;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    opacity: 0.72;
 }
 
 #hud {
     position: absolute;
-    left: 48px;
-    top: 34px;
+    left: 24px;
+    top: 24px;
     z-index: 20;
     display: grid;
-    grid-template-columns: repeat(4, auto);
-    gap: 14px;
+    grid-template-columns: repeat(2, 120px);
+    gap: 8px;
+}
+
+#condition-icons {
+    position: absolute;
+    left: 24px;
+    top: 158px;
+    z-index: 20;
+    display: flex;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 8px;
+    background: rgba(5, 11, 22, 0.54);
+    border: 1px solid rgba(255,255,255,0.11);
+    backdrop-filter: blur(12px);
+}
+
+.condition-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background-image: url("../assets/images/icon/icon_sheet_03_music_bonus_code.webp");
+    background-size: 336px 336px;
+    background-repeat: no-repeat;
+    background-color: #f8fafc;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.24), 0 12px 24px rgba(0,0,0,0.28);
+}
+
+.condition-icon:nth-child(1) { border-radius: 6px 2px 2px 6px; }
+.condition-icon:nth-child(2) { border-radius: 2px; }
+.condition-icon:nth-child(3) { border-radius: 2px 6px 6px 2px; }
+
+#stage-actions {
+    position: absolute;
+    right: 32px;
+    top: 28px;
+    z-index: 35;
+    display: flex;
+    gap: 10px;
+}
+
+#audience-layer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -14px;
+    height: 210px;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0.86;
+}
+
+#audience-portraits {
+    position: absolute;
+    left: 54%;
+    top: 34px;
+    z-index: 23;
+    width: 1120px;
+    height: 270px;
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+.side-audience {
+    position: absolute;
+    top: 328px;
+    z-index: 21;
+    width: 310px;
+    height: 180px;
+    pointer-events: none;
+}
+
+#side-audience-left {
+    left: 256px;
+}
+
+#side-audience-right {
+    right: 256px;
+}
+
+.portrait-chip {
+    position: relative;
+    width: 112px;
+    height: 112px;
+    display: inline-block;
+    overflow: hidden;
+    border-radius: 4px;
+    background: transparent;
+    box-shadow: 0 18px 36px rgba(0,0,0,0.42);
+}
+
+.portrait-chip.back-row {
+    z-index: 1;
+    width: 96px;
+    height: 96px;
+    opacity: 0.84;
+    filter: saturate(0.92) brightness(0.92);
+}
+
+.portrait-chip.front-row {
+    z-index: 3;
+}
+
+.portrait-chip.side-row {
+    z-index: 2;
+    width: 112px;
+    height: 112px;
+    opacity: 0.84;
+    filter: saturate(0.92) brightness(0.92);
+}
+
+.portrait-chip:nth-child(4n + 1) { transform: translateY(8px) rotate(-2deg); }
+.portrait-chip:nth-child(4n + 2) { transform: translateY(-4px) rotate(1.4deg); }
+.portrait-chip:nth-child(4n + 3) { transform: translateY(4px) rotate(-1.2deg); }
+.portrait-chip:nth-child(4n) { transform: translateY(10px) rotate(2deg); }
+
+#audience-portraits .portrait-chip {
+    position: absolute;
+}
+
+#audience-portraits .portrait-chip:nth-child(1) { left: 0; top: 82px; transform: rotate(-8deg); }
+#audience-portraits .portrait-chip:nth-child(2) { left: 138px; top: 42px; transform: rotate(-5deg); }
+#audience-portraits .portrait-chip:nth-child(3) { left: 276px; top: 18px; transform: rotate(-2.5deg); }
+#audience-portraits .portrait-chip:nth-child(4) { left: 414px; top: 4px; transform: rotate(-0.8deg); }
+#audience-portraits .portrait-chip:nth-child(5) { left: 552px; top: 4px; transform: rotate(0.8deg); }
+#audience-portraits .portrait-chip:nth-child(6) { left: 690px; top: 18px; transform: rotate(2.5deg); }
+#audience-portraits .portrait-chip:nth-child(7) { left: 828px; top: 42px; transform: rotate(5deg); }
+#audience-portraits .portrait-chip:nth-child(8) { left: 966px; top: 82px; transform: rotate(8deg); }
+#audience-portraits .portrait-chip:nth-child(9) { left: 36px; top: 172px; transform: rotate(-7deg); }
+#audience-portraits .portrait-chip:nth-child(10) { left: 170px; top: 144px; transform: rotate(-4deg); }
+#audience-portraits .portrait-chip:nth-child(11) { left: 304px; top: 126px; transform: rotate(-2deg); }
+#audience-portraits .portrait-chip:nth-child(12) { left: 438px; top: 116px; transform: rotate(-0.6deg); }
+#audience-portraits .portrait-chip:nth-child(13) { left: 572px; top: 116px; transform: rotate(0.6deg); }
+#audience-portraits .portrait-chip:nth-child(14) { left: 706px; top: 126px; transform: rotate(2deg); }
+#audience-portraits .portrait-chip:nth-child(15) { left: 840px; top: 144px; transform: rotate(4deg); }
+#audience-portraits .portrait-chip:nth-child(16) { left: 974px; top: 172px; transform: rotate(7deg); }
+
+#side-audience-left .portrait-chip,
+#side-audience-right .portrait-chip {
+    position: absolute;
+}
+
+#side-audience-left .portrait-chip:nth-child(1) { left: 0; top: 44px; transform: rotate(-6deg); }
+#side-audience-left .portrait-chip:nth-child(2) { left: 86px; top: 0; transform: rotate(2deg); }
+#side-audience-left .portrait-chip:nth-child(3) { left: 176px; top: 54px; transform: rotate(-1.4deg); }
+#side-audience-right .portrait-chip:nth-child(1) { right: 176px; top: 54px; transform: rotate(1.4deg); }
+#side-audience-right .portrait-chip:nth-child(2) { right: 86px; top: 0; transform: rotate(-2deg); }
+#side-audience-right .portrait-chip:nth-child(3) { right: 0; top: 44px; transform: rotate(6deg); }
+
+.portrait-chip::after {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    z-index: 3;
+    pointer-events: none;
+    background: linear-gradient(180deg, transparent 58%, rgba(3, 7, 18, 0.24));
+}
+
+.portrait-image {
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    top: 4px;
+    bottom: 4px;
+    z-index: 1;
+    background-image: var(--sheet);
+    background-size: var(--sprite-size, 400% 400%);
+    background-position: var(--pos);
+    transform: scaleX(var(--flip-scale, 1));
+    border-radius: 2px;
+    box-shadow: inset 0 0 18px rgba(3, 7, 18, 0.08);
+}
+
+.audience-frame {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: grid;
+    grid-template-rows: 24px 1fr 24px;
+    grid-template-columns: 24px 1fr 24px;
+    pointer-events: none;
+}
+
+.portrait-chip.react {
+    filter: brightness(1.08);
+}
+
+.portrait-chip.react .portrait-image,
+.portrait-chip.react .audience-frame {
+    animation: portraitCheer 520ms ease-out;
+}
+
+@keyframes portraitCheer {
+    0%, 100% { transform: scaleX(var(--flip-scale, 1)) scale(1); filter: brightness(1); }
+    34% { transform: scaleX(var(--flip-scale, 1)) scale(1.025); filter: brightness(1.18); }
+}
+
+.crowd-row {
+    position: absolute;
+    left: -2%;
+    right: -2%;
+    bottom: 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    filter: drop-shadow(0 8px 18px rgba(0,0,0,0.45));
+}
+
+.crowd-row.back { bottom: 40px; opacity: 0.34; transform: scale(0.86); }
+.crowd-row.front { opacity: 0.62; }
+
+.crowd-person {
+    width: 42px;
+    height: 92px;
+    border-radius: 999px 999px 12px 12px;
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.38), rgba(3, 7, 18, 0.9));
+    transform-origin: 50% 100%;
+    animation: crowdSway 1400ms ease-in-out infinite alternate;
+}
+
+.crowd-person:nth-child(2n) { height: 112px; animation-delay: -260ms; }
+.crowd-person:nth-child(3n) { height: 82px; animation-delay: -620ms; }
+
+body[data-heat="warm"] .crowd-person { animation-duration: 980ms; }
+body[data-heat="high"] .crowd-person { animation-duration: 680ms; }
+body[data-heat="high"] #audience-layer { opacity: 1; }
+
+@keyframes crowdSway {
+    from { transform: translateY(0) rotate(-1.2deg); }
+    to { transform: translateY(-8px) rotate(1.4deg); }
+}
+
+#heat-panel {
+    position: absolute;
+    left: 24px;
+    top: 222px;
+    z-index: 20;
+    width: 165px;
+    padding: 9px 10px;
+    border-radius: 8px;
+    background: rgba(5, 11, 22, 0.58);
+    border: 1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(12px);
+}
+
+#companion-lineup {
+    position: absolute;
+    left: 50%;
+    top: 350px;
+    z-index: 23;
+    display: flex;
+    gap: 96px;
+    transform: translateX(-50%);
+}
+
+.companion-card {
+    width: 140px;
+    height: 140px;
+    position: relative;
+    overflow: visible;
+    border-radius: 4px;
+    background: transparent;
+    box-shadow: 0 20px 42px rgba(0,0,0,0.42);
+    transform-origin: 50% 100%;
+    animation: companionAssist 2300ms ease-in-out infinite alternate;
+}
+
+.companion-card::before {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    z-index: 2;
+    pointer-events: none;
+    border-radius: 3px;
+    background:
+        linear-gradient(180deg, rgba(255, 248, 222, 0.16), transparent 34%),
+        radial-gradient(circle at 50% 4%, rgba(255, 255, 255, 0.18), transparent 42%);
+    mix-blend-mode: screen;
+}
+
+.companion-card:nth-child(2) { animation-delay: -620ms; }
+.companion-card:nth-child(3) { animation-delay: -1180ms; }
+
+@keyframes companionAssist {
+    from { filter: brightness(1); }
+    to { filter: brightness(1.035); }
+}
+
+.companion-card .companion-portrait,
+.companion-card .companion-frame,
+.companion-card .companion-name {
+    transform-origin: 50% 82%;
+    will-change: transform, filter;
+}
+
+.companion-card.assist-hit .companion-portrait,
+.companion-card.assist-hit .companion-frame,
+.companion-card.assist-hit .companion-name {
+    animation: companionTap 420ms ease-out;
+}
+
+.companion-card.assist-up .companion-portrait,
+.companion-card.assist-up .companion-frame,
+.companion-card.assist-up .companion-name {
+    animation: companionLift 720ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.companion-card[data-effect-role="dancer"].assist-hit .companion-portrait,
+.companion-card[data-effect-role="dancer"].assist-hit .companion-frame,
+.companion-card[data-effect-role="dancer"].assist-hit .companion-name {
+    animation-name: companionTurn;
+}
+
+.companion-card[data-effect-role="strings"].assist-hit .companion-portrait,
+.companion-card[data-effect-role="strings"].assist-hit .companion-frame,
+.companion-card[data-effect-role="strings"].assist-hit .companion-name {
+    animation-name: companionStrum;
+}
+
+.companion-card[data-effect-role="mystic"].assist-hit .companion-portrait,
+.companion-card[data-effect-role="mystic"].assist-hit .companion-frame,
+.companion-card[data-effect-role="mystic"].assist-hit .companion-name {
+    animation-name: companionGlyph;
+}
+
+.companion-card[data-effect-role="salon"].assist-hit .companion-portrait,
+.companion-card[data-effect-role="salon"].assist-hit .companion-frame,
+.companion-card[data-effect-role="salon"].assist-hit .companion-name {
+    animation-name: companionPresent;
+}
+
+.companion-card[data-effect-role="clap"].assist-hit .companion-portrait,
+.companion-card[data-effect-role="clap"].assist-hit .companion-frame,
+.companion-card[data-effect-role="clap"].assist-hit .companion-name {
+    animation-name: companionClap;
+}
+
+.companion-card.assist-up::after {
+    content: "";
+    position: absolute;
+    inset: -12px;
+    z-index: 5;
+    pointer-events: none;
+    border-radius: 999px;
+    background:
+        radial-gradient(circle, rgba(251,191,36,0.42), transparent 46%),
+        conic-gradient(from 90deg, transparent, rgba(244,114,182,0.42), transparent, rgba(56,189,248,0.36), transparent);
+    mix-blend-mode: screen;
+    animation: companionAura 720ms ease-out forwards;
+}
+
+@keyframes companionTap {
+    0%, 100% { transform: translateY(0) rotate(0deg) scale(1); filter: brightness(1); }
+    42% { transform: translateY(-1px) rotate(-0.45deg) scale(1.012); filter: brightness(1.12); }
+}
+
+@keyframes companionTurn {
+    0%, 100% { transform: translateY(0) rotate(0deg) scale(1); filter: brightness(1); }
+    48% { transform: translateY(0) rotate(2.2deg) scale(1.012); filter: brightness(1.13) saturate(1.08); }
+}
+
+@keyframes companionStrum {
+    0%, 100% { transform: translateX(0) rotate(0deg) scale(1); filter: brightness(1); }
+    36% { transform: translateX(2px) rotate(-0.55deg) scale(1.012); filter: brightness(1.11); }
+    66% { transform: translateX(-1px) rotate(0.35deg) scale(1.006); }
+}
+
+@keyframes companionGlyph {
+    0%, 100% { transform: translateY(0) scale(1); filter: brightness(1) hue-rotate(0deg); }
+    46% { transform: translateY(-1px) scale(1.02); filter: brightness(1.18) hue-rotate(18deg); }
+}
+
+@keyframes companionPresent {
+    0%, 100% { transform: translateY(0) rotate(0deg); filter: brightness(1); }
+    46% { transform: translateY(-1px) rotate(-1.2deg); filter: brightness(1.15); }
+}
+
+@keyframes companionClap {
+    0%, 100% { transform: scale(1); filter: brightness(1); }
+    34% { transform: scale(1.035); filter: brightness(1.14); }
+    58% { transform: scale(0.992); }
+}
+
+@keyframes companionLift {
+    0%, 100% { transform: translateY(0) rotate(0deg) scale(1); filter: brightness(1); }
+    42% { transform: translateY(-2px) rotate(1.2deg) scale(1.02); filter: brightness(1.22) saturate(1.12); }
+}
+
+@keyframes companionAura {
+    from { opacity: 0.68; transform: rotate(0deg) scale(0.86); }
+    to { opacity: 0; transform: rotate(120deg) scale(1.16); }
+}
+
+.companion-portrait {
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    top: 4px;
+    bottom: 4px;
+    border-radius: 2px;
+    background-image: var(--sheet);
+    background-size: var(--sprite-size, 400% 400%);
+    background-position: var(--pos);
+    box-shadow: inset 0 0 18px rgba(3, 7, 18, 0.08);
+}
+
+.companion-frame {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: grid;
+    grid-template-rows: 24px 1fr 24px;
+    grid-template-columns: 24px 1fr 24px;
+    pointer-events: none;
+    filter: brightness(1.1) saturate(1.08) drop-shadow(0 0 5px rgba(255, 236, 188, 0.18));
+}
+
+.companion-frame span,
+.audience-frame span {
+    min-width: 0;
+    min-height: 0;
+    background-repeat: no-repeat;
+}
+
+.companion-name {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 12px;
+    z-index: 4;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+    color: #f8fafc;
+    background: rgba(36, 29, 24, 0.88);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+}
+
+.heat-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+#heat-value {
+    color: var(--gold);
+    font-size: 14px;
+}
+
+.heat-track {
+    height: 10px;
+    margin-top: 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.12);
+    overflow: hidden;
+}
+
+#heat-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #06b6d4, #fbbf24);
+    box-shadow: 0 0 18px rgba(251, 191, 36, 0.52);
+    transition: width 160ms ease;
 }
 
 .hud-item,
@@ -145,14 +644,14 @@ input {
 }
 
 .hud-item {
-    min-width: 146px;
-    padding: 12px 16px;
+    min-width: 0;
+    padding: 9px 12px;
     border-radius: 8px;
 }
 
 .hud-label {
     color: var(--muted);
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 900;
     letter-spacing: 0.12em;
 }
@@ -160,7 +659,7 @@ input {
 .hud-value {
     margin-top: 2px;
     color: #ffffff;
-    font-size: 28px;
+    font-size: 23px;
     font-weight: 900;
     line-height: 1;
 }
@@ -176,13 +675,10 @@ input {
 }
 
 #settings-ui {
-    position: absolute;
-    top: 28px;
-    right: 32px;
-    z-index: 30;
-    width: 1010px;
+    position: relative;
+    width: 100%;
     display: grid;
-    grid-template-columns: 1.35fr 0.64fr 0.72fr 0.86fr 0.8fr 0.76fr 0.82fr;
+    grid-template-columns: 1.25fr 0.74fr 0.78fr 1fr 1fr;
     gap: 12px;
     padding: 14px;
     border-radius: 8px;
@@ -278,9 +774,9 @@ input[type="range"]:disabled {
 }
 
 .toolbar-actions {
-    grid-column: 5 / 8;
+    grid-column: 1 / -1;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 10px;
     align-items: end;
 }
@@ -328,11 +824,8 @@ input[type="range"]:disabled {
 }
 
 #key-config-panel {
-    position: absolute;
-    top: 160px;
-    right: 32px;
-    z-index: 29;
-    width: 430px;
+    position: relative;
+    width: 100%;
     display: grid;
     gap: 8px;
     padding: 12px;
@@ -386,6 +879,23 @@ body[data-input-mode="touch"] #key-config-panel {
 
 body[data-input-mode="touch"] .pc-only-control {
     display: none;
+}
+
+#config-modal .modal-content {
+    width: 980px;
+    max-height: 930px;
+    overflow: auto;
+    text-align: left;
+}
+
+#config-modal .modal-title {
+    font-size: 26px;
+    margin-bottom: 14px;
+}
+
+.config-stack {
+    display: grid;
+    gap: 14px;
 }
 
 #field {
@@ -741,6 +1251,49 @@ body[data-input-mode="touch"] .touch-lane-hitarea {
     to { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0.15); }
 }
 
+.companion-particle {
+    position: absolute;
+    z-index: 46;
+    pointer-events: none;
+    left: var(--x);
+    top: var(--y);
+    color: var(--particle-color);
+    font-size: var(--particle-size);
+    font-weight: 900;
+    line-height: 1;
+    text-shadow: 0 0 12px currentColor, 0 4px 10px rgba(0,0,0,0.55);
+    animation: companionParticle var(--particle-duration) ease-out forwards;
+    will-change: transform, opacity;
+}
+
+.companion-wave {
+    position: absolute;
+    z-index: 45;
+    pointer-events: none;
+    left: var(--x);
+    top: var(--y);
+    width: var(--wave-size);
+    height: var(--wave-size);
+    margin-left: calc(var(--wave-size) / -2);
+    margin-top: calc(var(--wave-size) / -2);
+    border: 2px solid var(--particle-color);
+    border-radius: 50%;
+    box-shadow: 0 0 18px var(--particle-color);
+    opacity: 0.72;
+    animation: companionWave 680ms ease-out forwards;
+}
+
+@keyframes companionParticle {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.66) rotate(0deg); }
+    16% { opacity: 1; transform: translate(calc(-50% + var(--tx) * 0.18), calc(-50% + var(--ty) * 0.18)) scale(1.04) rotate(calc(var(--rot) * 0.25)); }
+    100% { opacity: 0; transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0.74) rotate(var(--rot)); }
+}
+
+@keyframes companionWave {
+    from { opacity: 0.62; transform: scale(0.36); }
+    to { opacity: 0; transform: scale(1.25); }
+}
+
 #countdown-overlay,
 .modal-overlay {
     position: absolute;
@@ -864,6 +1417,14 @@ body[data-input-mode="touch"] .touch-lane-hitarea {
 <div id="game-container">
     <section id="stage">
         <canvas id="visualizer-canvas"></canvas>
+        <div id="audience-layer" aria-hidden="true">
+            <div class="crowd-row back">
+                <span class="crowd-person"></span><span class="crowd-person"></span><span class="crowd-person"></span><span class="crowd-person"></span><span class="crowd-person"></span><span class="crowd-person"></span><span class="crowd-person"></span><span class="crowd-person"></span><span class="crowd-person"></span><span class="crowd-person"></span><span class="crowd-person"></span><span class="crowd-person"></span>
+            </div>
+            <div class="crowd-row front">
+                <span class="crowd-person"></span><span class="crowd-person"></span><span class="crowd-person"></span><span class="crowd-person"></span><span class="crowd-person"></span><span class="crowd-person"></span><span class="crowd-person"></span><span class="crowd-person"></span><span class="crowd-person"></span><span class="crowd-person"></span>
+            </div>
+        </div>
         <div id="hud">
             <div class="hud-item"><div class="hud-label">Score</div><div class="hud-value accent" id="score-val">0</div></div>
             <div class="hud-item"><div class="hud-label">Combo</div><div class="hud-value combo" id="combo-val">0</div></div>
@@ -871,110 +1432,58 @@ body[data-input-mode="touch"] .touch-lane-hitarea {
             <div class="hud-item"><div class="hud-label">Accuracy</div><div class="hud-value" id="acc-val">--</div></div>
         </div>
 
-        <div id="settings-ui">
-            <div class="control-group">
-                <label for="track-select">Track</label>
-                <select id="track-select"></select>
-            </div>
-            <div class="control-group">
-                <label for="density-select">Density</label>
-                <select id="density-select">
-                    <option value="1">Light</option>
-                    <option value="2" selected>Standard</option>
-                    <option value="3">Dense</option>
-                </select>
-            </div>
-            <div class="control-group">
-                <label for="window-select">Window</label>
-                <select id="window-select">
-                    <option value="250">Wide 250ms</option>
-                    <option value="150" selected>Normal 150ms</option>
-                    <option value="80">Tight 80ms</option>
-                </select>
-            </div>
-            <div class="control-group">
-                <div class="range-head"><label for="note-speed-input">Speed</label><span class="range-val" id="speed-val">180 px/s</span></div>
-                <input type="range" id="note-speed-input" min="180" max="620" value="180" step="20">
-            </div>
-            <div class="control-group">
-                <div class="range-head"><label for="offset">Offset</label><span class="range-val" id="offset-val">0 ms</span></div>
-                <input type="range" id="offset" min="-250" max="250" value="0" step="5">
-            </div>
-            <div class="control-group">
-                <label for="input-mode-select">Input</label>
-                <div class="input-status" id="input-mode-status"><strong>PC</strong><span>AUTO</span></div>
-                <select id="input-mode-select" hidden>
-                    <option value="mouse" selected>PC</option>
-                    <option value="touch">Touch</option>
-                </select>
-            </div>
-            <div class="control-group pc-only-control">
-                <label for="key-timing-select">Key Judge</label>
-                <select id="key-timing-select">
-                    <option value="down">Input / Press</option>
-                    <option value="up">Release</option>
-                </select>
-            </div>
-            <div class="control-group">
-                <div class="range-head"><label for="bgm-vol">BGM</label><span class="range-val" id="bgm-vol-val">80%</span></div>
-                <input type="range" id="bgm-vol" min="0" max="100" value="80">
-            </div>
-            <div class="control-group">
-                <div class="range-head"><label for="se-vol">Hit SE</label><span class="range-val" id="se-vol-val">OFF</span></div>
-                <input type="range" id="se-vol" min="0" max="100" value="0" disabled>
-            </div>
-            <div class="toolbar-actions">
-                <button id="play-btn" class="btn-primary">PLAY</button>
-                <button id="calibrate-btn" class="btn-secondary">SYNC</button>
-                <button id="fullscreen-btn" class="btn-secondary">FULL</button>
-            </div>
+        <div id="condition-icons" aria-label="Performance conditions">
+            <span class="condition-icon" data-track-icon="instrument" title="楽器"></span>
+            <span class="condition-icon" data-track-icon="type" title="曲種"></span>
+            <span class="condition-icon" data-track-icon="theme" title="テーマ"></span>
         </div>
 
-        <div id="key-config-panel">
-            <div class="key-config-title">PC Key Config</div>
-            <div class="bind-row brave" data-bind-row="brave">
-                <strong>勇猛</strong>
-                <button class="bind-key-btn" data-key-bind="brave" type="button">D</button>
-                <select class="mouse-bind-select" data-mouse-bind="brave">
-                    <option value="none">No Mouse</option>
-                    <option value="0">Left Click</option>
-                    <option value="1">Middle Click</option>
-                    <option value="2">Right Click</option>
-                </select>
+        <div id="audience-portraits" aria-label="Audience members"></div>
+
+        <div id="stage-actions">
+            <button id="randomize-btn" class="btn-secondary" type="button">RANDOM</button>
+            <button id="play-btn" class="btn-primary">PLAY</button>
+            <button id="config-btn" class="btn-secondary" type="button">CONFIG</button>
+            <button id="fullscreen-btn" class="btn-secondary" type="button">FULL</button>
+        </div>
+
+        <div id="heat-panel">
+            <div class="heat-head"><span>Audience</span><span id="heat-value">0%</span></div>
+            <div class="heat-track"><div id="heat-fill"></div></div>
+        </div>
+
+        <div id="side-audience-left" class="side-audience" aria-label="Left side audience"></div>
+        <div id="side-audience-right" class="side-audience" aria-label="Right side audience"></div>
+
+        <div id="companion-lineup" aria-label="Elegant companions">
+            <div class="companion-card" style="--sheet:url('../assets/images/portrait/portrait_core_A_4x4.webp');--pos:0% 33.333%;" title="セレーネ">
+                <div class="companion-portrait"></div>
+                <div class="companion-frame" aria-hidden="true"><span class="ns-tl"></span><span class="ns-t"></span><span class="ns-tr"></span><span class="ns-l"></span><span class="ns-c"></span><span class="ns-r"></span><span class="ns-bl"></span><span class="ns-b"></span><span class="ns-br"></span></div>
+                <div class="companion-name">セレーネ</div>
             </div>
-            <div class="bind-row elegant" data-bind-row="elegant">
-                <strong>優美</strong>
-                <button class="bind-key-btn" data-key-bind="elegant" type="button">F</button>
-                <select class="mouse-bind-select" data-mouse-bind="elegant">
-                    <option value="none">No Mouse</option>
-                    <option value="0">Left Click</option>
-                    <option value="1">Middle Click</option>
-                    <option value="2">Right Click</option>
-                </select>
+            <div class="companion-card" style="--sheet:url('../assets/images/portrait/portrait_candidates_B1_4x4.webp');--pos:66.666% 66.666%;" title="マヒナ">
+                <div class="companion-portrait"></div>
+                <div class="companion-frame" aria-hidden="true"><span class="ns-tl"></span><span class="ns-t"></span><span class="ns-tr"></span><span class="ns-l"></span><span class="ns-c"></span><span class="ns-r"></span><span class="ns-bl"></span><span class="ns-b"></span><span class="ns-br"></span></div>
+                <div class="companion-name">マヒナ</div>
             </div>
-            <div class="bind-row mystic" data-bind-row="mystic">
-                <strong>神秘</strong>
-                <button class="bind-key-btn" data-key-bind="mystic" type="button">J</button>
-                <select class="mouse-bind-select" data-mouse-bind="mystic">
-                    <option value="none">No Mouse</option>
-                    <option value="0">Left Click</option>
-                    <option value="1">Middle Click</option>
-                    <option value="2">Right Click</option>
-                </select>
+            <div class="companion-card" style="--sheet:url('../assets/images/portrait/portrait_candidates_generic_A_4x4.webp');--pos:0% 33.333%;" title="ミレイユ">
+                <div class="companion-portrait"></div>
+                <div class="companion-frame" aria-hidden="true"><span class="ns-tl"></span><span class="ns-t"></span><span class="ns-tr"></span><span class="ns-l"></span><span class="ns-c"></span><span class="ns-r"></span><span class="ns-bl"></span><span class="ns-b"></span><span class="ns-br"></span></div>
+                <div class="companion-name">ミレイユ</div>
             </div>
         </div>
 
         <div class="stage-title">
-            <div class="kicker">Elegant Rhythm Tester</div>
-            <h1>Three-Lane Performance</h1>
-            <div class="track-name" id="track-title">Loading rhythm data...</div>
+            <div class="kicker">Elegant Performance</div>
+            <h1>優美演奏会</h1>
+            <div class="track-name" id="track-title">条件に合う楽曲を演奏中</div>
         </div>
     </section>
 
     <section id="field">
         <div id="vocal-portrait-container">
             <canvas id="vocal-canvas"></canvas>
-            <div class="vocal-name" id="vocal-tag">VOCAL</div>
+            <div class="vocal-name" id="protagonist-title">駆け出し吟遊詩人</div>
         </div>
 
         <div id="lane-container">
@@ -1011,6 +1520,105 @@ body[data-input-mode="touch"] .touch-lane-hitarea {
                 <button id="resume-btn" class="btn-primary">RESUME</button>
                 <button id="restart-btn" class="btn-secondary">RESTART</button>
                 <button id="exit-btn" class="btn-secondary">EXIT</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="config-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="modal-title">CONFIG</h2>
+            <div class="config-stack">
+                <div id="settings-ui">
+                    <div class="control-group">
+                        <label for="track-select">Debug Track</label>
+                        <select id="track-select"></select>
+                    </div>
+                    <div class="control-group">
+                        <label for="density-select">Density</label>
+                        <select id="density-select">
+                            <option value="1">Light</option>
+                            <option value="2" selected>Standard</option>
+                            <option value="3">Dense</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="window-select">Window</label>
+                        <select id="window-select">
+                            <option value="250">Wide 250ms</option>
+                            <option value="150" selected>Normal 150ms</option>
+                            <option value="80">Tight 80ms</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <div class="range-head"><label for="note-speed-input">Speed</label><span class="range-val" id="speed-val">180 px/s</span></div>
+                        <input type="range" id="note-speed-input" min="180" max="620" value="180" step="20">
+                    </div>
+                    <div class="control-group">
+                        <div class="range-head"><label for="offset">Offset</label><span class="range-val" id="offset-val">0 ms</span></div>
+                        <input type="range" id="offset" min="-250" max="250" value="0" step="5">
+                    </div>
+                    <div class="control-group">
+                        <label for="input-mode-select">Input</label>
+                        <div class="input-status" id="input-mode-status"><strong>PC</strong><span>AUTO</span></div>
+                        <select id="input-mode-select" hidden>
+                            <option value="mouse" selected>PC</option>
+                            <option value="touch">Touch</option>
+                        </select>
+                    </div>
+                    <div class="control-group pc-only-control">
+                        <label for="key-timing-select">Key Judge</label>
+                        <select id="key-timing-select">
+                            <option value="down">Input / Press</option>
+                            <option value="up">Release</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <div class="range-head"><label for="bgm-vol">BGM</label><span class="range-val" id="bgm-vol-val">80%</span></div>
+                        <input type="range" id="bgm-vol" min="0" max="100" value="80">
+                    </div>
+                    <div class="control-group">
+                        <div class="range-head"><label for="se-vol">Hit SE</label><span class="range-val" id="se-vol-val">OFF</span></div>
+                        <input type="range" id="se-vol" min="0" max="100" value="0" disabled>
+                    </div>
+                    <div class="toolbar-actions">
+                        <button id="calibrate-btn" class="btn-secondary" type="button">SYNC RESET</button>
+                        <button id="config-close-btn" class="btn-primary" type="button">CLOSE</button>
+                    </div>
+                </div>
+
+                <div id="key-config-panel">
+                    <div class="key-config-title">PC Key Config</div>
+                    <div class="bind-row brave" data-bind-row="brave">
+                        <strong>勇猛</strong>
+                        <button class="bind-key-btn" data-key-bind="brave" type="button">D</button>
+                        <select class="mouse-bind-select" data-mouse-bind="brave">
+                            <option value="none">No Mouse</option>
+                            <option value="0">Left Click</option>
+                            <option value="1">Middle Click</option>
+                            <option value="2">Right Click</option>
+                        </select>
+                    </div>
+                    <div class="bind-row elegant" data-bind-row="elegant">
+                        <strong>優美</strong>
+                        <button class="bind-key-btn" data-key-bind="elegant" type="button">F</button>
+                        <select class="mouse-bind-select" data-mouse-bind="elegant">
+                            <option value="none">No Mouse</option>
+                            <option value="0">Left Click</option>
+                            <option value="1">Middle Click</option>
+                            <option value="2">Right Click</option>
+                        </select>
+                    </div>
+                    <div class="bind-row mystic" data-bind-row="mystic">
+                        <strong>神秘</strong>
+                        <button class="bind-key-btn" data-key-bind="mystic" type="button">J</button>
+                        <select class="mouse-bind-select" data-mouse-bind="mystic">
+                            <option value="none">No Mouse</option>
+                            <option value="0">Left Click</option>
+                            <option value="1">Middle Click</option>
+                            <option value="2">Right Click</option>
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1072,6 +1680,7 @@ const KEY_LABELS = {
 };
 
 const gameContainer = document.getElementById("game-container");
+const stage = document.getElementById("stage");
 const player = document.getElementById("bgm-player");
 const trackSelect = document.getElementById("track-select");
 const densitySelect = document.getElementById("density-select");
@@ -1087,7 +1696,10 @@ const bgmVol = document.getElementById("bgm-vol");
 const bgmVolVal = document.getElementById("bgm-vol-val");
 const seVol = document.getElementById("se-vol");
 const seVolVal = document.getElementById("se-vol-val");
+const randomizeBtn = document.getElementById("randomize-btn");
 const playBtn = document.getElementById("play-btn");
+const configBtn = document.getElementById("config-btn");
+const configCloseBtn = document.getElementById("config-close-btn");
 const calibrateBtn = document.getElementById("calibrate-btn");
 const fullscreenBtn = document.getElementById("fullscreen-btn");
 const notesLayer = document.getElementById("notes-layer");
@@ -1095,6 +1707,7 @@ const laneContainer = document.getElementById("lane-container");
 const countdownOverlay = document.getElementById("countdown-overlay");
 const countdownText = document.getElementById("countdown-text");
 const pauseModal = document.getElementById("pause-modal");
+const configModal = document.getElementById("config-modal");
 const resultsModal = document.getElementById("results-modal");
 const timingMarker = document.getElementById("timing-marker");
 const lastJudge = document.getElementById("last-judge");
@@ -1104,6 +1717,158 @@ const comboValEl = document.getElementById("combo-val");
 const timeValEl = document.getElementById("time-val");
 const accValEl = document.getElementById("acc-val");
 const trackTitle = document.getElementById("track-title");
+const heatFill = document.getElementById("heat-fill");
+const heatValue = document.getElementById("heat-value");
+const conditionIconEls = {
+    instrument: document.querySelector('[data-track-icon="instrument"]'),
+    type: document.querySelector('[data-track-icon="type"]'),
+    theme: document.querySelector('[data-track-icon="theme"]')
+};
+
+const STAGE_BACKGROUNDS = [
+    { name: "bg_normal_ancient_graveyard_morning1.webp", audienceRegion: "graveyard" },
+    { name: "bg_normal_ancient_graveyard_morning2.webp", audienceRegion: "graveyard" },
+    { name: "bg_normal_arena_city_morning1.webp", audienceRegion: "arena" },
+    { name: "bg_normal_border_village_morning1.webp", audienceRegion: "border" },
+    { name: "bg_normal_brass_wasteland_morning1.webp", audienceRegion: "brass" },
+    { name: "bg_normal_capital_morning1.webp", audienceRegion: "capital" },
+    { name: "bg_normal_cathedral_stillness_morning1.webp", audienceRegion: "cathedral" },
+    { name: "bg_normal_forgotten_castle_morning1.webp", audienceRegion: "castle" },
+    { name: "bg_normal_giant_rock_fortress_morning1.webp", audienceRegion: "fortress" },
+    { name: "bg_normal_hidden_greenwood_morning1.webp", audienceRegion: "grove" },
+    { name: "bg_normal_labyrinth_entrance_morning1.webp", audienceRegion: "labyrinth" },
+    { name: "bg_normal_port_town_morning1.webp", audienceRegion: "port" },
+    { name: "bg_normal_sage_tower_morning1.webp", audienceRegion: "tower" }
+].map((stage) => ({
+    ...stage,
+    url: `../assets/images/stil/N00/${stage.name}`
+}));
+
+const AUDIENCE_REGION_ROWS = {
+    "portrait_audience_region_A_5x5.webp": ["capital", "border", "labyrinth", "tower", "port"],
+    "portrait_audience_region_B_5x5.webp": ["fortress", "cathedral", "brass", "castle", "graveyard"],
+    "portrait_audience_region_C_5x5.webp": ["arena", "grove", "generic", "generic", "generic"]
+};
+
+const AUDIENCE_BACK_ROW_ONLY = {
+    "portrait_audience_region_A_5x5.webp": new Set([4, 9, 24]),
+    "portrait_audience_region_B_5x5.webp": new Set([9, 14, 19]),
+    "portrait_audience_region_C_5x5.webp": new Set([4, 9, 23, 24])
+};
+
+const AUDIENCE_POOL = [
+    ["portrait_audience_region_A_5x5.webp", 0, "下級役人の男性", 5],
+    ["portrait_audience_region_A_5x5.webp", 1, "商家の夫人", 5],
+    ["portrait_audience_region_A_5x5.webp", 2, "若い仕立て職人", 5],
+    ["portrait_audience_region_A_5x5.webp", 3, "白髪の老紳士", 5],
+    ["portrait_audience_region_A_5x5.webp", 4, "使い走りの少年", 5],
+    ["portrait_audience_region_A_5x5.webp", 5, "獣人の木こり", 5],
+    ["portrait_audience_region_A_5x5.webp", 6, "獣人の薬草摘み", 5],
+    ["portrait_audience_region_A_5x5.webp", 7, "年長の猟師", 5],
+    ["portrait_audience_region_A_5x5.webp", 8, "村娘", 5],
+    ["portrait_audience_region_A_5x5.webp", 9, "獣人の子ども", 5],
+    ["portrait_audience_region_A_5x5.webp", 10, "松明持ちの案内人", 5],
+    ["portrait_audience_region_A_5x5.webp", 11, "荷運び人", 5],
+    ["portrait_audience_region_A_5x5.webp", 12, "遺物拾いの女性", 5],
+    ["portrait_audience_region_A_5x5.webp", 13, "酒場の常連女性", 5],
+    ["portrait_audience_region_A_5x5.webp", 14, "引退冒険者", 5],
+    ["portrait_audience_region_A_5x5.webp", 15, "一般学徒", 5],
+    ["portrait_audience_region_A_5x5.webp", 16, "書類係", 5],
+    ["portrait_audience_region_A_5x5.webp", 17, "研究助手", 5],
+    ["portrait_audience_region_A_5x5.webp", 18, "清掃係", 5],
+    ["portrait_audience_region_A_5x5.webp", 19, "年長の用務員", 5],
+    ["portrait_audience_region_A_5x5.webp", 20, "船乗りの男性", 5],
+    ["portrait_audience_region_A_5x5.webp", 21, "魚売りの女性", 5],
+    ["portrait_audience_region_A_5x5.webp", 22, "波止場労働者", 5],
+    ["portrait_audience_region_A_5x5.webp", 23, "船大工", 5],
+    ["portrait_audience_region_A_5x5.webp", 24, "見習い水夫", 5],
+    ["portrait_audience_region_B_5x5.webp", 0, "非番の兵士", 5],
+    ["portrait_audience_region_B_5x5.webp", 1, "石工の女性", 5],
+    ["portrait_audience_region_B_5x5.webp", 2, "縄職人", 5],
+    ["portrait_audience_region_B_5x5.webp", 3, "補給係", 5],
+    ["portrait_audience_region_B_5x5.webp", 4, "年長の元兵士", 5],
+    ["portrait_audience_region_B_5x5.webp", 5, "素朴な巡礼者", 5],
+    ["portrait_audience_region_B_5x5.webp", 6, "信徒女性", 5],
+    ["portrait_audience_region_B_5x5.webp", 7, "蝋燭売りの女性", 5],
+    ["portrait_audience_region_B_5x5.webp", 8, "鐘楼係", 5],
+    ["portrait_audience_region_B_5x5.webp", 9, "祭礼の子ども", 5],
+    ["portrait_audience_region_B_5x5.webp", 10, "隊商の御者", 5],
+    ["portrait_audience_region_B_5x5.webp", 11, "水売り", 5],
+    ["portrait_audience_region_B_5x5.webp", 12, "天幕修繕人", 5],
+    ["portrait_audience_region_B_5x5.webp", 13, "旅商人の女性", 5],
+    ["portrait_audience_region_B_5x5.webp", 14, "隊商の子ども", 5],
+    ["portrait_audience_region_B_5x5.webp", 15, "貧しい村人", 5],
+    ["portrait_audience_region_B_5x5.webp", 16, "旧家の使用人", 5],
+    ["portrait_audience_region_B_5x5.webp", 17, "老いた元衛兵", 5],
+    ["portrait_audience_region_B_5x5.webp", 18, "仮面を持つ住民女性", 5],
+    ["portrait_audience_region_B_5x5.webp", 19, "痩せた少年", 5],
+    ["portrait_audience_region_B_5x5.webp", 20, "墓守助手", 5],
+    ["portrait_audience_region_B_5x5.webp", 21, "苔採りの女性", 5],
+    ["portrait_audience_region_B_5x5.webp", 22, "遺跡巡礼者", 5],
+    ["portrait_audience_region_B_5x5.webp", 23, "石碑読みの女性", 5],
+    ["portrait_audience_region_B_5x5.webp", 24, "密林の荷運び人", 5],
+    ["portrait_audience_region_C_5x5.webp", 0, "熱狂する若者", 5],
+    ["portrait_audience_region_C_5x5.webp", 1, "賭け客", 5],
+    ["portrait_audience_region_C_5x5.webp", 2, "飲食売りの女性", 5],
+    ["portrait_audience_region_C_5x5.webp", 3, "傷のある常連女性", 5],
+    ["portrait_audience_region_C_5x5.webp", 4, "観戦する少年", 5],
+    ["portrait_audience_region_C_5x5.webp", 5, "エルフの水路係", 5],
+    ["portrait_audience_region_C_5x5.webp", 6, "葉織り職人", 5],
+    ["portrait_audience_region_C_5x5.webp", 7, "エルフの薬草師", 5],
+    ["portrait_audience_region_C_5x5.webp", 8, "年長のエルフ", 5],
+    ["portrait_audience_region_C_5x5.webp", 9, "エルフの子ども", 5],
+    ["portrait_audience_region_C_5x5.webp", 10, "中年の旅人男性", 5],
+    ["portrait_audience_region_C_5x5.webp", 11, "成人の旅人女性", 5],
+    ["portrait_audience_region_C_5x5.webp", 12, "年長の行商人男性", 5],
+    ["portrait_audience_region_C_5x5.webp", 13, "年長の行商人女性", 5],
+    ["portrait_audience_region_C_5x5.webp", 14, "若い荷運び男性", 5],
+    ["portrait_audience_region_C_5x5.webp", 15, "若い手伝い女性", 5],
+    ["portrait_audience_region_C_5x5.webp", 16, "子連れの母親", 5],
+    ["portrait_audience_region_C_5x5.webp", 17, "日焼けした職人男性", 5],
+    ["portrait_audience_region_C_5x5.webp", 18, "小麦肌の職人女性", 5],
+    ["portrait_audience_region_C_5x5.webp", 19, "白髪の老婦人", 5],
+    ["portrait_audience_region_C_5x5.webp", 20, "杖を持つ老人", 5],
+    ["portrait_audience_region_C_5x5.webp", 21, "控えめな若い女性", 5],
+    ["portrait_audience_region_C_5x5.webp", 22, "無口な若い男性", 5],
+    ["portrait_audience_region_C_5x5.webp", 23, "一般的な少年", 5],
+    ["portrait_audience_region_C_5x5.webp", 24, "一般的な少女", 5]
+];
+
+const ELEGANT_COMPANION_POOL = [
+    ["portrait_core_A_4x4.webp", 4, "セレーネ", "salon"],
+    ["portrait_candidates_A1_4x4.webp", 1, "リュシア", "strings"],
+    ["portrait_candidates_A1_4x4.webp", 4, "ミナ", "clap"],
+    ["portrait_candidates_A1_4x4.webp", 7, "ハナーン", "mystic"],
+    ["portrait_candidates_A1_4x4.webp", 10, "ルワン", "strings"],
+    ["portrait_candidates_A1_4x4.webp", 13, "アイーダ", "salon"],
+    ["portrait_candidates_A2_4x4.webp", 0, "ジュナ", "dancer"],
+    ["portrait_candidates_A2_4x4.webp", 6, "ミレイユ", "dancer"],
+    ["portrait_candidates_B1_4x4.webp", 1, "ノーラ", "mystic"],
+    ["portrait_candidates_B1_4x4.webp", 4, "サミーラ", "clap"],
+    ["portrait_candidates_B1_4x4.webp", 7, "アーディラ", "salon"],
+    ["portrait_candidates_B1_4x4.webp", 10, "マヒナ", "mystic"],
+    ["portrait_candidates_B1_4x4.webp", 13, "ナイーマ", "strings"],
+    ["portrait_candidates_B2_4x4.webp", 0, "ミルザ", "strings"],
+    ["portrait_candidates_B2_4x4.webp", 2, "サリーマ", "clap"]
+];
+
+const PORTRAIT_FRAME = {
+    sheet: "../assets/images/portrait/frame.webp",
+    cols: 6,
+    rows: 6,
+    naturalSize: 2048,
+    sliceL: 128,
+    sliceT: 128,
+    sliceB: 128,
+    categoryCol: {
+        brave: 0,
+        common: 1,
+        mystic: 2,
+        elegant: 3,
+        audience: 4,
+        enemy: 5
+    }
+};
 
 let tracksData = [];
 let songEmotionsData = {};
@@ -1125,6 +1890,7 @@ let perfects = 0;
 let greats = 0;
 let goods = 0;
 let misses = 0;
+let audienceHeat = 0;
 let lateHits = [];
 let keyBindings = JSON.parse(JSON.stringify(DEFAULT_BINDINGS));
 let keyJudgeTiming = "down";
@@ -1225,7 +1991,331 @@ function syncControlLabels() {
 }
 
 function isSettingsTarget(target) {
-    return Boolean(target.closest("#settings-ui, #key-config-panel, .modal-overlay"));
+    return Boolean(target.closest("#settings-ui, #key-config-panel, #stage-actions, .modal-overlay"));
+}
+
+function setAudienceHeat(value) {
+    audienceHeat = Math.max(0, Math.min(100, value));
+    heatFill.style.width = `${audienceHeat}%`;
+    heatValue.textContent = `${Math.round(audienceHeat)}%`;
+    document.body.dataset.heat = audienceHeat >= 70 ? "high" : audienceHeat >= 35 ? "warm" : "low";
+}
+
+function adjustAudienceHeat(delta) {
+    setAudienceHeat(audienceHeat + delta);
+    if (delta > 0) {
+        document.querySelectorAll(".portrait-chip").forEach((chip, idx) => {
+            window.setTimeout(() => {
+                chip.classList.remove("react");
+                void chip.offsetWidth;
+                chip.classList.add("react");
+            }, idx * 55);
+        });
+    }
+}
+
+function spritePos(index, columns = 4) {
+    const col = index % columns;
+    const row = Math.floor(index / columns);
+    const max = columns - 1;
+    return `${(col / max) * 100}% ${(row / max) * 100}%`;
+}
+
+function iconPosition(index) {
+    const tile = 42;
+    const col = index % 8;
+    const row = Math.floor(index / 8);
+    return `${-(col * tile)}px ${-(row * tile)}px`;
+}
+
+function pickUnique(pool, count) {
+    const source = [...pool];
+    const picks = [];
+    while (source.length && picks.length < count) {
+        const idx = Math.floor(Math.random() * source.length);
+        picks.push(source.splice(idx, 1)[0]);
+    }
+    return picks;
+}
+
+function audienceKey(item) {
+    return `${item[0]}:${item[1]}`;
+}
+
+function audienceRegion(item) {
+    const [sheet, index] = item;
+    const columns = Number.isFinite(item[3]) ? item[3] : 4;
+    const row = Math.floor(index / columns);
+    return AUDIENCE_REGION_ROWS[sheet]?.[row] || "generic";
+}
+
+function isFrontAudienceCandidate(item) {
+    const [sheet, index] = item;
+    return !AUDIENCE_BACK_ROW_ONLY[sheet]?.has(index);
+}
+
+function isBackOnlyAudienceCandidate(item) {
+    return !isFrontAudienceCandidate(item);
+}
+
+function pickAudienceFrom(source, count, used) {
+    const filtered = source.filter((item) => !used.has(audienceKey(item)));
+    const picked = pickUnique(filtered, count);
+    picked.forEach((item) => used.add(audienceKey(item)));
+    return picked;
+}
+
+function pickStageAudience(stageMeta, count = 22) {
+    const used = new Set();
+    const region = stageMeta?.audienceRegion || "generic";
+    const frontPool = AUDIENCE_POOL.filter(isFrontAudienceCandidate);
+    const localPool = frontPool.filter((item) => audienceRegion(item) === region);
+    const genericPool = frontPool.filter((item) => audienceRegion(item) === "generic");
+
+    if (count <= 4) {
+        const local = pickAudienceFrom(localPool, 2, used);
+        const localSheets = new Set(local.map((item) => item[0]));
+        const otherPool = frontPool.filter((item) => {
+            const itemRegion = audienceRegion(item);
+            return itemRegion !== region && itemRegion !== "generic" && !localSheets.has(item[0]);
+        });
+        const broadOtherPool = frontPool.filter((item) => {
+            const itemRegion = audienceRegion(item);
+            return itemRegion !== region && itemRegion !== "generic";
+        });
+        const generic = pickAudienceFrom(genericPool, 1, used);
+        const other = pickAudienceFrom(otherPool.length ? otherPool : broadOtherPool, 1, used);
+        const fallback = pickAudienceFrom(frontPool, count - local.length - generic.length - other.length, used);
+        return [local[0], other[0], local[1], generic[0], ...fallback].filter(Boolean).slice(0, count);
+    }
+
+    const local = pickAudienceFrom(localPool, 6, used);
+    const localSheets = new Set(local.map((item) => item[0]));
+    const otherPool = frontPool.filter((item) => {
+        const itemRegion = audienceRegion(item);
+        return itemRegion !== region && itemRegion !== "generic" && !localSheets.has(item[0]);
+    });
+    const broadOtherPool = frontPool.filter((item) => {
+        const itemRegion = audienceRegion(item);
+        return itemRegion !== region && itemRegion !== "generic";
+    });
+    const other = pickAudienceFrom(otherPool.length ? otherPool : broadOtherPool, 6, used);
+    const generic = pickAudienceFrom(genericPool, 5, used);
+    const side = [local[4], other[2], generic[2], other[3], local[5], generic[3]].filter(Boolean);
+    const front = [local[0], other[0], local[1], generic[0], local[2], other[1], generic[1], local[3]].filter(Boolean);
+
+    const childLimit = Math.random() < 0.45 ? 1 : 0;
+    const childPool = AUDIENCE_POOL.filter((item) => isBackOnlyAudienceCandidate(item) && !used.has(audienceKey(item)));
+    const child = pickAudienceFrom(childPool, childLimit, used);
+    const backLocal = pickAudienceFrom(frontPool.filter((item) => audienceRegion(item) === region), 3, used);
+    const backOther = pickAudienceFrom((otherPool.length ? otherPool : broadOtherPool), 3, used);
+    const backGeneric = pickAudienceFrom(genericPool, 2, used);
+    const backFallback = pickAudienceFrom(frontPool, 8, used);
+    const back = [...child, ...backLocal, ...backOther, ...backGeneric, ...backFallback]
+        .slice(0, Math.max(0, count - front.length - side.length));
+    const fallback = pickAudienceFrom(frontPool, count - front.length - side.length - back.length, used);
+    return [...back, ...front, ...side, ...fallback].slice(0, count);
+}
+
+function createPortraitChip(layerClass) {
+    const chip = document.createElement("span");
+    chip.className = `portrait-chip ${layerClass}`;
+    chip.innerHTML = '<span class="portrait-image"></span><span class="audience-frame" aria-hidden="true"><span class="ns-tl"></span><span class="ns-t"></span><span class="ns-tr"></span><span class="ns-l"></span><span class="ns-c"></span><span class="ns-r"></span><span class="ns-bl"></span><span class="ns-b"></span><span class="ns-br"></span></span>';
+    return chip;
+}
+
+function renderAudience(picks) {
+    const container = document.getElementById("audience-portraits");
+    const leftSide = document.getElementById("side-audience-left");
+    const rightSide = document.getElementById("side-audience-right");
+    container.innerHTML = "";
+    leftSide.innerHTML = "";
+    rightSide.innerHTML = "";
+
+    picks.slice(0, 16).forEach((item, idx) => {
+        const chip = createPortraitChip(idx < 8 ? "back-row" : "front-row");
+        chip.style.setProperty("--flip-scale", Math.random() < 0.5 ? "-1" : "1");
+        applySprite(chip, item);
+        chip.dataset.region = audienceRegion(item);
+        chip.dataset.rank = String((idx % 3) + 1);
+        container.appendChild(chip);
+        applyAudienceFrame(chip);
+    });
+
+    picks.slice(16, 19).forEach((item, idx) => {
+        const chip = createPortraitChip("side-row");
+        chip.style.setProperty("--flip-scale", Math.random() < 0.5 ? "-1" : "1");
+        applySprite(chip, item);
+        chip.dataset.region = audienceRegion(item);
+        chip.dataset.rank = String((idx % 3) + 1);
+        leftSide.appendChild(chip);
+        applyAudienceFrame(chip);
+    });
+
+    picks.slice(19, 22).forEach((item, idx) => {
+        const chip = createPortraitChip("side-row");
+        chip.style.setProperty("--flip-scale", Math.random() < 0.5 ? "-1" : "1");
+        applySprite(chip, item);
+        chip.dataset.region = audienceRegion(item);
+        chip.dataset.rank = String((idx % 3) + 1);
+        rightSide.appendChild(chip);
+        applyAudienceFrame(chip);
+    });
+}
+
+function applySprite(el, item) {
+    const [sheet, index, label, meta, maybeColumns] = item;
+    const columns = Number.isFinite(meta) ? meta : Number.isFinite(maybeColumns) ? maybeColumns : 4;
+    el.style.setProperty("--sheet", `url("../assets/images/portrait/${sheet}")`);
+    el.style.setProperty("--pos", spritePos(index, columns));
+    el.style.setProperty("--sprite-size", `${columns * 100}% ${columns * 100}%`);
+    el.title = label;
+}
+
+function frameIndex(category, rank) {
+    const f = PORTRAIT_FRAME;
+    const col = f.categoryCol[category] ?? f.categoryCol.common;
+    const row = Math.max(0, Math.min(f.rows - 1, Number(rank) || 0));
+    return row * f.cols + col;
+}
+
+function applyPortraitFrame(grid, category, rank, baseW, baseH, frameWidth) {
+    if (!grid) return;
+    const f = PORTRAIT_FRAME;
+    const index = frameIndex(category, rank);
+    const col = index % f.cols;
+    const row = Math.floor(index / f.cols);
+    const tw = f.naturalSize / f.cols;
+    const th = f.naturalSize / f.rows;
+    const sL = f.sliceL;
+    const sT = f.sliceT;
+    const sB = f.sliceB;
+    const wL = frameWidth;
+    const wT = frameWidth;
+    const wB = frameWidth;
+    const wVar = baseW - 2 * wL;
+    const hVar = baseH - wT - wB;
+    const sWVar = tw - 2 * sL;
+    const sHVar = th - sT - sB;
+
+    grid.style.gridTemplateRows = `${wT}px 1fr ${wB}px`;
+    grid.style.gridTemplateColumns = `${wL}px 1fr ${wL}px`;
+
+    const cells = {
+        ".ns-tl": { w: wL, h: wT, scX: wL / sL, scY: wT / sT, offsetX: 0, offsetY: 0 },
+        ".ns-tr": { w: wL, h: wT, scX: wL / sL, scY: wT / sT, offsetX: tw - sL, offsetY: 0 },
+        ".ns-bl": { w: wL, h: wB, scX: wL / sL, scY: wB / sB, offsetX: 0, offsetY: th - sB },
+        ".ns-br": { w: wL, h: wB, scX: wL / sL, scY: wB / sB, offsetX: tw - sL, offsetY: th - sB },
+        ".ns-t": { w: wVar, h: wT, scX: wVar / sWVar, scY: wT / sT, offsetX: sL, offsetY: 0 },
+        ".ns-b": { w: wVar, h: wB, scX: wVar / sWVar, scY: wB / sB, offsetX: sL, offsetY: th - sB },
+        ".ns-l": { w: wL, h: hVar, scX: wL / sL, scY: hVar / sHVar, offsetX: 0, offsetY: sT },
+        ".ns-r": { w: wL, h: hVar, scX: wL / sL, scY: hVar / sHVar, offsetX: tw - sL, offsetY: sT },
+        ".ns-c": { w: wVar, h: hVar, scX: wVar / sWVar, scY: hVar / sHVar, offsetX: sL, offsetY: sT }
+    };
+
+    Object.entries(cells).forEach(([selector, c]) => {
+        const el = grid.querySelector(selector);
+        if (!el) return;
+        const sourceX = col * tw + c.offsetX;
+        const sourceY = row * th + c.offsetY;
+        el.style.backgroundImage = `url("${f.sheet}")`;
+        el.style.backgroundSize = `${f.naturalSize * c.scX}px ${f.naturalSize * c.scY}px`;
+        el.style.backgroundPosition = `${-sourceX * c.scX}px ${-sourceY * c.scY}px`;
+    });
+}
+
+function applyCompanionFrame(card) {
+    const rect = card.getBoundingClientRect();
+    applyPortraitFrame(card.querySelector(".companion-frame"), "elegant", card.dataset.rank || 2, rect.width || 140, rect.height || 140, 24);
+}
+
+function applyAudienceFrame(chip) {
+    const rect = chip.getBoundingClientRect();
+    applyPortraitFrame(chip.querySelector(".audience-frame"), "audience", chip.dataset.rank || 1, rect.width || 140, rect.height || 140, 24);
+}
+
+function applyAllPortraitFrames() {
+    document.querySelectorAll(".companion-card").forEach(applyCompanionFrame);
+    document.querySelectorAll(".portrait-chip").forEach(applyAudienceFrame);
+}
+
+function applyTrackIcons(track) {
+    const rawId = String(track && track.id || "");
+    const parts = rawId.split("_");
+    let insCode = 201;
+    let typeCode = 211;
+    let themeCode = 221;
+    let isSpecial = false;
+    let specialRegion = 1;
+    let specialAttr = "elegant";
+
+    if (parts.length >= 4) {
+        if (parts[1] === "special") {
+            isSpecial = true;
+            specialRegion = parseInt(parts[2], 10) || 1;
+            specialAttr = parts[3] || "elegant";
+        } else {
+            insCode = parseInt(parts[1], 10) || insCode;
+            typeCode = parseInt(parts[2], 10) || typeCode;
+            themeCode = parseInt(parts[3], 10) || themeCode;
+        }
+    }
+
+    const iconDefs = {
+        instrument: { sheet: "icon_sheet_03_music_bonus_code.webp", index: 18, title: "楽器" },
+        type: { sheet: "icon_sheet_03_music_bonus_code.webp", index: 30, title: "曲種" },
+        theme: { sheet: "icon_sheet_03_music_bonus_code.webp", index: 43, title: "テーマ" }
+    };
+
+    if (isSpecial) {
+        iconDefs.instrument.index = 4;
+        iconDefs.type.sheet = "icon_sheet_02_card_event_code.webp";
+        iconDefs.type.index = 16 + (specialRegion - 1);
+        iconDefs.theme.sheet = "icon_sheet_01_minigame_ui.webp";
+        iconDefs.theme.index = specialAttr === "mystic" ? 26 : specialAttr === "brave" ? 24 : 25;
+    } else {
+        const instrumentMap = { 101: 16, 102: 17, 201: 18, 202: 19, 301: 20, 302: 21, 401: 22, 402: 23, 501: 24, 502: 25, 601: 26, 602: 27 };
+        const typeMap = { 111: 28, 112: 29, 211: 30, 212: 31, 311: 32, 312: 33, 411: 34, 412: 35, 511: 36, 512: 37, 611: 38, 612: 39 };
+        const themeMap = {
+            121: 40, 122: 41, 123: 42,
+            221: 43, 222: 44, 223: 45,
+            321: 46, 322: 47, 323: 48,
+            421: 49, 422: 50, 423: 51,
+            521: 52, 522: 53, 523: 54,
+            621: 55, 622: 56, 623: 57
+        };
+        iconDefs.instrument.index = instrumentMap[insCode] ?? iconDefs.instrument.index;
+        iconDefs.type.index = typeMap[typeCode] ?? iconDefs.type.index;
+        iconDefs.theme.index = themeMap[themeCode] ?? iconDefs.theme.index;
+    }
+
+    for (const [key, def] of Object.entries(iconDefs)) {
+        const el = conditionIconEls[key];
+        if (!el) continue;
+        el.style.backgroundImage = `url("../assets/images/icon/${def.sheet}")`;
+        el.style.backgroundPosition = iconPosition(def.index);
+        el.title = def.title;
+    }
+}
+
+function randomizeStageCast() {
+    const bg = STAGE_BACKGROUNDS[Math.floor(Math.random() * STAGE_BACKGROUNDS.length)];
+    gameContainer.style.setProperty("--stage-bg", `url("${bg.url}")`);
+
+    const companions = pickUnique(ELEGANT_COMPANION_POOL, 3);
+    renderAudience(pickStageAudience(bg, 22));
+
+    companions.forEach((item, idx) => {
+        const card = document.querySelectorAll(".companion-card")[idx];
+        if (!card) return;
+        applySprite(card, item);
+        card.dataset.rank = String(2 + idx);
+        card.dataset.effectRole = item[3] || "clap";
+        const name = card.querySelector(".companion-name");
+        if (name) name.textContent = item[2];
+        applyCompanionFrame(card);
+    });
+    window.setTimeout(pulseCompanionAmbience, 240);
 }
 
 function getAttributeForKey(code) {
@@ -1274,6 +2364,7 @@ function resizeGame() {
     gameContainer.style.width = "1920px";
     gameContainer.style.height = "1080px";
     if (visualizerReady) resizeViz();
+    applyAllPortraitFrames();
 }
 
 window.addEventListener("resize", () => {
@@ -1287,6 +2378,7 @@ if (window.visualViewport) {
     });
 }
 resizeGame();
+window.setInterval(pulseCompanionAmbience, 2400);
 
 function cleanSongName(name) {
     return String(name || "")
@@ -1313,7 +2405,7 @@ function populateTracks() {
         const fileName = getTrackFile(track);
         const opt = document.createElement("option");
         opt.value = idx;
-        opt.textContent = cleanSongName(fileName);
+        opt.textContent = `Track ${String(idx + 1).padStart(2, "0")}`;
         opt.title = fileName;
         trackSelect.appendChild(opt);
     });
@@ -1331,8 +2423,9 @@ function selectTrack(idx) {
     player.src = AUDIO_BASE_DIR + encodeURIComponent(fileName);
     player.volume = Number(bgmVol.value) / 100;
     player.load();
-    trackTitle.textContent = cleanSongName(fileName);
-    document.getElementById("vocal-tag").textContent = cleanSongName(fileName);
+    trackTitle.textContent = "条件に合う楽曲を演奏中";
+    applyTrackIcons(track);
+    randomizeStageCast();
     const emoData = songEmotionsData[baseName] || { attribute: "elegant", emotion: "neutral" };
     loadPortraitSprite(emoData.attribute || "elegant", emoData.emotion || "neutral");
     resetRunStats();
@@ -1361,6 +2454,7 @@ function resetRunStats() {
     greats = 0;
     goods = 0;
     misses = 0;
+    setAudienceHeat(0);
     lateHits = [];
     gameTime = 0;
     notesLayer.innerHTML = "";
@@ -1420,9 +2514,32 @@ keyTimingSelect.addEventListener("change", () => {
     saveSettings();
 });
 
+randomizeBtn.addEventListener("click", () => {
+    if (isPlaying || isPaused || isCountingDown || isApproaching) stopGame();
+    if (tracksData.length) {
+        const nextIndex = Math.floor(Math.random() * tracksData.length);
+        trackSelect.value = String(nextIndex);
+        selectTrack(nextIndex);
+        saveSettings();
+    } else {
+        randomizeStageCast();
+    }
+    randomizeBtn.blur();
+});
+
 playBtn.addEventListener("click", () => {
     isPlaying ? stopGame() : startGame();
     playBtn.blur();
+});
+
+configBtn.addEventListener("click", () => {
+    configModal.classList.add("active");
+    configBtn.blur();
+});
+
+configCloseBtn.addEventListener("click", () => {
+    configModal.classList.remove("active");
+    configCloseBtn.blur();
 });
 
 calibrateBtn.addEventListener("click", () => {
@@ -1594,6 +2711,87 @@ function burstAt(x, y, color) {
     }
 }
 
+const COMPANION_EFFECTS = {
+    dancer: { chars: "✦✧☆", color: "#f9a8d4", count: 10, spread: 132, lift: 98, size: 28 },
+    strings: { chars: "♪♫♬♩", color: "#7dd3fc", count: 12, spread: 118, lift: 110, size: 30 },
+    mystic: { chars: "◇◆✶✷", color: "#5eead4", count: 11, spread: 150, lift: 94, size: 28 },
+    salon: { chars: "✧✦❖", color: "#fde68a", count: 10, spread: 120, lift: 88, size: 27 },
+    clap: { chars: "✦＊✧", color: "#fef3c7", count: 9, spread: 100, lift: 76, size: 26 }
+};
+
+function companionStagePoint(card) {
+    const stageRect = stage.getBoundingClientRect();
+    const cardRect = card.getBoundingClientRect();
+    const scale = stageRect.width / 1920 || 1;
+    return {
+        x: (cardRect.left + cardRect.width / 2 - stageRect.left) / scale,
+        y: (cardRect.top + cardRect.height * 0.52 - stageRect.top) / scale
+    };
+}
+
+function emitCompanionParticles(card, strong = false, intensity = 1) {
+    const role = card.dataset.effectRole || "clap";
+    const def = COMPANION_EFFECTS[role] || COMPANION_EFFECTS.clap;
+    const origin = companionStagePoint(card);
+    const count = Math.max(1, Math.round((strong ? def.count * 1.7 : def.count) * intensity));
+    const lift = (strong ? def.lift * 1.26 : def.lift) * Math.max(0.55, intensity);
+    const spread = def.spread * Math.PI / 180;
+    const baseAngle = -Math.PI / 2;
+
+    if (strong) {
+        const wave = document.createElement("span");
+        wave.className = "companion-wave";
+        wave.style.setProperty("--x", `${origin.x}px`);
+        wave.style.setProperty("--y", `${origin.y}px`);
+        wave.style.setProperty("--wave-size", `${role === "strings" ? 118 : 98}px`);
+        wave.style.setProperty("--particle-color", def.color);
+        stage.appendChild(wave);
+        window.setTimeout(() => wave.remove(), 720);
+    }
+
+    for (let i = 0; i < count; i++) {
+        const particle = document.createElement("span");
+        particle.className = "companion-particle";
+        const char = def.chars[Math.floor(Math.random() * def.chars.length)];
+        const angle = baseAngle + (Math.random() - 0.5) * spread;
+        const dist = lift * (0.48 + Math.random() * 0.7);
+        const drift = (Math.random() - 0.5) * (strong ? 76 : 44);
+        particle.textContent = char;
+        particle.style.setProperty("--x", `${origin.x + (Math.random() - 0.5) * 34}px`);
+        particle.style.setProperty("--y", `${origin.y + (Math.random() - 0.5) * 22}px`);
+        particle.style.setProperty("--tx", `${Math.cos(angle) * dist + drift}px`);
+        particle.style.setProperty("--ty", `${Math.sin(angle) * dist}px`);
+        particle.style.setProperty("--rot", `${(Math.random() * 160 - 80).toFixed(1)}deg`);
+        particle.style.setProperty("--particle-color", def.color);
+        particle.style.setProperty("--particle-size", `${def.size * (0.82 + intensity * 0.18) + Math.random() * (strong ? 12 : 7)}px`);
+        particle.style.setProperty("--particle-duration", `${strong ? 920 + Math.random() * 260 : 680 + Math.random() * 180}ms`);
+        stage.appendChild(particle);
+        window.setTimeout(() => particle.remove(), strong ? 1300 : 980);
+    }
+}
+
+function pulseCompanionAmbience() {
+    if (document.hidden) return;
+    if (!isPlaying || isPaused || isCountingDown || isApproaching || gameTime < 0) return;
+    document.querySelectorAll(".companion-card").forEach((card, idx) => {
+        window.setTimeout(() => emitCompanionParticles(card, false, 0.34), idx * 180);
+    });
+}
+
+function triggerCompanionAssist(strong = false) {
+    document.querySelectorAll(".companion-card").forEach((card, idx) => {
+        window.setTimeout(() => {
+            card.classList.remove("assist-hit", "assist-up");
+            void card.offsetWidth;
+            card.classList.add(strong ? "assist-up" : "assist-hit");
+            emitCompanionParticles(card, strong);
+            window.setTimeout(() => {
+                card.classList.remove("assist-hit", "assist-up");
+            }, strong ? 980 : 620);
+        }, idx * (strong ? 110 : 70));
+    });
+}
+
 function setMeter(level, color) {
     lastJudge.style.color = color;
     meterBars.style.color = color;
@@ -1651,14 +2849,17 @@ function judgeInput(attribute) {
         color = "#fbbf24";
         level = 4;
         perfects++;
+        adjustAudienceHeat(5);
     } else if (ratio <= 0.62) {
         text = "GREAT";
         points = 60;
         color = "#34d399";
         level = 3;
         greats++;
+        adjustAudienceHeat(3);
     } else {
         goods++;
+        adjustAudienceHeat(1);
     }
 
     score += points + Math.min(combo, 80);
@@ -1671,6 +2872,7 @@ function judgeInput(attribute) {
     const y = laneY(attribute);
     showHitText(text, color, y);
     burstAt(x, y, color);
+    triggerCompanionAssist(activeState === "VOCAL_UP" || text === "PERFECT");
     showTiming(closest.time - now, windowSec, color);
     lastJudge.textContent = `${text} ${Math.round((closest.time - now) * 1000)}ms`;
     setMeter(level, color);
@@ -1681,6 +2883,7 @@ function missNote(note) {
     note.missed = true;
     combo = 0;
     misses++;
+    adjustAudienceHeat(-8);
     if (note.dom) note.dom.remove();
     const y = laneY(note.attribute);
     showHitText("MISS", "#f87171", y);
@@ -1754,6 +2957,10 @@ document.addEventListener("keydown", (e) => {
         return;
     }
     if (e.key === "Escape") {
+        if (configModal.classList.contains("active")) {
+            configModal.classList.remove("active");
+            return;
+        }
         if (!isPlaying) return;
         isPaused ? resumeGame() : pauseGame();
         return;
