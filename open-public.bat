@@ -12,9 +12,9 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command ^
   "$port=%PORT%; $public='%PUBLIC_DIR%'; $pidFile='%PID_FILE%'; $url='%URL%';" ^
   "$oldPid = if (Test-Path -LiteralPath $pidFile) { [int](Get-Content -LiteralPath $pidFile -ErrorAction SilentlyContinue) } else { 0 };" ^
   "if ($oldPid -and (Get-Process -Id $oldPid -ErrorAction SilentlyContinue)) { Start-Process $url; exit }" ^
-  "$listener = [System.Net.Sockets.TcpListener]::new([System.Net.IPAddress]::Parse('127.0.0.1'), $port);" ^
+  "$listener = [System.Net.Sockets.TcpListener]::new([System.Net.IPAddress]::Any, $port);" ^
   "try { $listener.Start(); $listener.Stop() } catch { Write-Host ('Port ' + $port + ' is already in use. Opening URL only.'); Start-Process $url; exit }" ^
-  "$p = Start-Process -WindowStyle Hidden -FilePath py -ArgumentList @('-m','http.server',[string]$port,'--bind','127.0.0.1','--directory',$public) -PassThru;" ^
+  "$p = Start-Process -WindowStyle Hidden -FilePath py -ArgumentList @('-m','http.server',[string]$port,'--bind','0.0.0.0','--directory',$public) -PassThru;" ^
   "Set-Content -LiteralPath $pidFile -Value $p.Id -Encoding ascii;" ^
   "Start-Sleep -Milliseconds 700;" ^
   "Start-Process $url"

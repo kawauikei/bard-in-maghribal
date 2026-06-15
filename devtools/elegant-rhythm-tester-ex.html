@@ -301,6 +301,46 @@ body {
     width: 2px;
     background: linear-gradient(180deg, transparent, rgba(255,255,255,0.36), transparent);
     box-shadow: 0 0 12px rgba(255,255,255,0.24);
+    z-index: 20;
+}
+
+.judgment-icon {
+    position: absolute;
+    width: 76px;
+    height: 76px;
+    left: -37px;
+    margin-top: -38px;
+    background-image: url("../assets/images/icon/icon_sheet_01_minigame_ui.webp");
+    background-size: 800% 800%;
+    opacity: 0.35;
+    pointer-events: none;
+    image-rendering: pixelated;
+    z-index: -1;
+    transition: transform 0.05s ease-out;
+    transform-origin: center;
+}
+.judgment-icon.shrink {
+    transform: scale(0.65);
+}
+.judgment-icon.mystic { top: 17%; background-position: 28.571% 42.857%; }
+.judgment-icon.elegant { top: 50%; background-position: 14.285% 42.857%; }
+.judgment-icon.brave { top: 83%; background-position: 0% 42.857%; }
+
+.ripple-wave {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    margin-left: -45px;
+    margin-top: -45px;
+    border-radius: 50%;
+    border: 3px solid;
+    pointer-events: none;
+    z-index: 25;
+    animation: ripple-wave-anim 0.4s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+@keyframes ripple-wave-anim {
+    0% { transform: scale(0.6); opacity: 0.8; border-width: 6px; }
+    100% { transform: scale(1.6); opacity: 0; border-width: 1px; }
 }
 
 #notes-layer {
@@ -822,7 +862,7 @@ input[type="range"] {
     background: transparent;
     color: currentColor;
     cursor: pointer;
-    display: none;
+    display: block;
     touch-action: manipulation;
 }
 
@@ -835,7 +875,7 @@ input[type="range"] {
     transition: background 80ms ease, border-color 80ms ease, box-shadow 80ms ease;
 }
 
-.touch-lane-hitarea:active::after {
+.touch-lane-hitarea:active::after, .touch-lane-hitarea.active::after {
     background: rgba(255,255,255,0.08);
     border-color: currentColor;
     box-shadow: inset 0 0 22px currentColor;
@@ -845,25 +885,8 @@ input[type="range"] {
 .touch-lane-hitarea.elegant { top: 50%; color: var(--elegant); }
 .touch-lane-hitarea.brave { top: 83%; color: var(--brave); }
 
-body[data-input-mode="touch"] .touch-lane-hitarea {
-    display: block;
-}
-
 .input-btn {
-    position: absolute;
-    left: calc(74% + 74px);
-    width: 92px;
-    height: 92px;
-    transform: translateY(-50%);
-    z-index: 35;
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
-    border: 3px solid currentColor;
-    background: rgba(8, 18, 32, 0.94);
-    box-shadow: 0 18px 35px rgba(0,0,0,0.38), inset 0 0 24px rgba(255,255,255,0.04);
-    cursor: pointer;
-    transition: box-shadow 70ms ease, background 70ms ease;
+    display: none;
 }
 
 .input-btn.mystic { top: 17%; color: var(--mystic); }
@@ -878,6 +901,10 @@ body[data-input-mode="touch"] .touch-lane-hitarea {
 body[data-input-mode="mouse"] .input-btn {
     pointer-events: none;
     opacity: 0.42;
+}
+
+body[data-input-mode="mouse"] .touch-lane-hitarea {
+    pointer-events: none;
 }
 
 .btn-icon {
@@ -932,8 +959,8 @@ body[data-input-mode="mouse"] .input-btn {
     gap: 14px;
 }
 </style>
-  <script type="module" crossorigin src="/build/devtools/elegant-rhythm-tester-ex-CWM9N3Qs.js"></script>
-  <link rel="modulepreload" crossorigin href="/build/excalibur-D3YLseMN.js">
+  <script type="module" crossorigin src="../build/devtools/elegant-rhythm-tester-ex-CAQ7bG2K.js"></script>
+  <link rel="modulepreload" crossorigin href="../build/excalibur-D3YLseMN.js">
 </head>
 <body>
 <div id="game-container">
@@ -991,7 +1018,11 @@ body[data-input-mode="mouse"] .input-btn {
             <div class="lane-path mystic"></div>
             <div class="lane-path elegant"></div>
             <div class="lane-path brave"></div>
-            <div id="judgment-line"></div>
+            <div id="judgment-line">
+                <div class="judgment-icon mystic"></div>
+                <div class="judgment-icon elegant"></div>
+                <div class="judgment-icon brave"></div>
+            </div>
             <div id="notes-layer"></div>
             <button class="touch-lane-hitarea mystic" data-attr="mystic" aria-label="神秘レーン"></button>
             <button class="touch-lane-hitarea elegant" data-attr="elegant" aria-label="優美レーン"></button>
@@ -1094,9 +1125,12 @@ body[data-input-mode="mouse"] .input-btn {
                         <label for="audience-count-select">観客人数</label>
                         <select id="audience-count-select">
                             <option value="0">0人 (なし)</option>
-                            <option value="4">4人 (少なめ)</option>
+                            <option value="4">4人 (少ない)</option>
                             <option value="8">8人 (軽量)</option>
-                            <option value="12" selected>12人 (標準)</option>
+                            <option value="12">12人 (標準)</option>
+                            <option value="20">20人 (多い)</option>
+                            <option value="30">30人 (最大)</option>
+                            <option value="50" selected>50人 (カオス)</option>
                         </select>
                     </div>
                     <div class="toolbar-actions">
@@ -1164,6 +1198,6 @@ body[data-input-mode="mouse"] .input-btn {
 </div>
 
 <audio id="bgm-player" preload="auto"></audio>
-<script src="/devtools/rhythm_data.js"></script>
+<script src="./rhythm_data.js"></script>
 </body>
 </html>
