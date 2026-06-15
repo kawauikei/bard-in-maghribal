@@ -212,100 +212,31 @@ input {
 
 #audience-portraits {
     position: absolute;
-    left: 54%;
+    left: 50%;
     top: 34px;
     z-index: 23;
-    width: 1120px;
+    width: 1540px;
     height: 270px;
     transform: translateX(-50%);
     pointer-events: none;
 }
 
 .side-audience {
-    position: absolute;
-    top: 328px;
-    z-index: 21;
-    width: 310px;
-    height: 180px;
-    pointer-events: none;
-}
-
-#side-audience-left {
-    left: 256px;
-}
-
-#side-audience-right {
-    right: 256px;
+    display: none;
 }
 
 .portrait-chip {
-    position: relative;
-    width: 112px;
-    height: 112px;
-    display: inline-block;
-    overflow: hidden;
+    position: absolute;
+    left: var(--x, 50%);
+    top: var(--y, 50%);
+    z-index: var(--z, 2);
+    width: 128px;
+    height: 128px;
     border-radius: 4px;
     background: transparent;
     box-shadow: 0 18px 36px rgba(0,0,0,0.42);
+    transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) scale(var(--scale, 1));
 }
-
-.portrait-chip.back-row {
-    z-index: 1;
-    width: 96px;
-    height: 96px;
-    opacity: 0.84;
-    filter: saturate(0.92) brightness(0.92);
-}
-
-.portrait-chip.front-row {
-    z-index: 3;
-}
-
-.portrait-chip.side-row {
-    z-index: 2;
-    width: 112px;
-    height: 112px;
-    opacity: 0.84;
-    filter: saturate(0.92) brightness(0.92);
-}
-
-.portrait-chip:nth-child(4n + 1) { transform: translateY(8px) rotate(-2deg); }
-.portrait-chip:nth-child(4n + 2) { transform: translateY(-4px) rotate(1.4deg); }
-.portrait-chip:nth-child(4n + 3) { transform: translateY(4px) rotate(-1.2deg); }
-.portrait-chip:nth-child(4n) { transform: translateY(10px) rotate(2deg); }
-
-#audience-portraits .portrait-chip {
-    position: absolute;
-}
-
-#audience-portraits .portrait-chip:nth-child(1) { left: 0; top: 82px; transform: rotate(-8deg); }
-#audience-portraits .portrait-chip:nth-child(2) { left: 138px; top: 42px; transform: rotate(-5deg); }
-#audience-portraits .portrait-chip:nth-child(3) { left: 276px; top: 18px; transform: rotate(-2.5deg); }
-#audience-portraits .portrait-chip:nth-child(4) { left: 414px; top: 4px; transform: rotate(-0.8deg); }
-#audience-portraits .portrait-chip:nth-child(5) { left: 552px; top: 4px; transform: rotate(0.8deg); }
-#audience-portraits .portrait-chip:nth-child(6) { left: 690px; top: 18px; transform: rotate(2.5deg); }
-#audience-portraits .portrait-chip:nth-child(7) { left: 828px; top: 42px; transform: rotate(5deg); }
-#audience-portraits .portrait-chip:nth-child(8) { left: 966px; top: 82px; transform: rotate(8deg); }
-#audience-portraits .portrait-chip:nth-child(9) { left: 36px; top: 172px; transform: rotate(-7deg); }
-#audience-portraits .portrait-chip:nth-child(10) { left: 170px; top: 144px; transform: rotate(-4deg); }
-#audience-portraits .portrait-chip:nth-child(11) { left: 304px; top: 126px; transform: rotate(-2deg); }
-#audience-portraits .portrait-chip:nth-child(12) { left: 438px; top: 116px; transform: rotate(-0.6deg); }
-#audience-portraits .portrait-chip:nth-child(13) { left: 572px; top: 116px; transform: rotate(0.6deg); }
-#audience-portraits .portrait-chip:nth-child(14) { left: 706px; top: 126px; transform: rotate(2deg); }
-#audience-portraits .portrait-chip:nth-child(15) { left: 840px; top: 144px; transform: rotate(4deg); }
-#audience-portraits .portrait-chip:nth-child(16) { left: 974px; top: 172px; transform: rotate(7deg); }
-
-#side-audience-left .portrait-chip,
-#side-audience-right .portrait-chip {
-    position: absolute;
-}
-
-#side-audience-left .portrait-chip:nth-child(1) { left: 0; top: 44px; transform: rotate(-6deg); }
-#side-audience-left .portrait-chip:nth-child(2) { left: 86px; top: 0; transform: rotate(2deg); }
-#side-audience-left .portrait-chip:nth-child(3) { left: 176px; top: 54px; transform: rotate(-1.4deg); }
-#side-audience-right .portrait-chip:nth-child(1) { right: 176px; top: 54px; transform: rotate(1.4deg); }
-#side-audience-right .portrait-chip:nth-child(2) { right: 86px; top: 0; transform: rotate(-2deg); }
-#side-audience-right .portrait-chip:nth-child(3) { right: 0; top: 44px; transform: rotate(6deg); }
 
 .portrait-chip::after {
     content: "";
@@ -409,7 +340,7 @@ body[data-heat="high"] #audience-layer { opacity: 1; }
     top: 350px;
     z-index: 23;
     display: flex;
-    gap: 96px;
+    gap: 36px;
     transform: translateX(-50%);
 }
 
@@ -1426,36 +1357,43 @@ body[data-input-mode="touch"] .touch-lane-hitarea {
             </div>
         </div>
         <div id="hud">
-            <div class="hud-item"><div class="hud-label">Score</div><div class="hud-value accent" id="score-val">0</div></div>
-            <div class="hud-item"><div class="hud-label">Combo</div><div class="hud-value combo" id="combo-val">0</div></div>
-            <div class="hud-item"><div class="hud-label">Time</div><div class="hud-value" id="time-val">0.00</div></div>
-            <div class="hud-item"><div class="hud-label">Accuracy</div><div class="hud-value" id="acc-val">--</div></div>
+            <div class="hud-item"><div class="hud-label">スコア</div><div class="hud-value accent" id="score-val">0</div></div>
+            <div class="hud-item"><div class="hud-label">コンボ</div><div class="hud-value combo" id="combo-val">0</div></div>
+            <div class="hud-item"><div class="hud-label">時間</div><div class="hud-value" id="time-val">0.00</div></div>
+            <div class="hud-item"><div class="hud-label">精度</div><div class="hud-value" id="acc-val">--</div></div>
         </div>
 
-        <div id="condition-icons" aria-label="Performance conditions">
+        <div id="condition-icons" aria-label="演奏条件">
             <span class="condition-icon" data-track-icon="instrument" title="楽器"></span>
             <span class="condition-icon" data-track-icon="type" title="曲種"></span>
             <span class="condition-icon" data-track-icon="theme" title="テーマ"></span>
         </div>
 
-        <div id="audience-portraits" aria-label="Audience members"></div>
+        <div id="audience-portraits" aria-label="観客席"></div>
+
+        <div id="layout-diagnostic-hud" style="position:absolute; left:24px; top:280px; z-index:100; background:rgba(4,9,20,0.92); border:1px solid #ef4444; padding:10px 14px; border-radius:6px; font-family:monospace; font-size:12px; color:#f8fafc; pointer-events:none; box-shadow:0 12px 24px rgba(0,0,0,0.5); display:flex; flex-direction:column; gap:4px; line-height:1.4;">
+            <div style="font-weight:bold; color:#fbbf24; border-bottom:1px solid rgba(255,255,255,0.15); padding-bottom:3px; margin-bottom:3px;">LAYOUT DIAGNOSTIC</div>
+            <div id="diag-out-of-bounds">Out of Stage: 0px</div>
+            <div id="diag-audience-overlap">Audience Overlap: 0px</div>
+            <div id="diag-companion-overlap">Companion Overlap: 0px</div>
+        </div>
 
         <div id="stage-actions">
-            <button id="randomize-btn" class="btn-secondary" type="button">RANDOM</button>
-            <button id="play-btn" class="btn-primary">PLAY</button>
-            <button id="config-btn" class="btn-secondary" type="button">CONFIG</button>
-            <button id="fullscreen-btn" class="btn-secondary" type="button">FULL</button>
+            <button id="randomize-btn" class="btn-secondary" type="button">ランダム</button>
+            <button id="play-btn" class="btn-primary">演奏開始</button>
+            <button id="config-btn" class="btn-secondary" type="button">設定</button>
+            <button id="fullscreen-btn" class="btn-secondary" type="button">全画面</button>
         </div>
 
         <div id="heat-panel">
-            <div class="heat-head"><span>Audience</span><span id="heat-value">0%</span></div>
+            <div class="heat-head"><span>観客の熱気</span><span id="heat-value">0%</span></div>
             <div class="heat-track"><div id="heat-fill"></div></div>
         </div>
 
-        <div id="side-audience-left" class="side-audience" aria-label="Left side audience"></div>
-        <div id="side-audience-right" class="side-audience" aria-label="Right side audience"></div>
+        <div id="side-audience-left" class="side-audience" aria-label="左側観客席"></div>
+        <div id="side-audience-right" class="side-audience" aria-label="右側観客席"></div>
 
-        <div id="companion-lineup" aria-label="Elegant companions">
+        <div id="companion-lineup" aria-label="伴奏者ラインナップ">
             <div class="companion-card" style="--sheet:url('../assets/images/portrait/portrait_core_A_4x4.webp');--pos:0% 33.333%;" title="セレーネ">
                 <div class="companion-portrait"></div>
                 <div class="companion-frame" aria-hidden="true"><span class="ns-tl"></span><span class="ns-t"></span><span class="ns-tr"></span><span class="ns-l"></span><span class="ns-c"></span><span class="ns-r"></span><span class="ns-bl"></span><span class="ns-b"></span><span class="ns-br"></span></div>
@@ -1492,20 +1430,20 @@ body[data-input-mode="touch"] .touch-lane-hitarea {
             <div class="lane-path brave"></div>
             <div id="judgment-line"></div>
             <div id="notes-layer"></div>
-            <button class="touch-lane-hitarea mystic" data-attr="mystic" aria-label="Mystic lane"></button>
-            <button class="touch-lane-hitarea elegant" data-attr="elegant" aria-label="Elegant lane"></button>
-            <button class="touch-lane-hitarea brave" data-attr="brave" aria-label="Brave lane"></button>
-            <button class="input-btn mystic" data-attr="mystic" aria-label="Mystic"><span class="btn-icon"></span></button>
-            <button class="input-btn elegant" data-attr="elegant" aria-label="Elegant"><span class="btn-icon"></span></button>
-            <button class="input-btn brave" data-attr="brave" aria-label="Brave"><span class="btn-icon"></span></button>
+            <button class="touch-lane-hitarea mystic" data-attr="mystic" aria-label="神秘レーン"></button>
+            <button class="touch-lane-hitarea elegant" data-attr="elegant" aria-label="優美レーン"></button>
+            <button class="touch-lane-hitarea brave" data-attr="brave" aria-label="勇猛レーン"></button>
+            <button class="input-btn mystic" data-attr="mystic" aria-label="神秘"><span class="btn-icon"></span></button>
+            <button class="input-btn elegant" data-attr="elegant" aria-label="優美"><span class="btn-icon"></span></button>
+            <button class="input-btn brave" data-attr="brave" aria-label="勇猛"><span class="btn-icon"></span></button>
             <div class="timing-rail"><span class="timing-marker" id="timing-marker"></span></div>
         </div>
     </section>
 
     <div class="meter-panel" id="judge-meter">
         <div class="meter-row">
-            <div class="meter-title">Last Judgment</div>
-            <div class="meter-value" id="last-judge">READY</div>
+            <div class="meter-title">直前の判定</div>
+            <div class="meter-value" id="last-judge">準備完了</div>
         </div>
         <div class="meter-bars" id="meter-bars"><span></span><span></span><span></span><span></span></div>
     </div>
@@ -1514,108 +1452,127 @@ body[data-input-mode="touch"] .touch-lane-hitarea {
 
     <div id="pause-modal" class="modal-overlay">
         <div class="modal-content">
-            <h2 class="modal-title">PAUSED</h2>
-            <div class="pause-stats">Score <span id="pause-score">0</span> / Combo <span id="pause-combo">0</span></div>
+            <h2 class="modal-title">一時停止</h2>
+            <div class="pause-stats">スコア <span id="pause-score">0</span> / コンボ <span id="pause-combo">0</span></div>
             <div class="modal-actions">
-                <button id="resume-btn" class="btn-primary">RESUME</button>
-                <button id="restart-btn" class="btn-secondary">RESTART</button>
-                <button id="exit-btn" class="btn-secondary">EXIT</button>
+                <button id="resume-btn" class="btn-primary">再開する</button>
+                <button id="restart-btn" class="btn-secondary">最初から</button>
+                <button id="exit-btn" class="btn-secondary">終了する</button>
             </div>
         </div>
     </div>
 
     <div id="config-modal" class="modal-overlay">
         <div class="modal-content">
-            <h2 class="modal-title">CONFIG</h2>
+            <h2 class="modal-title">設定</h2>
             <div class="config-stack">
                 <div id="settings-ui">
                     <div class="control-group">
-                        <label for="track-select">Debug Track</label>
+                        <label for="track-select">デバッグ楽曲</label>
                         <select id="track-select"></select>
                     </div>
                     <div class="control-group">
-                        <label for="density-select">Density</label>
+                        <label for="density-select">ノーツ密度</label>
                         <select id="density-select">
-                            <option value="1">Light</option>
-                            <option value="2" selected>Standard</option>
-                            <option value="3">Dense</option>
+                            <option value="1">控えめ</option>
+                            <option value="2" selected>標準</option>
+                            <option value="3">高密度</option>
                         </select>
                     </div>
                     <div class="control-group">
-                        <label for="window-select">Window</label>
+                        <label for="window-select">判定枠幅</label>
                         <select id="window-select">
-                            <option value="250">Wide 250ms</option>
-                            <option value="150" selected>Normal 150ms</option>
-                            <option value="80">Tight 80ms</option>
+                            <option value="250">広い (250ms)</option>
+                            <option value="150" selected>標準 (150ms)</option>
+                            <option value="80">狭い (80ms)</option>
                         </select>
                     </div>
                     <div class="control-group">
-                        <div class="range-head"><label for="note-speed-input">Speed</label><span class="range-val" id="speed-val">180 px/s</span></div>
+                        <div class="range-head"><label for="note-speed-input">スピード</label><span class="range-val" id="speed-val">180 px/s</span></div>
                         <input type="range" id="note-speed-input" min="180" max="620" value="180" step="20">
                     </div>
                     <div class="control-group">
-                        <div class="range-head"><label for="offset">Offset</label><span class="range-val" id="offset-val">0 ms</span></div>
+                        <div class="range-head"><label for="offset">判定調節</label><span class="range-val" id="offset-val">0 ms</span></div>
                         <input type="range" id="offset" min="-250" max="250" value="0" step="5">
                     </div>
                     <div class="control-group">
-                        <label for="input-mode-select">Input</label>
-                        <div class="input-status" id="input-mode-status"><strong>PC</strong><span>AUTO</span></div>
+                        <label for="input-mode-select">操作端末</label>
+                        <div class="input-status" id="input-mode-status"><strong>PC</strong><span>自動検出</span></div>
                         <select id="input-mode-select" hidden>
                             <option value="mouse" selected>PC</option>
                             <option value="touch">Touch</option>
                         </select>
                     </div>
                     <div class="control-group pc-only-control">
-                        <label for="key-timing-select">Key Judge</label>
+                        <label for="key-timing-select">キー判定方式</label>
                         <select id="key-timing-select">
-                            <option value="down">Input / Press</option>
-                            <option value="up">Release</option>
+                            <option value="down">押し下げ時</option>
+                            <option value="up">離し時</option>
                         </select>
                     </div>
                     <div class="control-group">
-                        <div class="range-head"><label for="bgm-vol">BGM</label><span class="range-val" id="bgm-vol-val">80%</span></div>
+                        <div class="range-head"><label for="bgm-vol">BGM音量</label><span class="range-val" id="bgm-vol-val">80%</span></div>
                         <input type="range" id="bgm-vol" min="0" max="100" value="80">
                     </div>
                     <div class="control-group">
-                        <div class="range-head"><label for="se-vol">Hit SE</label><span class="range-val" id="se-vol-val">OFF</span></div>
+                        <div class="range-head"><label for="se-vol">打鍵音量</label><span class="range-val" id="se-vol-val">OFF</span></div>
                         <input type="range" id="se-vol" min="0" max="100" value="0" disabled>
                     </div>
+                    <div class="control-group">
+                        <label for="companion-count-select">伴奏者人数</label>
+                        <select id="companion-count-select">
+                            <option value="0">0人</option>
+                            <option value="1">1人</option>
+                            <option value="2">2人</option>
+                            <option value="3" selected>3人 (標準)</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="audience-count-select">観客人数</label>
+                        <select id="audience-count-select">
+                            <option value="0">0人 (なし)</option>
+                            <option value="4">4人 (少なめ)</option>
+                            <option value="16">16人 (正面のみ)</option>
+                            <option value="22" selected>22人 (標準)</option>
+                            <option value="30">30人 (最大)</option>
+                        </select>
+                    </div>
                     <div class="toolbar-actions">
-                        <button id="calibrate-btn" class="btn-secondary" type="button">SYNC RESET</button>
-                        <button id="config-close-btn" class="btn-primary" type="button">CLOSE</button>
+                        <button id="calibrate-btn" class="btn-secondary" type="button">設定リセット</button>
+                        <button id="config-close-btn" class="btn-primary" type="button">閉じる</button>
                     </div>
                 </div>
 
                 <div id="key-config-panel">
-                    <div class="key-config-title">PC Key Config</div>
+                    <div class="key-config-title">PC キー割り当て設定</div>
                     <div class="bind-row brave" data-bind-row="brave">
                         <strong>勇猛</strong>
                         <button class="bind-key-btn" data-key-bind="brave" type="button">D</button>
                         <select class="mouse-bind-select" data-mouse-bind="brave">
-                            <option value="none">No Mouse</option>
-                            <option value="0">Left Click</option>
-                            <option value="1">Middle Click</option>
-                            <option value="2">Right Click</option>
+                            <option value="none">マウス無効</option>
+                            <option value="0">左クリック</option>
+                            <option value="1">ホイールクリック</option>
+                            <option value="2">右クリック</option>
                         </select>
                     </div>
                     <div class="bind-row elegant" data-bind-row="elegant">
                         <strong>優美</strong>
                         <button class="bind-key-btn" data-key-bind="elegant" type="button">F</button>
                         <select class="mouse-bind-select" data-mouse-bind="elegant">
-                            <option value="none">No Mouse</option>
-                            <option value="0">Left Click</option>
-                            <option value="1">Middle Click</option>
-                            <option value="2">Right Click</option>
+                            <option value="none">マウス無効</option>
+                            <option value="0">左クリック</option>
+                            <option value="1">ホイールクリック</option>
+                            <option value="2">右クリック</option>
                         </select>
                     </div>
                     <div class="bind-row mystic" data-bind-row="mystic">
                         <strong>神秘</strong>
                         <button class="bind-key-btn" data-key-bind="mystic" type="button">J</button>
                         <select class="mouse-bind-select" data-mouse-bind="mystic">
-                            <option value="none">No Mouse</option>
-                            <option value="0">Left Click</option>
-                            <option value="1">Middle Click</option>
-                            <option value="2">Right Click</option>
+                            <option value="none">マウス無効</option>
+                            <option value="0">左クリック</option>
+                            <option value="1">ホイールクリック</option>
+                            <option value="2">右クリック</option>
                         </select>
                     </div>
                 </div>
@@ -1625,20 +1582,20 @@ body[data-input-mode="touch"] .touch-lane-hitarea {
 
     <div id="results-modal" class="modal-overlay">
         <div class="modal-content">
-            <h2 class="modal-title">STAGE CLEAR</h2>
+            <h2 class="modal-title">演奏終了</h2>
             <div id="res-rank" class="result-rank rank-S">S</div>
             <div class="result-grid">
-                <div class="result-item perfect"><span>PERFECT</span><span id="res-perfect">0</span></div>
-                <div class="result-item great"><span>GREAT</span><span id="res-great">0</span></div>
-                <div class="result-item good"><span>GOOD</span><span id="res-good">0</span></div>
-                <div class="result-item miss"><span>MISS</span><span id="res-miss">0</span></div>
-                <div class="result-item"><span>MAX COMBO</span><span id="res-maxcombo">0</span></div>
-                <div class="result-item"><span>TOTAL SCORE</span><span id="res-score">0</span></div>
+                <div class="result-item perfect"><span>パーフェクト</span><span id="res-perfect">0</span></div>
+                <div class="result-item great"><span>グレート</span><span id="res-great">0</span></div>
+                <div class="result-item good"><span>グッド</span><span id="res-good">0</span></div>
+                <div class="result-item miss"><span>ミス</span><span id="res-miss">0</span></div>
+                <div class="result-item"><span>最大コンボ数</span><span id="res-maxcombo">0</span></div>
+                <div class="result-item"><span>最終スコア</span><span id="res-score">0</span></div>
             </div>
             <div class="modal-actions">
-                <button id="res-retry-btn" class="btn-primary">RETRY</button>
-                <button id="res-close-btn" class="btn-secondary">CLOSE</button>
-                <button id="res-stop-btn" class="btn-secondary">STOP</button>
+                <button id="res-retry-btn" class="btn-primary">再挑戦</button>
+                <button id="res-close-btn" class="btn-secondary">閉じる</button>
+                <button id="res-stop-btn" class="btn-secondary">停止</button>
             </div>
         </div>
     </div>
@@ -1696,6 +1653,8 @@ const bgmVol = document.getElementById("bgm-vol");
 const bgmVolVal = document.getElementById("bgm-vol-val");
 const seVol = document.getElementById("se-vol");
 const seVolVal = document.getElementById("se-vol-val");
+const companionCountSelect = document.getElementById("companion-count-select");
+const audienceCountSelect = document.getElementById("audience-count-select");
 const randomizeBtn = document.getElementById("randomize-btn");
 const playBtn = document.getElementById("play-btn");
 const configBtn = document.getElementById("config-btn");
@@ -1936,7 +1895,9 @@ function saveSettings() {
         offset: offsetInput.value,
         bgm: bgmVol.value,
         keyJudgeTiming,
-        bindings: keyBindings
+        bindings: keyBindings,
+        companionCount: companionCountSelect.value,
+        audienceCount: audienceCountSelect.value
     };
     localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(settings));
 }
@@ -1948,9 +1909,23 @@ function applySavedSettings() {
     if (settings.speed) speedInput.value = settings.speed;
     if (settings.offset) offsetInput.value = settings.offset;
     if (settings.bgm) bgmVol.value = settings.bgm;
+    if (settings.companionCount !== undefined) companionCountSelect.value = settings.companionCount;
+    if (settings.audienceCount !== undefined) audienceCountSelect.value = settings.audienceCount;
     keyJudgeTiming = settings.keyJudgeTiming === "up" ? "up" : "down";
     keyTimingSelect.value = keyJudgeTiming;
     keyBindings = normalizeBindings(settings.bindings);
+}
+
+function updateCompanionVisibility() {
+    const count = Number(companionCountSelect.value);
+    const cards = document.querySelectorAll(".companion-card");
+    cards.forEach((card, idx) => {
+        if (idx < count) {
+            card.style.display = "";
+        } else {
+            card.style.display = "none";
+        }
+    });
 }
 
 function keyLabel(code) {
@@ -2068,99 +2043,290 @@ function pickAudienceFrom(source, count, used) {
 function pickStageAudience(stageMeta, count = 22) {
     const used = new Set();
     const region = stageMeta?.audienceRegion || "generic";
-    const frontPool = AUDIENCE_POOL.filter(isFrontAudienceCandidate);
-    const localPool = frontPool.filter((item) => audienceRegion(item) === region);
-    const genericPool = frontPool.filter((item) => audienceRegion(item) === "generic");
 
-    if (count <= 4) {
-        const local = pickAudienceFrom(localPool, 2, used);
-        const localSheets = new Set(local.map((item) => item[0]));
-        const otherPool = frontPool.filter((item) => {
-            const itemRegion = audienceRegion(item);
-            return itemRegion !== region && itemRegion !== "generic" && !localSheets.has(item[0]);
-        });
-        const broadOtherPool = frontPool.filter((item) => {
-            const itemRegion = audienceRegion(item);
-            return itemRegion !== region && itemRegion !== "generic";
-        });
-        const generic = pickAudienceFrom(genericPool, 1, used);
-        const other = pickAudienceFrom(otherPool.length ? otherPool : broadOtherPool, 1, used);
-        const fallback = pickAudienceFrom(frontPool, count - local.length - generic.length - other.length, used);
-        return [local[0], other[0], local[1], generic[0], ...fallback].filter(Boolean).slice(0, count);
+    const localPool = AUDIENCE_POOL.filter(item => audienceRegion(item) === region);
+    const genericPool = AUDIENCE_POOL.filter(item => audienceRegion(item) === "generic");
+    const otherPool = AUDIENCE_POOL.filter(item => audienceRegion(item) !== region && audienceRegion(item) !== "generic");
+
+    const picks = [];
+
+    // 1. 地域一致プールから優先選出 (最大45%)
+    const localLimit = Math.min(Math.ceil(count * 0.45), localPool.length);
+    const localPicks = pickUnique(localPool, localLimit);
+    picks.push(...localPicks);
+    localPicks.forEach(item => used.add(audienceKey(item)));
+
+    // 2. 一般枠プールから選出
+    const remainingCount = count - picks.length;
+    const filteredGeneric = genericPool.filter(item => !used.has(audienceKey(item)));
+    const genericPicks = pickUnique(filteredGeneric, Math.min(remainingCount, filteredGeneric.length));
+    picks.push(...genericPicks);
+    genericPicks.forEach(item => used.add(audienceKey(item)));
+
+    // 3. 不足分をその他プールから補填
+    if (picks.length < count) {
+        const nextRemaining = count - picks.length;
+        const filteredOther = otherPool.filter(item => !used.has(audienceKey(item)));
+        const otherPicks = pickUnique(filteredOther, Math.min(nextRemaining, filteredOther.length));
+        picks.push(...otherPicks);
     }
-
-    const local = pickAudienceFrom(localPool, 6, used);
-    const localSheets = new Set(local.map((item) => item[0]));
-    const otherPool = frontPool.filter((item) => {
-        const itemRegion = audienceRegion(item);
-        return itemRegion !== region && itemRegion !== "generic" && !localSheets.has(item[0]);
-    });
-    const broadOtherPool = frontPool.filter((item) => {
-        const itemRegion = audienceRegion(item);
-        return itemRegion !== region && itemRegion !== "generic";
-    });
-    const other = pickAudienceFrom(otherPool.length ? otherPool : broadOtherPool, 6, used);
-    const generic = pickAudienceFrom(genericPool, 5, used);
-    const side = [local[4], other[2], generic[2], other[3], local[5], generic[3]].filter(Boolean);
-    const front = [local[0], other[0], local[1], generic[0], local[2], other[1], generic[1], local[3]].filter(Boolean);
-
-    const childLimit = Math.random() < 0.45 ? 1 : 0;
-    const childPool = AUDIENCE_POOL.filter((item) => isBackOnlyAudienceCandidate(item) && !used.has(audienceKey(item)));
-    const child = pickAudienceFrom(childPool, childLimit, used);
-    const backLocal = pickAudienceFrom(frontPool.filter((item) => audienceRegion(item) === region), 3, used);
-    const backOther = pickAudienceFrom((otherPool.length ? otherPool : broadOtherPool), 3, used);
-    const backGeneric = pickAudienceFrom(genericPool, 2, used);
-    const backFallback = pickAudienceFrom(frontPool, 8, used);
-    const back = [...child, ...backLocal, ...backOther, ...backGeneric, ...backFallback]
-        .slice(0, Math.max(0, count - front.length - side.length));
-    const fallback = pickAudienceFrom(frontPool, count - front.length - side.length - back.length, used);
-    return [...back, ...front, ...side, ...fallback].slice(0, count);
+    return picks;
 }
 
-function createPortraitChip(layerClass) {
-    const chip = document.createElement("span");
-    chip.className = `portrait-chip ${layerClass}`;
-    chip.innerHTML = '<span class="portrait-image"></span><span class="audience-frame" aria-hidden="true"><span class="ns-tl"></span><span class="ns-t"></span><span class="ns-tr"></span><span class="ns-l"></span><span class="ns-c"></span><span class="ns-r"></span><span class="ns-bl"></span><span class="ns-b"></span><span class="ns-br"></span></span>';
+function createPortraitChip(rowClass) {
+    const chip = document.createElement("div");
+    chip.className = `portrait-chip ${rowClass}`;
+
+    const img = document.createElement("div");
+    img.className = "portrait-image";
+    chip.appendChild(img);
+
+    const frame = document.createElement("div");
+    frame.className = "audience-frame";
+    frame.setAttribute("aria-hidden", "true");
+
+    const spans = ["ns-tl", "ns-t", "ns-tr", "ns-l", "ns-c", "ns-r", "ns-bl", "ns-b", "ns-br"];
+    spans.forEach(cls => {
+        const span = document.createElement("span");
+        span.className = cls;
+        frame.appendChild(span);
+    });
+    chip.appendChild(frame);
+
     return chip;
 }
 
 function renderAudience(picks) {
     const container = document.getElementById("audience-portraits");
-    const leftSide = document.getElementById("side-audience-left");
-    const rightSide = document.getElementById("side-audience-right");
     container.innerHTML = "";
-    leftSide.innerHTML = "";
-    rightSide.innerHTML = "";
 
-    picks.slice(0, 16).forEach((item, idx) => {
-        const chip = createPortraitChip(idx < 8 ? "back-row" : "front-row");
+    const total = picks.length;
+    if (total === 0) return;
+
+    const frontGroup = [];
+    const backGroup = [];
+    picks.forEach((item, idx) => {
+        if (idx % 2 === 0) {
+            frontGroup.push({ item, originalIdx: idx });
+        } else {
+            backGroup.push({ item, originalIdx: idx });
+        }
+    });
+
+    const centerX = 770; // 1540 / 2
+    const angleRange = 3.0; 
+    const startAngle = 3 * Math.PI / 2 - angleRange / 2;
+
+    const placements = [];
+
+    const calculateGroupPlacements = (group, isFront) => {
+        const count = group.length;
+        if (count === 0) return;
+
+        const centerY = 280; 
+        const radiusBaseX = isFront ? 600 : 710;
+        const radiusBaseY = isFront ? 110 : 240;
+        const staggerOffset = isFront ? 0 : (angleRange / Math.max(1, count)) * 0.5;
+
+        group.forEach((entry, i) => {
+            const { item, originalIdx } = entry;
+            if (!item) return;
+
+            let angle = 3 * Math.PI / 2;
+            if (count > 1) {
+                const ratio = i / (count - 1);
+                angle = startAngle + ratio * angleRange + staggerOffset;
+            } else if (count === 1) {
+                angle = 3 * Math.PI / 2 + staggerOffset;
+            }
+
+            const angleJitter = (Math.random() - 0.5) * 0.008;
+            const radiusJitter = (Math.random() - 0.5) * 8;
+            const finalAngle = angle + angleJitter;
+            const finalRadiusX = radiusBaseX + radiusJitter;
+            const finalRadiusY = radiusBaseY + radiusJitter;
+
+            const x = centerX + finalRadiusX * Math.cos(finalAngle);
+            // 上下に散らせるための±10%の揺らぎ
+            const yOffsetJitter = (Math.random() - 0.5) * (isFront ? 36 : 48);
+            
+            // 両端に行くほど滑らかにY座標を下げる垂れ下がり補正（端で最大+36px）
+            const angleFromCenter = Math.abs(finalAngle - 3 * Math.PI / 2);
+            const edgeDrop = Math.pow(angleFromCenter / (angleRange / 2), 2) * 36;
+
+            const y = centerY + finalRadiusY * Math.sin(finalAngle) + yOffsetJitter + edgeDrop;
+
+            placements.push({
+                item,
+                originalIdx,
+                isFront,
+                x,
+                y,
+                scale: (isFront ? 1.0 : 0.88) + (Math.random() - 0.5) * 0.02,
+                rot: (Math.random() - 0.5) * 4
+            });
+        });
+    };
+
+    calculateGroupPlacements(backGroup, false);
+    calculateGroupPlacements(frontGroup, true);
+
+    // --- 数学的・論理的なレイアウト自動補正アルゴリズム ---
+    const compMinX = 770 - 246 - 64; // 伴奏者のX範囲 (左)
+    const compMaxX = 770 + 246 + 64; // 伴奏者のX範囲 (右)
+    const compMinY = 316 - 64;       // 伴奏者の上端Y (親34pxを考慮)
+    const compMaxY = 316 + 140 + 64; // 伴奏者の下端Y
+
+    // 1. 伴奏者（仲間カード）との重なりを自動的に上に押し上げて完全回避
+    placements.forEach(p => {
+        if (p.x > compMinX && p.x < compMaxX) {
+            if (p.y > compMinY && p.y < compMaxY) {
+                p.y = compMinY - 4; // 重ならない安全圏（頭上）まで押し上げる
+            }
+        }
+    });
+
+    // 2. 観客同士が激しく重なるのを防ぐ反発シミュレーション（団子化防止）
+    for (let iter = 0; iter < 10; iter++) {
+        for (let i = 0; i < placements.length; i++) {
+            for (let j = i + 1; j < placements.length; j++) {
+                const p1 = placements[i];
+                const p2 = placements[j];
+                const dx = p2.x - p1.x;
+                const dy = p2.y - p1.y;
+                const dist = Math.hypot(dx, dy);
+                const minDist = p1.isFront === p2.isFront ? 112 : 98; // 同列同士は112px、前後列間は98px以上離す
+                if (dist < minDist && dist > 0) {
+                    const overlap = minDist - dist;
+                    const forceX = (dx / dist) * overlap * 0.5;
+                    const forceY = (dy / dist) * overlap * 0.5;
+                    p1.x -= forceX;
+                    p1.y -= forceY;
+                    p2.x += forceX;
+                    p2.y += forceY;
+                }
+            }
+        }
+
+        // 3. 画面外およびステージ境界（下限560px）へのはみ出しを強制補正
+        placements.forEach(p => {
+            if (p.y > 462) {
+                p.y = 462;
+            }
+            if (p.y < 64) {
+                p.y = 64;
+            }
+            if (p.x < 64) {
+                p.x = 64;
+            }
+            if (p.x > 1476) {
+                p.x = 1476;
+            }
+        });
+    }
+
+    // --- 補正済みの座標に基づいて DOM 要素を生成し配置 ---
+    placements.forEach(p => {
+        const chip = createPortraitChip(p.isFront ? "front-row" : "back-row");
+        chip.style.setProperty("--x", `${p.x.toFixed(1)}px`);
+        chip.style.setProperty("--y", `${p.y.toFixed(1)}px`);
+        chip.style.setProperty("--z", String(p.isFront ? 23 : 21));
+        chip.style.setProperty("--rot", `${p.rot.toFixed(1)}deg`);
+        chip.style.setProperty("--scale", p.scale.toFixed(2));
         chip.style.setProperty("--flip-scale", Math.random() < 0.5 ? "-1" : "1");
-        applySprite(chip, item);
-        chip.dataset.region = audienceRegion(item);
-        chip.dataset.rank = String((idx % 3) + 1);
+
+        applySprite(chip, p.item);
+        chip.dataset.region = audienceRegion(p.item);
+        chip.dataset.rank = String((p.originalIdx % 3) + 1);
+
         container.appendChild(chip);
         applyAudienceFrame(chip);
     });
 
-    picks.slice(16, 19).forEach((item, idx) => {
-        const chip = createPortraitChip("side-row");
-        chip.style.setProperty("--flip-scale", Math.random() < 0.5 ? "-1" : "1");
-        applySprite(chip, item);
-        chip.dataset.region = audienceRegion(item);
-        chip.dataset.rank = String((idx % 3) + 1);
-        leftSide.appendChild(chip);
-        applyAudienceFrame(chip);
+    window.setTimeout(checkLayoutIntegrity, 60);
+}
+
+function checkLayoutIntegrity() {
+    const stageEl = document.getElementById("stage");
+    const hud = document.getElementById("layout-diagnostic-hud");
+    if (!stageEl || !hud) return;
+
+    const stageRect = stageEl.getBoundingClientRect();
+    const scale = stageRect.width / 1920 || 1;
+
+    const portraits = Array.from(document.querySelectorAll(".portrait-chip"));
+    const companions = Array.from(document.querySelectorAll(".companion-card"));
+
+    let outOfBoundsSum = 0;
+    let audienceOverlapSum = 0;
+    let companionOverlapSum = 0;
+
+    const coords = portraits.map((p) => {
+        const r = p.getBoundingClientRect();
+        return {
+            left: (r.left - stageRect.left) / scale,
+            right: (r.right - stageRect.left) / scale,
+            top: (r.top - stageRect.top) / scale,
+            bottom: (r.bottom - stageRect.top) / scale,
+            x: ((r.left + r.right) / 2 - stageRect.left) / scale,
+            y: ((r.top + r.bottom) / 2 - stageRect.top) / scale
+        };
     });
 
-    picks.slice(19, 22).forEach((item, idx) => {
-        const chip = createPortraitChip("side-row");
-        chip.style.setProperty("--flip-scale", Math.random() < 0.5 ? "-1" : "1");
-        applySprite(chip, item);
-        chip.dataset.region = audienceRegion(item);
-        chip.dataset.rank = String((idx % 3) + 1);
-        rightSide.appendChild(chip);
-        applyAudienceFrame(chip);
+    const compCoords = companions.filter(c => c.style.display !== "none").map((c) => {
+        const r = c.getBoundingClientRect();
+        return {
+            left: (r.left - stageRect.left) / scale,
+            right: (r.right - stageRect.left) / scale,
+            top: (r.top - stageRect.top) / scale,
+            bottom: (r.bottom - stageRect.top) / scale
+        };
     });
+
+    // 1. 下限(560px)および左右端(0px/1920px)のはみ出し検出
+    coords.forEach((c) => {
+        if (c.bottom > 560) {
+            outOfBoundsSum += Math.max(0, c.bottom - 560);
+        }
+        if (c.left < 0) {
+            outOfBoundsSum += Math.max(0, 0 - c.left);
+        }
+        if (c.right > 1920) {
+            outOfBoundsSum += Math.max(0, c.right - 1920);
+        }
+    });
+
+    // 2. 観客同士の重なり面積検出
+    for (let i = 0; i < coords.length; i++) {
+        for (let j = i + 1; j < coords.length; j++) {
+            const c1 = coords[i];
+            const c2 = coords[j];
+            const overlapX = Math.max(0, Math.min(c1.right, c2.right) - Math.max(c1.left, c2.left));
+            const overlapY = Math.max(0, Math.min(c1.bottom, c2.bottom) - Math.max(c1.top, c2.top));
+            audienceOverlapSum += overlapX * overlapY;
+        }
+    }
+
+    // 3. 仲間との重なり面積検出
+    coords.forEach((c) => {
+        compCoords.forEach((comp) => {
+            const overlapX = Math.max(0, Math.min(c.right, comp.right) - Math.max(c.left, comp.left));
+            const overlapY = Math.max(0, Math.min(c.bottom, comp.bottom) - Math.max(c.top, comp.top));
+            companionOverlapSum += overlapX * overlapY;
+        });
+    });
+
+    const oobEl = document.getElementById("diag-out-of-bounds");
+    const audEl = document.getElementById("diag-audience-overlap");
+    const compEl = document.getElementById("diag-companion-overlap");
+
+    if (oobEl) oobEl.textContent = `Out of Stage: ${Math.round(outOfBoundsSum)}px`;
+    if (audEl) audEl.textContent = `Audience Overlap: ${Math.round(audienceOverlapSum)}px`;
+    if (compEl) compEl.textContent = `Companion Overlap: ${Math.round(companionOverlapSum)}px`;
+
+    const hasError = outOfBoundsSum > 0 || companionOverlapSum > 0;
+    hud.style.borderColor = hasError ? "#ef4444" : "#10b981";
+    hud.style.boxShadow = hasError ? "0 0 12px rgba(239, 68, 68, 0.4)" : "0 0 12px rgba(16, 185, 129, 0.4)";
 }
 
 function applySprite(el, item) {
@@ -2225,13 +2391,11 @@ function applyPortraitFrame(grid, category, rank, baseW, baseH, frameWidth) {
 }
 
 function applyCompanionFrame(card) {
-    const rect = card.getBoundingClientRect();
-    applyPortraitFrame(card.querySelector(".companion-frame"), "elegant", card.dataset.rank || 2, rect.width || 140, rect.height || 140, 24);
+    applyPortraitFrame(card.querySelector(".companion-frame"), "elegant", card.dataset.rank || 2, 140, 140, 24);
 }
 
 function applyAudienceFrame(chip) {
-    const rect = chip.getBoundingClientRect();
-    applyPortraitFrame(chip.querySelector(".audience-frame"), "audience", chip.dataset.rank || 1, rect.width || 140, rect.height || 140, 24);
+    applyPortraitFrame(chip.querySelector(".audience-frame"), "audience", chip.dataset.rank || 1, 128, 128, 24);
 }
 
 function applyAllPortraitFrames() {
@@ -2302,20 +2466,27 @@ function randomizeStageCast() {
     const bg = STAGE_BACKGROUNDS[Math.floor(Math.random() * STAGE_BACKGROUNDS.length)];
     gameContainer.style.setProperty("--stage-bg", `url("${bg.url}")`);
 
-    const companions = pickUnique(ELEGANT_COMPANION_POOL, 3);
-    renderAudience(pickStageAudience(bg, 22));
+    const companionCount = Number(companionCountSelect.value);
+    const companions = pickUnique(ELEGANT_COMPANION_POOL, companionCount);
+    
+    const audienceCount = Number(audienceCountSelect.value);
+    renderAudience(pickStageAudience(bg, audienceCount));
 
-    companions.forEach((item, idx) => {
-        const card = document.querySelectorAll(".companion-card")[idx];
-        if (!card) return;
-        applySprite(card, item);
-        card.dataset.rank = String(2 + idx);
-        card.dataset.effectRole = item[3] || "clap";
-        const name = card.querySelector(".companion-name");
-        if (name) name.textContent = item[2];
-        applyCompanionFrame(card);
+    const cards = document.querySelectorAll(".companion-card");
+    cards.forEach((card, idx) => {
+        if (idx < companionCount && companions[idx]) {
+            const item = companions[idx];
+            applySprite(card, item);
+            card.dataset.rank = String(2 + idx);
+            card.dataset.effectRole = item[3] || "clap";
+            const name = card.querySelector(".companion-name");
+            if (name) name.textContent = item[2];
+            applyCompanionFrame(card);
+        }
     });
+    updateCompanionVisibility();
     window.setTimeout(pulseCompanionAmbience, 240);
+    window.setTimeout(checkLayoutIntegrity, 280);
 }
 
 function getAttributeForKey(code) {
@@ -2354,6 +2525,7 @@ applySavedSettings();
 updateInputModeFromDevice();
 refreshBindingUI();
 syncControlLabels();
+updateCompanionVisibility();
 
 function resizeGame() {
     const viewport = window.visualViewport || window;
@@ -2405,7 +2577,7 @@ function populateTracks() {
         const fileName = getTrackFile(track);
         const opt = document.createElement("option");
         opt.value = idx;
-        opt.textContent = `Track ${String(idx + 1).padStart(2, "0")}`;
+        opt.textContent = `楽曲 ${String(idx + 1).padStart(2, "0")}`;
         opt.title = fileName;
         trackSelect.appendChild(opt);
     });
@@ -2458,7 +2630,7 @@ function resetRunStats() {
     lateHits = [];
     gameTime = 0;
     notesLayer.innerHTML = "";
-    lastJudge.textContent = "READY";
+    lastJudge.textContent = "準備完了";
     timingMarker.style.opacity = 0;
     setMeter(0, "#94a3b8");
 }
@@ -2509,6 +2681,21 @@ densitySelect.addEventListener("change", () => {
 
 windowSelect.addEventListener("change", saveSettings);
 
+companionCountSelect.addEventListener("change", () => {
+    updateCompanionVisibility();
+    if (!isPlaying) {
+        randomizeStageCast();
+    }
+    saveSettings();
+});
+
+audienceCountSelect.addEventListener("change", () => {
+    if (!isPlaying) {
+        randomizeStageCast();
+    }
+    saveSettings();
+});
+
 keyTimingSelect.addEventListener("change", () => {
     keyJudgeTiming = keyTimingSelect.value === "up" ? "up" : "down";
     saveSettings();
@@ -2545,7 +2732,7 @@ configCloseBtn.addEventListener("click", () => {
 calibrateBtn.addEventListener("click", () => {
     offsetInput.value = 0;
     offsetVal.textContent = "0 ms";
-    lastJudge.textContent = "SYNC READY";
+    lastJudge.textContent = "判定調整完了";
     setMeter(2, "#38bdf8");
     saveSettings();
 });
@@ -2564,7 +2751,7 @@ fullscreenBtn.addEventListener("click", () => {
 });
 
 document.addEventListener("fullscreenchange", () => {
-    fullscreenBtn.textContent = document.fullscreenElement ? "EXIT" : "FULL";
+    fullscreenBtn.textContent = document.fullscreenElement ? "終了" : "全画面";
     resizeGame();
     if (!document.fullscreenElement && screen.orientation && screen.orientation.unlock) {
         screen.orientation.unlock();
@@ -2576,7 +2763,7 @@ document.querySelectorAll(".bind-key-btn").forEach((btn) => {
         waitingBindAttr = btn.dataset.keyBind;
         document.querySelectorAll(".bind-key-btn").forEach((item) => item.classList.remove("waiting"));
         btn.classList.add("waiting");
-        btn.textContent = "Press key";
+        btn.textContent = "キーを押してください";
     });
 });
 
@@ -2610,7 +2797,7 @@ function startGame() {
     activeState = "BGM";
     selectedRow = 0;
     selectedCol = 0;
-    playBtn.textContent = "STOP";
+    playBtn.textContent = "演奏停止";
     pauseModal.classList.remove("active");
     resultsModal.classList.remove("active");
     countdownOverlay.classList.add("active");
@@ -2632,7 +2819,7 @@ function stopGame() {
     countdownOverlay.classList.remove("approach");
     pauseModal.classList.remove("active");
     resultsModal.classList.remove("active");
-    playBtn.textContent = "PLAY";
+    playBtn.textContent = "演奏開始";
     activeState = "BGM";
     updateHUD();
 }
@@ -2730,6 +2917,7 @@ function companionStagePoint(card) {
 }
 
 function emitCompanionParticles(card, strong = false, intensity = 1) {
+    if (card.style.display === "none") return;
     const role = card.dataset.effectRole || "clap";
     const def = COMPANION_EFFECTS[role] || COMPANION_EFFECTS.clap;
     const origin = companionStagePoint(card);
@@ -2829,7 +3017,7 @@ function judgeInput(attribute) {
     }
 
     if (!closest) {
-        lastJudge.textContent = "EMPTY";
+        lastJudge.textContent = "空振り";
         setMeter(1, "#64748b");
         return;
     }
@@ -2839,19 +3027,19 @@ function judgeInput(attribute) {
     playSE();
 
     const ratio = closestDiff / windowSec;
-    let text = "GOOD";
+    let text = "グッド";
     let points = 25;
     let color = "#38bdf8";
     let level = 2;
     if (ratio <= 0.28) {
-        text = "PERFECT";
+        text = "パーフェクト";
         points = 100;
         color = "#fbbf24";
         level = 4;
         perfects++;
         adjustAudienceHeat(5);
     } else if (ratio <= 0.62) {
-        text = "GREAT";
+        text = "グレート";
         points = 60;
         color = "#34d399";
         level = 3;
@@ -2872,7 +3060,7 @@ function judgeInput(attribute) {
     const y = laneY(attribute);
     showHitText(text, color, y);
     burstAt(x, y, color);
-    triggerCompanionAssist(activeState === "VOCAL_UP" || text === "PERFECT");
+    triggerCompanionAssist(activeState === "VOCAL_UP" || text === "パーフェクト");
     showTiming(closest.time - now, windowSec, color);
     lastJudge.textContent = `${text} ${Math.round((closest.time - now) * 1000)}ms`;
     setMeter(level, color);
@@ -2886,8 +3074,8 @@ function missNote(note) {
     adjustAudienceHeat(-8);
     if (note.dom) note.dom.remove();
     const y = laneY(note.attribute);
-    showHitText("MISS", "#f87171", y);
-    lastJudge.textContent = "MISS";
+    showHitText("ミス", "#f87171", y);
+    lastJudge.textContent = "ミス";
     setMeter(1, "#f87171");
     updateHUD();
 }
