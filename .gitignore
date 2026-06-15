@@ -21,6 +21,4 @@
 Thumbs.db
 tmp/
 temp/
-
-# generated Vite build artifacts
-build/
+.public-server.pid
