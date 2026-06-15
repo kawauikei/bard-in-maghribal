@@ -351,8 +351,8 @@ input {
 }
 
 @keyframes portraitCheer {
-    0%, 100% { transform: scaleX(var(--flip-scale, 1)) scale(1); filter: brightness(1); }
-    34% { transform: scaleX(var(--flip-scale, 1)) scale(1.025); filter: brightness(1.18); }
+    0%, 100% { transform: scaleX(var(--flip-scale, 1)) scale(1) translateY(0); filter: brightness(1); }
+    34% { transform: scaleX(var(--flip-scale, 1)) scale(1.1) translateY(-14px); filter: brightness(1.22); }
 }
 
 .crowd-row {
@@ -442,8 +442,8 @@ body[data-heat="high"] #audience-layer { opacity: 1; }
 .companion-card:nth-child(3) { animation-delay: -1180ms; }
 
 @keyframes companionAssist {
-    from { filter: brightness(1); }
-    to { filter: brightness(1.035); }
+    from { transform: translateY(0) rotate(-1deg); filter: brightness(1); }
+    to { transform: translateY(-4px) rotate(1deg); filter: brightness(1.035); }
 }
 
 .companion-card .companion-portrait,
@@ -511,39 +511,39 @@ body[data-heat="high"] #audience-layer { opacity: 1; }
 
 @keyframes companionTap {
     0%, 100% { transform: translateY(0) rotate(0deg) scale(1); filter: brightness(1); }
-    42% { transform: translateY(-1px) rotate(-0.45deg) scale(1.012); filter: brightness(1.12); }
+    42% { transform: translateY(-8px) rotate(-2deg) scale(1.05); filter: brightness(1.18); }
 }
 
 @keyframes companionTurn {
     0%, 100% { transform: translateY(0) rotate(0deg) scale(1); filter: brightness(1); }
-    48% { transform: translateY(0) rotate(2.2deg) scale(1.012); filter: brightness(1.13) saturate(1.08); }
+    48% { transform: translateY(0) rotate(8deg) scale(1.06); filter: brightness(1.2) saturate(1.15); }
 }
 
 @keyframes companionStrum {
     0%, 100% { transform: translateX(0) rotate(0deg) scale(1); filter: brightness(1); }
-    36% { transform: translateX(2px) rotate(-0.55deg) scale(1.012); filter: brightness(1.11); }
-    66% { transform: translateX(-1px) rotate(0.35deg) scale(1.006); }
+    36% { transform: translateX(10px) rotate(-4deg) scale(1.05); filter: brightness(1.18); }
+    66% { transform: translateX(-4px) rotate(2deg) scale(1.02); }
 }
 
 @keyframes companionGlyph {
     0%, 100% { transform: translateY(0) scale(1); filter: brightness(1) hue-rotate(0deg); }
-    46% { transform: translateY(-1px) scale(1.02); filter: brightness(1.18) hue-rotate(18deg); }
+    46% { transform: translateY(-10px) scale(1.08); filter: brightness(1.25) hue-rotate(25deg); }
 }
 
 @keyframes companionPresent {
     0%, 100% { transform: translateY(0) rotate(0deg); filter: brightness(1); }
-    46% { transform: translateY(-1px) rotate(-1.2deg); filter: brightness(1.15); }
+    46% { transform: translateY(-8px) rotate(-6deg); filter: brightness(1.22); }
 }
 
 @keyframes companionClap {
     0%, 100% { transform: scale(1); filter: brightness(1); }
-    34% { transform: scale(1.035); filter: brightness(1.14); }
-    58% { transform: scale(0.992); }
+    34% { transform: scale(1.12); filter: brightness(1.22); }
+    58% { transform: scale(0.96); }
 }
 
 @keyframes companionLift {
     0%, 100% { transform: translateY(0) rotate(0deg) scale(1); filter: brightness(1); }
-    42% { transform: translateY(-2px) rotate(1.2deg) scale(1.02); filter: brightness(1.22) saturate(1.12); }
+    42% { transform: translateY(-16px) rotate(4deg) scale(1.1); filter: brightness(1.3) saturate(1.2); }
 }
 
 @keyframes companionAura {
@@ -3293,12 +3293,23 @@ function drawVisualizer() {
     for (const attr of Object.keys(beams)) {
         if (beams[attr] <= 0) continue;
         beams[attr] -= 0.045;
-        const x = w * JUDGMENT_X_RATIO;
-        const g = vizCtx.createLinearGradient(x, h, x, 0);
-        g.addColorStop(0, `${hexToRgb(ATTR[attr].color, beams[attr] * 0.38)}`);
-        g.addColorStop(1, `${hexToRgb(ATTR[attr].color, 0)}`);
-        vizCtx.fillStyle = g;
-        vizCtx.fillRect(x - 42, 0, 84, h);
+        const pt = { x: w / 2, y: h * 0.75 };
+        vizCtx.save();
+        vizCtx.beginPath();
+        const radiusX = 480;
+        const radiusY = 130;
+        vizCtx.translate(pt.x, pt.y);
+        vizCtx.scale(1, radiusY / radiusX);
+        const grad = vizCtx.createRadialGradient(0, 0, 0, 0, 0, radiusX);
+        const color = ATTR[attr].color;
+        const opacity = beams[attr] * 0.22;
+        grad.addColorStop(0, hexToRgb(color, opacity));
+        grad.addColorStop(0.5, hexToRgb(color, opacity * 0.45));
+        grad.addColorStop(1, hexToRgb(color, 0));
+        vizCtx.fillStyle = grad;
+        vizCtx.arc(0, 0, radiusX, 0, Math.PI * 2);
+        vizCtx.fill();
+        vizCtx.restore();
     }
 
     if (singing && Math.random() < 0.11) {
