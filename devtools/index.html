@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevTools Index</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #38bdf8;
+            border-bottom: 2px solid #334155;
+            padding-bottom: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        .tool-category {
+            font-size: 1.5rem;
+            color: #fbbf24;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 0.25rem;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+        a {
+            display: block;
+            padding: 1rem;
+            background-color: #1e293b;
+            color: #e2e8f0;
+            text-decoration: none;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            transition: all 0.2s ease;
+            height: 100%;
+            box-sizing: border-box;
+        }
+        a:hover {
+            background-color: #334155;
+            border-color: #38bdf8;
+            transform: translateY(-2px);
+        }
+        .tool-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #bae6fd;
+        }
+        .tool-filename {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+            font-family: monospace;
+        }
+        .tool-desc {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <h1>テストツール・モック一覧</h1>
+
+    <div class="tool-category">ミニゲーム・リズム関連</div>
+    <ul>
+        <li>
+            <a href="elegant-rhythm-tester-ex.html">
+                <div class="tool-title">優美演奏テスター EX</div>
+                <div class="tool-filename">elegant-rhythm-tester-ex.html</div>
+                <div class="tool-desc">優美属性ミニゲームの最新テスター（Excalibur版）</div>
+            </a>
+        </li>
+        <li>
+            <a href="brave-rhythm-tester-ex.html">
+                <div class="tool-title">勇猛ミニゲーム テスター EX</div>
+                <div class="tool-filename">brave-rhythm-tester-ex.html</div>
+                <div class="tool-desc">勇猛属性ミニゲーム（2ルート選択＆ロックルール）のテストプロトタイプ</div>
+            </a>
+        </li>
+        <li>
+            <a href="elegant-rhythm-tester.html">
+                <div class="tool-title">Elegant Rhythm Tester</div>
+                <div class="tool-filename">elegant-rhythm-tester.html</div>
+                <div class="tool-desc">旧バージョンの優美リズムテスター</div>
+            </a>
+        </li>
+        <li>
+            <a href="vocal.html">
+                <div class="tool-title">Music Console (Vocal)</div>
+                <div class="tool-filename">vocal.html</div>
+                <div class="tool-desc">楽曲のボーカルやコンソール機能のテスト</div>
+            </a>
+        </li>
+        <li>
+            <a href="loop_test.html">
+                <div class="tool-title">BGM Crossfade Loop Tester</div>
+                <div class="tool-filename">loop_test.html</div>
+                <div class="tool-desc">BGMのクロスフェードやループ再生のテスト</div>
+            </a>
+        </li>
+    </ul>
+
+    <div class="tool-category">UI・イベント・演出モック</div>
+    <ul>
+        <li>
+            <a href="normal-event-mock.html">
+                <div class="tool-title">Normal Event Mock</div>
+                <div class="tool-filename">normal-event-mock.html</div>
+                <div class="tool-desc">通常イベントの画面レイアウト・進行のモック</div>
+            </a>
+        </li>
+        <li>
+            <a href="phase-hub-mock.html">
+                <div class="tool-title">Phase Hub Mock</div>
+                <div class="tool-filename">phase-hub-mock.html</div>
+                <div class="tool-desc">フェーズハブ（拠点画面）のモック</div>
+            </a>
+        </li>
+        <li>
+            <a href="portrait-frame-tester.html">
+                <div class="tool-title">Portrait Frame Tester</div>
+                <div class="tool-filename">portrait-frame-tester.html</div>
+                <div class="tool-desc">キャラクター立ち絵のフレームやレイアウトのテスト</div>
+            </a>
+        </li>
+        <li>
+            <a href="effect-tester.html">
+                <div class="tool-title">Effect Tester</div>
+                <div class="tool-filename">effect-tester.html</div>
+                <div class="tool-desc">ゲーム内の各種エフェクトの描画テスト</div>
+            </a>
+        </li>
+    </ul>
+
+    <div class="tool-category">スプライト・アセット関連</div>
+    <ul>
+        <li>
+            <a href="anime-test.html">
+                <div class="tool-title">Sprite Animation Tester</div>
+                <div class="tool-filename">anime-test.html</div>
+                <div class="tool-desc">スプライトアニメーションの動作確認</div>
+            </a>
+        </li>
+        <li>
+            <a href="sprite_composer.html">
+                <div class="tool-title">Sprite Composer</div>
+                <div class="tool-filename">sprite_composer.html</div>
+                <div class="tool-desc">スプライトの構成や合成のテスト</div>
+            </a>
+        </li>
+        <li>
+            <a href="prompt_generator.html">
+                <div class="tool-title">Sprite Prompt Generator</div>
+                <div class="tool-filename">prompt_generator.html</div>
+                <div class="tool-desc">スプライト生成用のプロンプトジェネレーター</div>
+            </a>
+        </li>
+    </ul>
+</body>
+</html>
