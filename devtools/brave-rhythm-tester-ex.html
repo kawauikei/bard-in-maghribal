@@ -55,7 +55,7 @@ body {
 
 #stage {
     position: absolute;
-    inset: 0 0 520px 0;
+    inset: 0; /* ステージ背景画を画面全体（1080px）に広げる */
     overflow: hidden;
     border-bottom: 1px solid var(--line);
 }
@@ -63,12 +63,28 @@ body {
 #stage::before {
     content: "";
     position: absolute;
-    inset: 0;
+    inset: -20px; /* ゆらぎ時の境界線露出を防ぐため少し外側に広げる */
     background:
-        linear-gradient(180deg, rgba(3, 7, 18, 0.04), rgba(3, 7, 18, 0.25) 72%, rgba(3, 7, 18, 0.45)),
-        var(--stage-bg) center 42% / cover no-repeat;
+        linear-gradient(180deg, rgba(3, 7, 18, 0.04), rgba(3, 7, 18, 0.25) 72%, rgba(3, 7, 18, 0.7)),
+        var(--stage-bg) center center / cover no-repeat;
     filter: none;
     transform: scale(1.02);
+    /* 陽炎の初期設定 */
+    animation: heathaze var(--haze-speed, 4s) ease-in-out infinite alternate;
+}
+
+@keyframes heathaze {
+    0% {
+        transform: scale(1.02) skewX(0deg) translateY(0px);
+        filter: brightness(var(--haze-bright, 1.0));
+    }
+    50% {
+        transform: scale(calc(1.02 + var(--haze-scale-offset, 0.005))) skewX(var(--haze-skew, 0.3deg)) translateY(var(--haze-translate, 2px));
+    }
+    100% {
+        transform: scale(1.02) skewX(calc(var(--haze-skew, 0.3deg) * -1)) translateY(calc(var(--haze-translate, 2px) * -1));
+        filter: brightness(var(--haze-bright, 1.0));
+    }
 }
 
 #stage::after {
@@ -87,7 +103,7 @@ body {
     left: 0;
     top: 0;
     width: 1920px;
-    height: 520px;
+    height: 1080px;
     z-index: 5;
     pointer-events: none;
 }
@@ -97,7 +113,7 @@ body {
     left: 0;
     top: 0;
     width: 1920px;
-    height: 520px;
+    height: 1080px; /* 520px から 1080px（画面全体の縦幅）へ変更 */
     z-index: 6;
     pointer-events: none;
     background: linear-gradient(to bottom right, rgba(168,85,247,0.08) 0%, rgba(6,182,212,0.13) 52%, rgba(239,68,68,0.08) 100%);
@@ -239,9 +255,14 @@ body {
     grid-template-columns: 360px 1fr;
     gap: 34px;
     padding: 34px 42px 38px 42px;
-    background:
-        linear-gradient(90deg, rgba(3, 7, 18, 0.86), rgba(15, 23, 42, 0.54)),
-        rgba(15, 23, 42, 0.2);
+    /* 上の区切り線付近（0%）は黒く濃くし、ノーツ流れる中央部（40%〜70%）は透明に近く背景を見せ、画面最下部（100%）は再び黒く濃くする3段階のグラデーション */
+    background: linear-gradient(180deg, rgba(3, 7, 18, 0.82) 0%, rgba(3, 7, 18, 0.16) 35%, rgba(3, 7, 18, 0.16) 65%, rgba(3, 7, 18, 0.8) 100%);
+    border-top: 1px solid rgba(255, 255, 255, 0.15); /* 境界線をシャープに区切るためのホワイトライン */
+    box-shadow: inset 0 20px 30px -20px rgba(3, 7, 18, 0.8); /* 境界部分の影を補強 */
+    pointer-events: none; /* ノーツやレーンへのタッチイベントが透過するようにする */
+}
+#field > * {
+    pointer-events: auto; /* 子要素（レーン、立ち絵など）はタッチを受け取る */
 }
 
 #vocal-portrait-container {
@@ -291,22 +312,22 @@ body {
     position: absolute;
     left: 0;
     right: 112px;
-    height: 2px;
-    background: linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.12) 68%, rgba(255,255,255,0.03));
+    height: 4px; /* 3pxから4pxに太くして存在感をアピール */
+    background: linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.18) 68%, rgba(255,255,255,0.04));
 }
 
-.lane-path.mystic { top: 17%; background-image: linear-gradient(90deg, rgba(168,85,247,0), rgba(168,85,247,0.24) 68%, rgba(168,85,247,0.04)); }
-.lane-path.elegant { top: 50%; background-image: linear-gradient(90deg, rgba(6,182,212,0), rgba(6,182,212,0.24) 68%, rgba(6,182,212,0.04)); }
-.lane-path.brave { top: 83%; background-image: linear-gradient(90deg, rgba(239,68,68,0), rgba(239,68,68,0.24) 68%, rgba(239,68,68,0.04)); }
+.lane-path.mystic { top: 17%; background-image: linear-gradient(90deg, rgba(168,85,247,0), rgba(168,85,247,0.46) 68%, rgba(168,85,247,0.12)); } /* 紫色の視認性を高めるため不透明度を大幅アップ */
+.lane-path.elegant { top: 50%; background-image: linear-gradient(90deg, rgba(6,182,212,0), rgba(6,182,212,0.36) 68%, rgba(6,182,212,0.08)); }
+.lane-path.brave { top: 83%; background-image: linear-gradient(90deg, rgba(239,68,68,0), rgba(239,68,68,0.36) 68%, rgba(239,68,68,0.08)); }
 
 #judgment-line {
     position: absolute;
     left: 74%;
     top: 0;
     bottom: 0;
-    width: 2px;
-    background: linear-gradient(180deg, transparent, rgba(255,255,255,0.36), transparent);
-    box-shadow: 0 0 12px rgba(255,255,255,0.24);
+    width: 4px;
+    background: linear-gradient(180deg, transparent, rgba(255,255,255,0.58), transparent); /* 縦線をはっきり */
+    box-shadow: 0 0 16px rgba(255,255,255,0.36);
     z-index: 20;
 }
 
@@ -314,6 +335,7 @@ body {
     position: absolute;
     width: 76px;
     height: 76px;
+    left: -37px;
     margin-top: -38px;
     background-image: url("../assets/images/icon/icon_sheet_01_minigame_ui.webp");
     background-size: 800% 800%;
@@ -1036,16 +1058,14 @@ body[data-input-mode="mouse"] .touch-lane-hitarea {
     100% { transform: scale(1); filter: brightness(1.0); }
 }
 </style>
-  <script type="module" crossorigin src="../build/devtools/brave-rhythm-tester-ex-Bv6kBYBz.js"></script>
-  <link rel="modulepreload" crossorigin href="../build/excalibur-Dw4fWozV.js">
-  <link rel="modulepreload" crossorigin href="../build/stage-cast-B5tLK7lj.js">
+  <script type="module" src="../../src/devtools/brave-rhythm-tester-ex.ts"></script>
 </head>
 <body>
 <div id="game-container">
     <section id="stage">
         <!-- Canvas wrapper for Excalibur.js -->
         <div id="excalibur-canvas-container"></div>
-        <canvas id="visualizer-canvas" width="1920" height="520"></canvas>
+        <canvas id="visualizer-canvas" width="1920" height="1080"></canvas>
 
         <div id="hud">
             <div class="hud-item"><div class="hud-label">スコア</div><div class="hud-value accent" id="score-val">0</div></div>
@@ -1096,10 +1116,11 @@ body[data-input-mode="mouse"] .touch-lane-hitarea {
             <div class="lane-path mystic"></div>
             <div class="lane-path elegant"></div>
             <div class="lane-path brave"></div>
-            <div id="judgment-line"></div>
-            <div class="judgment-icon mystic" style="left: calc(74% - 37px);"></div>
-            <div class="judgment-icon elegant" style="left: calc(74% - 37px);"></div>
-            <div class="judgment-icon brave" style="left: calc(74% - 37px);"></div>
+            <div id="judgment-line">
+                <div class="judgment-icon mystic"></div>
+                <div class="judgment-icon elegant"></div>
+                <div class="judgment-icon brave"></div>
+            </div>
             <div id="notes-layer"></div>
             <button class="touch-lane-hitarea mystic" data-attr="mystic" aria-label="神秘レーン"></button>
             <button class="touch-lane-hitarea elegant" data-attr="elegant" aria-label="優美レーン"></button>

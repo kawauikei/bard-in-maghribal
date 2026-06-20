@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>優美演奏テスター Ex (Excalibur)</title>
+<title>勇猛ミニゲーム テスターEX</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -46,7 +46,7 @@ body {
     height: 1080px;
     overflow: hidden;
     transform-origin: center center;
-    --stage-bg: url("../assets/images/stil/N00/bg_normal_ancient_graveyard_morning1.webp");
+    --stage-bg: url("../../build/bg_normal_ancient_graveyard_morning1-BwXn6iPK.webp");
     background:
         linear-gradient(180deg, rgba(3, 7, 18, 0.25), rgba(3, 7, 18, 0.8)),
         radial-gradient(circle at 50% 12%, rgba(56, 189, 248, 0.16), transparent 33%),
@@ -148,7 +148,7 @@ body {
     height: 42px;
     border-radius: 6px;
     border: 1px solid rgba(255,255,255,0.2);
-    background-image: url("../assets/images/icon/icon_sheet_03_music_bonus_code.webp");
+    background-image: url("../../build/icon_sheet_03_music_bonus_code-DUMlqEMu.webp");
     background-size: 336px 336px;
     background-repeat: no-repeat;
     background-color: #f8fafc;
@@ -316,7 +316,7 @@ body {
     background: linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.18) 68%, rgba(255,255,255,0.04));
 }
 
-.lane-path.mystic { top: 17%; background-image: linear-gradient(90deg, rgba(168,85,247,0), rgba(168,85,247,0.46) 68%, rgba(168,85,247,0.12)); }
+.lane-path.mystic { top: 17%; background-image: linear-gradient(90deg, rgba(168,85,247,0), rgba(168,85,247,0.46) 68%, rgba(168,85,247,0.12)); } /* 紫色の視認性を高めるため不透明度を大幅アップ */
 .lane-path.elegant { top: 50%; background-image: linear-gradient(90deg, rgba(6,182,212,0), rgba(6,182,212,0.36) 68%, rgba(6,182,212,0.08)); }
 .lane-path.brave { top: 83%; background-image: linear-gradient(90deg, rgba(239,68,68,0), rgba(239,68,68,0.36) 68%, rgba(239,68,68,0.08)); }
 
@@ -325,8 +325,8 @@ body {
     left: 74%;
     top: 0;
     bottom: 0;
-    width: 4px; /* 3pxから4pxに太く変更 */
-    background: linear-gradient(180deg, transparent, rgba(255,255,255,0.58), transparent);
+    width: 4px;
+    background: linear-gradient(180deg, transparent, rgba(255,255,255,0.58), transparent); /* 縦線をはっきり */
     box-shadow: 0 0 16px rgba(255,255,255,0.36);
     z-index: 20;
 }
@@ -337,7 +337,7 @@ body {
     height: 76px;
     left: -37px;
     margin-top: -38px;
-    background-image: url("../assets/images/icon/icon_sheet_01_minigame_ui.webp");
+    background-image: url("../../build/icon_sheet_01_minigame_ui-D39EwO8B.webp");
     background-size: 800% 800%;
     opacity: 0.35;
     pointer-events: none;
@@ -422,7 +422,7 @@ body {
     display: block;
     width: 100%;
     height: 100%;
-    background-image: url("../assets/images/icon/icon_sheet_01_minigame_ui.webp");
+    background-image: url("../../build/icon_sheet_01_minigame_ui-D39EwO8B.webp");
     background-size: 800% 800%;
     image-rendering: pixelated;
     filter: drop-shadow(0 12px 20px rgba(0,0,0,0.55));
@@ -915,7 +915,7 @@ input[type="range"] {
     border: 0;
     padding: 0;
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.0); /* 通常時は透明 */
+    background: transparent;
     color: currentColor;
     cursor: pointer;
     display: block;
@@ -952,6 +952,30 @@ input[type="range"] {
 .touch-lane-hitarea.elegant { top: 50%; color: var(--elegant); }
 .touch-lane-hitarea.brave { top: 83%; color: var(--brave); }
 
+/* --- 勇猛ロック演出 --- */
+.touch-lane-hitarea.locked {
+    background: linear-gradient(90deg, 
+        rgba(248,113,113,0) 0%, 
+        rgba(248,113,113,0.15) 50%, 
+        rgba(248,113,113,0.3) 98%,
+        #f87171 100%
+    );
+    border-top: 1px solid rgba(248,113,113,0.2);
+    border-bottom: 1px solid rgba(248,113,113,0.2);
+}
+
+.touch-lane-hitarea.locked::before {
+    content: "✕";
+    position: absolute;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #f87171;
+    font-size: 2rem;
+    font-weight: bold;
+    opacity: 0.8;
+}
+
 .input-btn {
     display: none;
 }
@@ -978,7 +1002,7 @@ body[data-input-mode="mouse"] .touch-lane-hitarea {
     position: relative;
     width: 64px;
     height: 64px;
-    background-image: url("../assets/images/icon/icon_sheet_01_minigame_ui.webp");
+    background-image: url("../../build/icon_sheet_01_minigame_ui-D39EwO8B.webp");
     background-size: 800% 800%;
     image-rendering: pixelated;
     filter: drop-shadow(0 12px 14px rgba(0,0,0,0.45));
@@ -1034,7 +1058,9 @@ body[data-input-mode="mouse"] .touch-lane-hitarea {
     100% { transform: scale(1); filter: brightness(1.0); }
 }
 </style>
-  <script type="module" src="../../src/devtools/elegant-rhythm-tester-ex.ts"></script>
+  <script type="module" crossorigin src="../../build/devtools/brave-rhythm-tester-ex-BiWgsM0U.js"></script>
+  <link rel="modulepreload" crossorigin href="../../build/excalibur-Dw4fWozV.js">
+  <link rel="modulepreload" crossorigin href="../../build/stage-cast-CgMDE3Lb.js">
 </head>
 <body>
 <div id="game-container">
@@ -1272,6 +1298,6 @@ body[data-input-mode="mouse"] .touch-lane-hitarea {
 </div>
 
 <audio id="bgm-player" preload="auto"></audio>
-<script src="./rhythm_data.js"></script>
+<script src="./rhythm_data.js"></script>
 </body>
 </html>
