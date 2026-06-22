@@ -746,31 +746,94 @@ input[type="range"] {
 
 .meter-panel {
     position: absolute;
-    right: 36px;
-    bottom: 34px;
-    z-index: 25;
-    width: 320px;
-    padding: 12px 14px;
+    right: 28px;
+    top: 44%;
+    transform: translateY(-50%);
+    z-index: 34;
+    width: 248px;
+    max-width: calc(100% - 56px);
+    min-height: 116px;
+    padding: 12px 14px 13px;
     border-radius: 8px;
+    pointer-events: none;
 }
 
 .meter-row {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
-    gap: 12px;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
 }
 
 .meter-title {
     color: var(--muted);
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 900;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    white-space: nowrap;
 }
 
 .meter-value {
-    font-size: 18px;
+    margin-top: 9px;
+    min-width: 0;
+    font-size: 25px;
     font-weight: 900;
+    line-height: 1.02;
+    letter-spacing: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 0 0 18px currentColor;
+}
+
+.meter-chip {
+    flex: 0 0 auto;
+    max-width: 106px;
+    padding: 3px 7px;
+    border-radius: 999px;
+    color: #dbeafe;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    font-size: 10px;
+    font-weight: 900;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.meter-chip.up {
+    color: #fef3c7;
+    background: rgba(251, 191, 36, 0.14);
+    border-color: rgba(251, 191, 36, 0.32);
+}
+
+.meter-chip.hold {
+    color: #bae6fd;
+    background: rgba(56, 189, 248, 0.12);
+    border-color: rgba(56, 189, 248, 0.26);
+}
+
+.meter-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 8px;
+    min-height: 16px;
+    color: #cbd5e1;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.meter-delta {
+    min-width: 0;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .meter-bars {
@@ -1034,9 +1097,9 @@ body[data-input-mode="mouse"] .touch-lane-hitarea {
     100% { transform: scale(1); filter: brightness(1.0); }
 }
 </style>
-  <script type="module" crossorigin src="../../build/devtools/elegant-rhythm-tester-ex-C63NGBkU.js"></script>
+  <script type="module" crossorigin src="../../build/devtools/elegant-rhythm-tester-ex-CoOebA6f.js"></script>
   <link rel="modulepreload" crossorigin href="../../build/excalibur-Dw4fWozV.js">
-  <link rel="modulepreload" crossorigin href="../../build/stage-cast-CgMDE3Lb.js">
+  <link rel="modulepreload" crossorigin href="../../build/stage-cast-c3Vw81XC.js">
 </head>
 <body>
 <div id="game-container">
@@ -1112,8 +1175,13 @@ body[data-input-mode="mouse"] .touch-lane-hitarea {
 
     <div class="meter-panel" id="judge-meter">
         <div class="meter-row">
-            <div class="meter-title">直前の判定</div>
-            <div class="meter-value" id="last-judge">準備完了</div>
+            <div class="meter-title">JUDGE</div>
+            <div class="meter-chip" id="judge-state">READY</div>
+        </div>
+        <div class="meter-value" id="last-judge">準備完了</div>
+        <div class="meter-meta">
+            <span id="judge-timing">-- ms</span>
+            <span class="meter-delta" id="judge-delta">入力待ち</span>
         </div>
         <div class="meter-bars" id="meter-bars"><span></span><span></span><span></span><span></span></div>
     </div>
