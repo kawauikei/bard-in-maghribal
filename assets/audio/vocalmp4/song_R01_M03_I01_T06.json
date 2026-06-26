@@ -1,0 +1,107 @@
+{
+  "id": "song_R01_M03_I01_T06",
+  "title": "星降る夜の市場",
+  "plannedClassification": {
+    "requestId": "R01",
+    "moodId": "M03",
+    "instrumentId": "I01",
+    "themeId": "T06"
+  },
+  "confirmedClassification": null,
+  "genreTags": [],
+  "sourceFile": "assets_src/audio/vocalmp4/song_R01_M03_I01_T06星降る夜の市場.mp4",
+  "audioFile": "song_R01_M03_I01_T06.mp3",
+  "coverFile": "song_R01_M03_I01_T06.webp",
+  "lyricsFile": "song_R01_M03_I01_T06.lyrics.csv",
+  "rawLyricsFile": "song_R01_M03_I01_T06.lyrics.raw.csv",
+  "vocalLyricsFile": "song_R01_M03_I01_T06.lyrics.vocal.csv",
+  "notesFile": "song_R01_M03_I01_T06.notes.csv",
+  "energyFile": "song_R01_M03_I01_T06.energy.csv",
+  "prompt": "",
+  "durationSec": 89.09,
+  "audio": {
+    "codec": "mp3",
+    "bitrate": 181370,
+    "sampleRate": 44100,
+    "channels": 2
+  },
+  "cover": {
+    "frameSec": 2,
+    "width": 1024,
+    "height": 1024
+  },
+  "analysis": {
+    "bpm": null,
+    "beatsFile": "",
+    "energyFile": "song_R01_M03_I01_T06.energy.csv",
+    "highlightSections": [
+      {
+        "start": 2,
+        "end": 3.5
+      },
+      {
+        "start": 2.7,
+        "end": 4.2
+      },
+      {
+        "start": 3.5,
+        "end": 5
+      },
+      {
+        "start": 4,
+        "end": 5.5
+      },
+      {
+        "start": 4.6,
+        "end": 6.1
+      },
+      {
+        "start": 5.5,
+        "end": 7
+      },
+      {
+        "start": 6.7,
+        "end": 8.2
+      },
+      {
+        "start": 7.5,
+        "end": 9
+      }
+    ],
+    "silenceSections": []
+  },
+  "transcription": {
+    "language": "ja",
+    "model": "large-v3-turbo",
+    "usedVocalSeparation": true,
+    "mergedStrategy": "vocal_text_with_raw_timing_and_raw_rescue",
+    "rawLyricsFile": "song_R01_M03_I01_T06.lyrics.raw.csv",
+    "vocalLyricsFile": "song_R01_M03_I01_T06.lyrics.vocal.csv",
+    "notes": [
+      "Raw transcription segment count: 20",
+      "Separated vocal transcription segment count: 21",
+      "Raw hallucinated check: False",
+      "Vocal hallucinated check: False",
+      "Cleaned up hallucinated raw segment at 0.0s: '作詞・作曲・編曲 初音ミク'",
+      "Using separated vocal text with raw timing reconciliation.",
+      "Discrepancy at 0.0s: Vocal='小さなお店にぎわう声' vs Raw='小さなお店 賑わう声'",
+      "Discrepancy at 31.64s: Vocal='さあ踊り出そうさ砂漠の星空の下' vs Raw='さあ踊りだそうさ 砂漠の星空の下'",
+      "Discrepancy at 35.5s: Vocal='煌めくこの市場は魔法の絨毯' vs Raw='きらめくこの市場は魔法の絨毯'",
+      "Discrepancy at 40.06s: Vocal='低拍子叩き声上げ笑えば' vs Raw='テレビ押し叩き声上げ笑えば'",
+      "Discrepancy at 44.02s: Vocal='世界の生活になる一つになる魔法の夜' vs Raw='真世界生活になひとつになる魔法の夜'",
+      "Discrepancy at 73.48s: Vocal='きらめくこの市場は' vs Raw='さあ踊り出そうさ砂漠の星空の下, 煌めくこの市場は魔法の絨毯'"
+    ]
+  },
+  "noteGeneration": {
+    "automatic": true,
+    "generator": "scripts/generate-notes.js",
+    "status": "generated",
+    "notesFile": "song_R01_M03_I01_T06.notes.csv",
+    "difficultyCounts": {
+      "easy": 45,
+      "normal": 75,
+      "hard": 95
+    }
+  },
+  "status": "auto_raw"
+}

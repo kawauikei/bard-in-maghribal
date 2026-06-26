@@ -1,0 +1,13 @@
+start,end,text,uncertain,source,checked
+11,14,定め 糸巻き取る,1,raw_rescue,
+14,18,いかめし 大雑く,1,raw_rescue,
+18,25,紫 まとみ サクサク 歩く道,1,raw_rescue,
+25,54.5,この魂 高く掲げた冠 確かな意思持つ 司る運命,0,vocal_text_raw_time,
+47.56,56,サダメジョウノノウタ,1,vocal_text_raw_start,
+54.5,59.8,ムラサキノカガヤキ,1,vocal_text_raw_start,
+59.8,63.5,イカメシミライ,1,vocal,
+62.96,70.9,時間巻き戻す薄,0,vocal_text_raw_time,
+62.96,70.9,毛穴が騒ぐ静かに,0,vocal_text_raw_time,
+70.9,78.3,イカメシイカイジョウオウ,1,vocal_text_raw_time,
+70.9,78.3,ムラサキノゲンリジョウノ,1,vocal_text_raw_time,
+70.9,88.06,うたごえさだめいじょうの いかめしつるぎ,1,vocal_text_raw_time,

@@ -1,0 +1,104 @@
+{
+  "id": "song_R02_M09_I14_T16",
+  "title": "ももいろの朝",
+  "plannedClassification": {
+    "requestId": "R02",
+    "moodId": "M09",
+    "instrumentId": "I14",
+    "themeId": "T16"
+  },
+  "confirmedClassification": null,
+  "genreTags": [],
+  "sourceFile": "assets_src/audio/vocalmp4/song_R02_M09_I14_T16ももいろの朝.mp4",
+  "audioFile": "song_R02_M09_I14_T16.mp3",
+  "coverFile": "song_R02_M09_I14_T16.webp",
+  "lyricsFile": "song_R02_M09_I14_T16.lyrics.csv",
+  "rawLyricsFile": "song_R02_M09_I14_T16.lyrics.raw.csv",
+  "vocalLyricsFile": "song_R02_M09_I14_T16.lyrics.vocal.csv",
+  "notesFile": "song_R02_M09_I14_T16.notes.csv",
+  "energyFile": "song_R02_M09_I14_T16.energy.csv",
+  "prompt": "",
+  "durationSec": 90.33,
+  "audio": {
+    "codec": "mp3",
+    "bitrate": 179793,
+    "sampleRate": 44100,
+    "channels": 2
+  },
+  "cover": {
+    "frameSec": 2,
+    "width": 1024,
+    "height": 1024
+  },
+  "analysis": {
+    "bpm": null,
+    "beatsFile": "",
+    "energyFile": "song_R02_M09_I14_T16.energy.csv",
+    "highlightSections": [
+      {
+        "start": 2.2,
+        "end": 3.7
+      },
+      {
+        "start": 3.3,
+        "end": 4.8
+      },
+      {
+        "start": 4.2,
+        "end": 5.7
+      },
+      {
+        "start": 5.5,
+        "end": 7
+      },
+      {
+        "start": 6.2,
+        "end": 7.7
+      },
+      {
+        "start": 7.2,
+        "end": 8.7
+      },
+      {
+        "start": 8.2,
+        "end": 9.7
+      },
+      {
+        "start": 10.4,
+        "end": 11.9
+      }
+    ],
+    "silenceSections": []
+  },
+  "transcription": {
+    "language": "ja",
+    "model": "large-v3-turbo",
+    "usedVocalSeparation": true,
+    "mergedStrategy": "vocal_text_with_raw_timing_and_raw_rescue",
+    "rawLyricsFile": "song_R02_M09_I14_T16.lyrics.raw.csv",
+    "vocalLyricsFile": "song_R02_M09_I14_T16.lyrics.vocal.csv",
+    "notes": [
+      "Raw transcription segment count: 14",
+      "Separated vocal transcription segment count: 15",
+      "Raw hallucinated check: False",
+      "Vocal hallucinated check: False",
+      "Cleaned up hallucinated vocal segment at 86.42s: 'ご視聴ありがとうございました'",
+      "Using separated vocal text with raw timing reconciliation.",
+      "Discrepancy at 56.7s: Vocal='ねじい頬の旅人' vs Raw='ねじい頬のたっぴり人'",
+      "Discrepancy at 64.82s: Vocal='手拍子鳴らして' vs Raw='てびゃうし鳴らして, うららかななときとまる'",
+      "Discrepancy at 83.44s: Vocal='明日へつながる松' vs Raw='明日へ繋がる祭り'"
+    ]
+  },
+  "noteGeneration": {
+    "automatic": true,
+    "generator": "scripts/generate-notes.js",
+    "status": "generated",
+    "notesFile": "song_R02_M09_I14_T16.notes.csv",
+    "difficultyCounts": {
+      "easy": 45,
+      "normal": 68,
+      "hard": 82
+    }
+  },
+  "status": "auto_raw"
+}

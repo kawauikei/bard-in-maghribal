@@ -1,0 +1,20 @@
+start,end,text,uncertain,source,checked
+11,15,小さなお店にぎわう声,1,vocal_text_raw_time,1
+15,19.46,ラクダの鈴もリズムに合わせる,0,vocal_text_raw_start,1
+21,25.5,キラキラ光る宝物見つけて ,0,vocal_text_raw_time,1
+25.5,34.6,心弾む不思議なお祭り,,manual,1
+31.6,35.6,さあ 踊り出そう さあ 砂漠の星空の下,1,vocal_text_raw_time,1
+35.6,40,煌めくこの市場は魔法の絨毯,1,vocal_text_raw_time,1
+40,44,手拍子叩き 声上げ笑えば,1,vocal_text_raw_time,1
+44,49,わぁ 世界の生活になる 一つになる魔法の夜,1,vocal_text_raw_time,1
+49,53.92,あっちもこっちも不思議なものばかり,0,vocal_text_raw_start,1
+54,56.2,甘い匂いに誘われ,0,vocal_text_raw_time,1
+58,60.7,甘い匂いに誘われ,0,vocal_text_raw_time,1
+60.7,63,歩くの 迷い込んだら,0,vocal_text_raw_time,1
+63,65.2,抜け出せない楽しさ,0,vocal_text_raw_time,1
+66,73.7,夢の中の夢みたいな時間,0,vocal_text_raw_time,1
+69.7,73.7,さあ 踊り出そう さあ 砂漠の星空の下,0,vocal_text_raw_time,1
+73.7,77.7, きらめくこの市場は 魔法の絨毯,1,vocal_text_raw_time,1
+77.7,81.7,手拍子叩き 声上げ笑えば,0,vocal_text_raw_time,1
+81.7,84.96,世界がひとつになる魔法の夜,0,vocal_text_raw_time,1
+84.96,88.08,また明日ね,0,vocal_text_raw_time,1

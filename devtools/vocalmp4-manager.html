@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vocal MP4 Manager</title>
+  <style>
+    :root { color-scheme: dark; font-family: "Noto Sans JP", system-ui, sans-serif; background: #101820; color: #edf2f7; }
+    body { margin: 0; padding: 16px; }
+    header { position: sticky; top: 0; z-index: 5; display: flex; justify-content: space-between; gap: 16px; align-items: end; margin: -16px -16px 14px; padding: 14px 16px; background: rgba(16, 24, 32, 0.96); border-bottom: 1px solid #26384a; backdrop-filter: blur(10px); }
+    h1 { margin: 0; font-size: 24px; }
+    h2 { margin: 0 0 12px; font-size: 17px; }
+    a { color: #7dd3fc; }
+    main { display: grid; grid-template-columns: minmax(280px, 340px) minmax(420px, 1fr); gap: 14px; align-items: start; }
+    section { border: 1px solid #334155; border-radius: 8px; padding: 16px; background: #162231; }
+    label { display: block; margin: 10px 0 5px; color: #b9c6d3; font-size: 12px; }
+    select, input, button, textarea { width: 100%; box-sizing: border-box; border-radius: 6px; border: 1px solid #405469; background: #0f172a; color: #f8fafc; padding: 8px 10px; font: inherit; }
+    button { margin-top: 14px; background: #0f766e; cursor: pointer; font-weight: 700; }
+    textarea { min-height: 318px; resize: vertical; white-space: pre-wrap; }
+    .stack { display: grid; gap: 14px; }
+    .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 12px; }
+    .stat { border: 1px solid #2b3b4c; border-radius: 6px; padding: 10px; background: #0f172a; }
+    .stat strong { display: block; font-size: 20px; color: #f8fafc; }
+    .stat span { color: #94a3b8; font-size: 12px; }
+    .toolbar { display: grid; grid-template-columns: minmax(180px, 1.6fr) repeat(4, minmax(110px, 1fr)) minmax(100px, 0.7fr); gap: 8px; align-items: end; margin-bottom: 10px; }
+    .toolbar label { margin: 0 0 4px; }
+    .table-wrap { max-height: calc(100vh - 300px); min-height: 260px; overflow: auto; border: 1px solid #2b3b4c; border-radius: 8px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { border-bottom: 1px solid #2b3b4c; padding: 8px; text-align: left; vertical-align: top; }
+    th { position: sticky; top: 0; z-index: 1; color: #bae6fd; background: #162231; }
+    tr:hover td { background: #111d2b; }
+    .muted { color: #94a3b8; font-size: 13px; }
+    .id { font-family: ui-monospace, Consolas, monospace; color: #facc15; }
+    .compact { white-space: nowrap; }
+    @media (max-width: 1100px) { main, .toolbar { grid-template-columns: 1fr; } .table-wrap { max-height: 520px; } }
+  </style>
+  <script src="vocalmp4-data.js"></script>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Vocal MP4 Manager</h1>
+      <div class="muted">R/M/I/T classification. Legacy vocal files are under old/20260626_vocal_legacy.</div>
+    </div>
+    <a href="vocalmp4-player-tester.html">Player Tester</a>
+  </header>
+  <main>
+    <div class="stack">
+      <section>
+        <h2>Candidate</h2>
+        <label for="request">R</label><select id="request"><option value="">auto</option></select>
+        <label for="mood">M</label><select id="mood"><option value="">auto</option></select>
+        <label for="instrument">I</label><select id="instrument"><option value="">auto</option></select>
+        <label for="theme">T</label><select id="theme"><option value="">auto</option></select>
+        <label for="seed">Seed</label><input id="seed" inputmode="numeric" placeholder="optional">
+        <button id="pick">Pick candidate</button>
+        <p class="muted">Uses the generated devtool bundle. For conversion and sync, use vp scripts from the project root.</p>
+      </section>
+      <section>
+        <h2>Prompt</h2>
+        <textarea id="prompt" spellcheck="false"></textarea>
+        <div id="copy-status" class="muted" aria-live="polite"></div>
+      </section>
+    </div>
+    <section>
+      <h2>Catalog</h2>
+      <div class="stats">
+        <div class="stat"><strong id="stat-total">0</strong><span>generated</span></div>
+        <div class="stat"><strong id="stat-filtered">0</strong><span>shown</span></div>
+        <div class="stat"><strong id="stat-unused">0</strong><span>open IDs</span></div>
+        <div class="stat"><strong id="stat-updated">-</strong><span>updated</span></div>
+      </div>
+      <div class="toolbar">
+        <div><label for="catalog-search">Search</label><input id="catalog-search" placeholder="id / title / source"></div>
+        <div><label for="catalog-request">R</label><select id="catalog-request"><option value="">all</option></select></div>
+        <div><label for="catalog-mood">M</label><select id="catalog-mood"><option value="">all</option></select></div>
+        <div><label for="catalog-instrument">I</label><select id="catalog-instrument"><option value="">all</option></select></div>
+        <div><label for="catalog-theme">T</label><select id="catalog-theme"><option value="">all</option></select></div>
+        <div><label for="catalog-sort">Sort</label><select id="catalog-sort"><option value="id">id</option><option value="title">title</option><option value="status">status</option></select></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>ID</th><th>Title</th><th>R</th><th>M</th><th>I</th><th>T</th><th>Status</th><th>Play</th></tr></thead>
+          <tbody id="catalog"><tr><td colspan="8" class="muted">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <script type="module">
+    const loadJson = async (url, fallback) => {
+      if (location.protocol === "file:") return fallback;
+      try {
+        const response = await fetch(url);
+        return response.ok ? response.json() : fallback;
+      } catch {
+        return fallback;
+      }
+    };
+    const pool = await loadJson("vocalmp4-pool.json", window.vocalMp4Pool);
+    const catalog = await loadJson("../assets/audio/vocalmp4/catalog.json", window.vocalMp4Catalog || { tracks: [] });
+    const byId = (items) => Object.fromEntries(items.map((item) => [item.id, item]));
+    const maps = { r: byId(pool.requests), m: byId(pool.moods), i: byId(pool.instruments), t: byId(pool.themes) };
+    const fill = (id, items) => {
+      const select = document.getElementById(id);
+      for (const item of items) {
+        const option = document.createElement("option");
+        option.value = item.id;
+        option.textContent = `${item.id} ${item.name}`;
+        select.appendChild(option);
+      }
+    };
+    for (const [id, items] of [
+      ["request", pool.requests],
+      ["mood", pool.moods],
+      ["instrument", pool.instruments],
+      ["theme", pool.themes],
+      ["catalog-request", pool.requests],
+      ["catalog-mood", pool.moods],
+      ["catalog-instrument", pool.instruments],
+      ["catalog-theme", pool.themes],
+    ]) fill(id, items);
+
+    const parseId = (id) => {
+      const m = id.match(/^song_(R\d{2})_(M\d{2})_(I\d{2})_(T\d{2})$/);
+      return m && { requestId: m[1], moodId: m[2], instrumentId: m[3], themeId: m[4] };
+    };
+    const promptFor = (chosen) => {
+      const c = chosen.classification;
+      const labels = {
+        request: maps.r[c.requestId],
+        mood: maps.m[c.moodId],
+        instrument: maps.i[c.instrumentId],
+        theme: maps.t[c.themeId],
+      };
+      if (typeof window.vocalMp4BuildPrompt === "function") {
+        return window.vocalMp4BuildPrompt({ ...chosen, labels });
+      }
+      const request = labels.request?.name || c.requestId;
+      const mood = labels.mood?.name || c.moodId;
+      const instrument = labels.instrument?.name || c.instrumentId;
+      const theme = labels.theme?.name || c.themeId;
+      return [
+        `ID: ${chosen.id}`,
+        "",
+        `リクエスト: ${request}`,
+        `雰囲気: ${mood}`,
+        `中心となる楽器: ${instrument}`,
+        `テーマ: ${theme}`,
+        "",
+        "世界観はアラビアンナイト風のファンタジー世界。",
+        "現代的な高層ビルや機械文明の雰囲気にはしない。",
+        "",
+        "華奢で可憐な若い女性による日本語ボーカル。",
+        "ただし、添付画像の女性の容姿や服装は歌詞に組み込まないこと。",
+        "",
+        "音ゲー向けの明確なリズムと、平坦にならない展開にする。",
+        `${instrument}を明確に聞かせる。`,
+        "無音区間は作らない。",
+        "長さは65〜75秒。",
+        "盛り上がりの途中で切らず、自然に完結させる。",
+        "",
+        "歌詞は聞き取りやすく自然な日本語にする。",
+        "助詞の「は」の発音は特に気をつける。",
+        "歌詞本文はひらがなのみとし、漢字、カタカナ、「、」「。」は使わない。",
+        "半角スペースと短い改行を使う。",
+        "",
+        "楽曲生成後日本語発音が妥当か評価すること。"
+      ].join("\n");
+    };
+    const copyPrompt = async (text) => {
+      const status = document.getElementById("copy-status");
+      try {
+        if (navigator.clipboard?.writeText && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          const promptBox = document.getElementById("prompt");
+          promptBox.focus();
+          promptBox.select();
+          document.execCommand("copy");
+        }
+        status.textContent = "Prompt copied.";
+      } catch {
+        status.textContent = "Copy failed. Select the prompt manually.";
+      }
+    };
+    const used = new Set([...(pool.generationHistory || []), ...(catalog.tracks || [])].map((item) => item.id));
+    const makeId = (r, m, i, t) => `song_${r}_${m}_${i}_${t}`;
+    const score = (r, m, i, t, rnd) => {
+      let s = 1000 + rnd;
+      const rw = pool.weights.requestMood[r];
+      if (rw?.primary.includes(m)) s += 35;
+      if (rw?.secondary.includes(m)) s += 18;
+      if (pool.weights.requestInstrument[r]?.includes(i)) s += 22;
+      if (pool.weights.requestTheme[r]?.includes(t)) s += 24;
+      return s;
+    };
+    const random = (seed) => {
+      let n = (seed || Date.now()) >>> 0;
+      return () => ((n = Math.imul(1664525, n) + 1013904223) >>> 0) / 4294967296;
+    };
+    document.getElementById("pick").onclick = () => {
+      const constraints = {
+        r: document.getElementById("request").value,
+        m: document.getElementById("mood").value,
+        i: document.getElementById("instrument").value,
+        t: document.getElementById("theme").value,
+      };
+      const rnd = random(Number.parseInt(document.getElementById("seed").value || "0", 10) || Date.now());
+      const candidates = [];
+      for (const r of pool.requests) for (const m of pool.moods) for (const i of pool.instruments) for (const t of pool.themes) {
+        if (constraints.r && constraints.r !== r.id) continue;
+        if (constraints.m && constraints.m !== m.id) continue;
+        if (constraints.i && constraints.i !== i.id) continue;
+        if (constraints.t && constraints.t !== t.id) continue;
+        const id = makeId(r.id, m.id, i.id, t.id);
+        if (!used.has(id)) candidates.push({ id, classification: parseId(id), score: score(r.id, m.id, i.id, t.id, rnd()) });
+      }
+      candidates.sort((a, b) => b.score - a.score);
+      const chosen = candidates[Math.floor(rnd() * Math.min(30, candidates.length))];
+      if (!chosen) return;
+      const promptText = promptFor(chosen);
+      document.getElementById("prompt").value = promptText;
+      copyPrompt(promptText);
+    };
+
+    const totalCombinations = pool.requests.length * pool.moods.length * pool.instruments.length * pool.themes.length;
+    const catalogFilters = {
+      q: document.getElementById("catalog-search"),
+      requestId: document.getElementById("catalog-request"),
+      moodId: document.getElementById("catalog-mood"),
+      instrumentId: document.getElementById("catalog-instrument"),
+      themeId: document.getElementById("catalog-theme"),
+      sort: document.getElementById("catalog-sort"),
+    };
+    const renderCatalog = () => {
+      const tbody = document.getElementById("catalog");
+      const q = catalogFilters.q.value.trim().toLowerCase();
+      let rows = (catalog.tracks || []).map((track) => ({ track, c: track.plannedClassification || parseId(track.id) }));
+      rows = rows.filter(({ track, c }) => {
+        if (q && !`${track.id} ${track.title || ""} ${track.sourceFile || ""}`.toLowerCase().includes(q)) return false;
+        for (const key of ["requestId", "moodId", "instrumentId", "themeId"]) if (catalogFilters[key].value && c?.[key] !== catalogFilters[key].value) return false;
+        return true;
+      });
+      const sortKey = catalogFilters.sort.value;
+      rows.sort((a, b) => `${a.track[sortKey] || a.track.id}`.localeCompare(`${b.track[sortKey] || b.track.id}`, "ja"));
+      document.getElementById("stat-total").textContent = `${(catalog.tracks || []).length}`;
+      document.getElementById("stat-filtered").textContent = `${rows.length}`;
+      document.getElementById("stat-unused").textContent = `${Math.max(0, totalCombinations - used.size)}`;
+      document.getElementById("stat-updated").textContent = catalog.updatedAt ? catalog.updatedAt.slice(5, 10) : "-";
+      tbody.innerHTML = "";
+      for (const { track, c } of rows) {
+        const tr = document.createElement("tr");
+        const playUrl = `vocalmp4-player-tester.html?id=${encodeURIComponent(track.id)}`;
+        tr.innerHTML = `<td class="id compact">${track.id}</td><td>${track.title || ""}</td><td>${c?.requestId || ""} ${maps.r[c?.requestId]?.name || ""}</td><td>${c?.moodId || ""} ${maps.m[c?.moodId]?.name || ""}</td><td>${c?.instrumentId || ""} ${maps.i[c?.instrumentId]?.name || ""}</td><td>${c?.themeId || ""} ${maps.t[c?.themeId]?.name || ""}</td><td class="compact">${track.status || ""}</td><td><a href="${playUrl}">open</a></td>`;
+        tbody.appendChild(tr);
+      }
+      if (!tbody.children.length) tbody.innerHTML = '<tr><td colspan="8" class="muted">No tracks match the filters.</td></tr>';
+    };
+    for (const control of Object.values(catalogFilters)) {
+      control.oninput = renderCatalog;
+      control.onchange = renderCatalog;
+    }
+    renderCatalog();
+  </script>
+</body>
+</html>

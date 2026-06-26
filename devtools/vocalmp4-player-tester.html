@@ -1,0 +1,755 @@
+﻿<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vocal MP4 Player Tester</title>
+  <style>
+    :root { color-scheme: dark; font-family: "Noto Sans JP", system-ui, sans-serif; background: #0f172a; color: #e5e7eb; }
+    html, body { height: 100%; overflow: hidden; }
+    body { margin: 0; padding: 12px; box-sizing: border-box; }
+    header { display: flex; justify-content: space-between; gap: 16px; align-items: end; padding-bottom: 10px; border-bottom: 1px solid #253448; }
+    h1 { margin: 0; font-size: 24px; }
+    a { color: #67e8f9; }
+    main { height: calc(100vh - 24px); display: grid; grid-template-columns: minmax(720px, 1fr) minmax(380px, 520px); gap: 12px; align-items: stretch; overflow: hidden; }
+    aside, section { min-height: 0; background: #162033; border: 1px solid #334155; border-radius: 8px; padding: 12px; box-sizing: border-box; overflow: hidden; }
+    aside { display: grid; grid-template-rows: auto auto auto minmax(0, 1fr); }
+    input, select, button { width: 100%; box-sizing: border-box; padding: 8px 10px; border-radius: 6px; border: 1px solid #475569; background: #0b1120; color: #f8fafc; margin-bottom: 8px; font: inherit; }
+    button { cursor: pointer; }
+    .filter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .filter-grid input { grid-column: 1 / -1; }
+    .list-head { display: flex; justify-content: space-between; gap: 10px; align-items: center; margin: 6px 0 8px; }
+    .track-list { min-height: 0; overflow: auto; border: 1px solid #2d3a4b; border-radius: 8px; padding: 6px; background: #0b1120; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; align-content: start; }
+    .track { width: 100%; text-align: left; display: grid; grid-template-columns: 1fr auto; gap: 6px; border: 1px solid transparent; border-radius: 6px; padding: 7px 8px; margin: 0 0 4px; background: #0f172a; color: #e5e7eb; cursor: pointer; }
+    .track.active { border-color: #38bdf8; background: #123047; }
+    .id { font-family: ui-monospace, Consolas, monospace; color: #facc15; }
+    .track-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .track-meta { grid-column: 1 / -1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .track-check { color: #5eead4; font-size: 12px; }
+    .muted { color: #94a3b8; font-size: 13px; }
+    .player { height: 100%; display: block; overflow: hidden; }
+    .stage { min-width: 0; height: 100%; display: flex; flex-direction: column; }
+    .control-row { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; margin-top: 8px; }
+    .control-row button { min-height: 32px; margin: 0; padding: 6px 8px; font-size: 13px; font-weight: 700; }
+    .control-row .danger { background: #7f1d1d; border-color: #b91c1c; }
+    .control-row .active { background: #0f766e; border-color: #14b8a6; }
+    .lyrics-panel { min-width: 0; min-height: 0; display: grid; grid-template-rows: auto minmax(0, 1fr); overflow: hidden; margin-top: 12px; }
+    .lyrics-head { display: grid; grid-template-columns: auto 1fr auto auto auto; gap: 8px; align-items: center; margin-bottom: 8px; }
+    .lyrics-head h2 { margin: 0; }
+    .lyrics-head button { width: auto; margin: 0; padding: 6px 12px; background: #0f766e; border-color: #14b8a6; font-size: 13px; font-weight: 700; }
+    .lyrics-checked-toggle { display: inline-flex; gap: 6px; align-items: center; color: #cbd5e1; font-size: 13px; font-weight: 700; white-space: nowrap; }
+    .lyrics-checked-toggle input { width: 16px; height: 16px; margin: 0; padding: 0; accent-color: #14b8a6; }
+    .status { min-height: 1.2em; font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .cover-stage { position: relative; width: min(100%, 46vh); max-width: 100%; aspect-ratio: 1 / 1; margin: 0 auto; border-radius: 8px; overflow: hidden; background: #020617; cursor: pointer; }
+    img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .cover-zoom { position: absolute; top: 8px; right: 8px; z-index: 2; width: auto; min-width: 40px; margin: 0; padding: 6px 9px; border-color: rgba(148, 163, 184, 0.72); background: rgba(15, 23, 42, 0.78); font-size: 13px; }
+    .cover-dialog { width: min(92vw, 920px); padding: 10px; border: 1px solid #475569; border-radius: 8px; background: #020617; }
+    .cover-dialog::backdrop { background: rgba(2, 6, 23, 0.82); }
+    .cover-dialog img { width: 100%; max-height: 82vh; object-fit: contain; }
+    .cover-dialog button { margin: 8px 0 0; }
+    .lyric-overlay {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      min-height: 30%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 6px;
+      padding: 56px 18px 18px;
+      box-sizing: border-box;
+      background: linear-gradient(to top, rgba(2, 6, 23, 0.88), rgba(2, 6, 23, 0.42), transparent);
+      pointer-events: none;
+      text-align: center;
+    }
+    .lyric-current {
+      min-height: 2.8em;
+      color: #fff7ed;
+      font-size: 24px;
+      line-height: 1.35;
+      font-weight: 800;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95), 0 0 18px rgba(8, 13, 24, 0.9);
+      word-break: keep-all;
+      overflow-wrap: anywhere;
+      white-space: pre-line;
+    }
+    .lyric-current.upcoming { color: #e0f2fe; opacity: 0.92; }
+    .lyric-next {
+      min-height: 1.4em;
+      color: rgba(226, 232, 240, 0.74);
+      font-size: 14px;
+      line-height: 1.35;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.85);
+      overflow-wrap: anywhere;
+      white-space: pre-line;
+    }
+    audio { width: 100%; margin: 12px 0; }
+    .seek-row { display: grid; grid-template-columns: 44px 1fr 44px; gap: 10px; align-items: center; }
+    .seek-row input { margin: 0; padding: 0; accent-color: #38bdf8; }
+    .time { font: 12px/1 ui-monospace, Consolas, monospace; color: #cbd5e1; text-align: center; }
+    .lyric-list { min-height: 0; overflow-y: auto; overflow-x: hidden; border-radius: 8px; background: #0b1120; padding: 10px; }
+    .lyric-row { width: 100%; display: grid; grid-template-columns: 32px 58px 58px minmax(0, 1fr) 28px 28px; gap: 6px; padding: 5px 6px; border: 0; border-radius: 5px; background: transparent; color: #e5e7eb; font: inherit; font-size: 13px; text-align: left; align-items: start; }
+    .lyric-row:hover { background: #111d2b; }
+    .lyric-row.active { background: #123047; color: #f8fafc; }
+    .lyric-row button { min-height: 26px; margin: 0; padding: 2px 0; font-size: 13px; font-weight: 700; }
+    .lyric-seek-button { border-color: transparent; background: transparent; color: #94a3b8; }
+    .lyric-add { border-color: #0e7490; background: #164e63; color: #ecfeff; }
+    .lyric-delete { border-color: #991b1b; background: #7f1d1d; color: #fee2e2; }
+    .lyric-time { width: 100%; min-height: 26px; margin: 0; padding: 2px 4px; border: 1px solid #334155; border-radius: 4px; background: #020617; color: #cbd5e1; font: 12px/1 ui-monospace, Consolas, monospace; }
+    .lyric-time:focus { border-color: #38bdf8; outline: none; }
+    .lyric-text { width: 100%; min-height: 1.8em; margin: 0; padding: 2px 4px; border: 1px solid transparent; border-radius: 4px; background: transparent; color: inherit; font: inherit; resize: none; overflow: hidden; white-space: pre-wrap; }
+    .lyric-text:focus { border-color: #38bdf8; background: #0f172a; outline: none; }
+    @media (max-width: 1500px) { main { grid-template-columns: minmax(560px, 1fr) minmax(360px, 500px); } .track-list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    @media (max-width: 1180px) { main { grid-template-columns: minmax(360px, 460px) minmax(0, 1fr); } .track-list { grid-template-columns: 1fr; } }
+  </style>
+  <script src="vocalmp4-data.js"></script>
+</head>
+<body>
+  <main>
+    <aside>
+      <header>
+        <div>
+          <h1>Vocal MP4 Player Tester</h1>
+          <div class="muted">Reads public/assets/audio/vocalmp4/catalog.json and song metadata.</div>
+        </div>
+        <a href="vocalmp4-manager.html">Manager</a>
+      </header>
+      <div class="filter-grid">
+        <input id="search" placeholder="filter id/title/source">
+        <select id="request"><option value="">all R</option></select>
+        <select id="mood"><option value="">all M</option></select>
+        <select id="instrument"><option value="">all I</option></select>
+        <select id="theme"><option value="">all T</option></select>
+        <select id="sort"><option value="id">sort id</option><option value="title">sort title</option><option value="status">sort status</option></select>
+      </div>
+      <div class="list-head">
+        <span class="muted" id="track-count">0 / 0</span>
+        <span class="muted" id="selected-summary">not selected</span>
+      </div>
+      <div id="tracks" class="track-list"></div>
+    </aside>
+    <section>
+      <div id="empty" class="muted">Select a track.</div>
+      <div id="detail" class="player" hidden>
+        <div class="stage">
+          <div class="cover-stage">
+            <img id="cover" alt="">
+            <button id="cover-zoom" class="cover-zoom" type="button">Zoom</button>
+            <div class="lyric-overlay" aria-live="polite">
+              <div id="lyric-current" class="lyric-current">-</div>
+              <div id="lyric-next" class="lyric-next"></div>
+            </div>
+          </div>
+          <audio id="audio" controls></audio>
+          <div class="seek-row">
+            <span class="time" id="time-current">0:00</span>
+            <input id="lyric-seek" type="range" min="0" max="0" step="0.01" value="0" aria-label="lyric seek">
+            <span class="time" id="time-total">0:00</span>
+          </div>
+          <div class="muted" id="duration"></div>
+          <div class="control-row">
+            <button id="next-track" type="button">Next</button>
+            <button id="auto-next" type="button">Auto</button>
+            <button id="loop-mode" type="button">Loop</button>
+            <button id="shuffle-mode" type="button">Shuffle</button>
+            <button id="copy-delete-command" class="danger" type="button">Arm delete</button>
+          </div>
+          <div class="lyrics-panel">
+            <div class="lyrics-head">
+              <h2>Lyrics</h2>
+              <div id="lyrics-status" class="muted status" aria-live="polite"></div>
+              <label class="lyrics-checked-toggle"><input id="lyrics-checked" type="checkbox"> checked</label>
+              <button id="add-lyric-row" type="button">Add row</button>
+              <button id="save-lyrics" type="button">Save lyrics</button>
+            </div>
+            <div id="lyrics" class="lyric-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <dialog id="cover-dialog" class="cover-dialog">
+    <img id="cover-large" alt="">
+    <button id="cover-close" type="button">Close</button>
+  </dialog>
+  <script type="module">
+    const loadJson = async (url, fallback) => {
+      if (location.protocol === "file:") return fallback;
+      try {
+        const response = await fetch(url);
+        return response.ok ? response.json() : fallback;
+      } catch {
+        return fallback;
+      }
+    };
+    const parseCsv = (text) => {
+      const rows = [];
+      let row = [];
+      let cell = "";
+      let quoted = false;
+      for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        if (quoted) {
+          if (char === '"' && text[i + 1] === '"') {
+            cell += '"';
+            i++;
+          } else if (char === '"') quoted = false;
+          else cell += char;
+        } else if (char === '"') quoted = true;
+        else if (char === ",") {
+          row.push(cell);
+          cell = "";
+        } else if (char === "\n") {
+          row.push(cell);
+          rows.push(row);
+          row = [];
+          cell = "";
+        } else if (char !== "\r") cell += char;
+      }
+      if (cell || row.length) rows.push([...row, cell]);
+      const [headers, ...data] = rows.filter((item) => item.some((value) => value !== ""));
+      return headers ? data.map((values) => Object.fromEntries(headers.map((header, index) => [header, values[index] ?? ""]))) : [];
+    };
+    const loadCsv = async (url, fallback) => {
+      if (location.protocol === "file:") return fallback;
+      try {
+        const response = await fetch(url);
+        return response.ok ? parseCsv(await response.text()) : fallback;
+      } catch {
+        return fallback;
+      }
+    };
+    const [pool, catalog] = await Promise.all([
+      loadJson("vocalmp4-pool.json", window.vocalMp4Pool),
+      loadJson("../assets/audio/vocalmp4/catalog.json", window.vocalMp4Catalog || { tracks: [] }),
+    ]);
+    const maps = {
+      requestId: Object.fromEntries(pool.requests.map((item) => [item.id, item])),
+      moodId: Object.fromEntries(pool.moods.map((item) => [item.id, item])),
+      instrumentId: Object.fromEntries(pool.instruments.map((item) => [item.id, item])),
+      themeId: Object.fromEntries(pool.themes.map((item) => [item.id, item])),
+    };
+    const projectRoot = "C:\\AI\\projects\\P0008_BardInMaghribal";
+    const quotePowerShell = (value) => `'${value.replace(/'/g, "''")}'`;
+    const selects = {
+      requestId: document.getElementById("request"),
+      moodId: document.getElementById("mood"),
+      instrumentId: document.getElementById("instrument"),
+      themeId: document.getElementById("theme"),
+    };
+    for (const [key, items] of [["requestId", pool.requests], ["moodId", pool.moods], ["instrumentId", pool.instruments], ["themeId", pool.themes]]) {
+      for (const item of items) {
+        const option = document.createElement("option");
+        option.value = item.id;
+        option.textContent = `${item.id} ${item.name}`;
+        selects[key].appendChild(option);
+      }
+    }
+    const parseId = (id) => {
+      const m = id.match(/^song_(R\d{2})_(M\d{2})_(I\d{2})_(T\d{2})$/);
+      return m && { requestId: m[1], moodId: m[2], instrumentId: m[3], themeId: m[4] };
+    };
+    const label = (c) => c ? `${c.requestId} ${maps.requestId[c.requestId]?.name || ""} / ${c.moodId} ${maps.moodId[c.moodId]?.name || ""} / ${c.instrumentId} ${maps.instrumentId[c.instrumentId]?.name || ""} / ${c.themeId} ${maps.themeId[c.themeId]?.name || ""}` : "legacy or unknown";
+    const state = {
+      selected: null,
+      metadata: null,
+      lyrics: [],
+      lyricsFile: "",
+      filteredTracks: [],
+      activeLyricIndex: -1,
+      scrubbing: false,
+      dirty: false,
+      deleteArmed: false,
+      autoNext: false,
+      loop: false,
+      shuffle: false,
+      lyricsChecked: false,
+    };
+    const audio = document.getElementById("audio");
+    const lyricSeek = document.getElementById("lyric-seek");
+    const timeCurrent = document.getElementById("time-current");
+    const timeTotal = document.getElementById("time-total");
+    const tracksEl = document.getElementById("tracks");
+    const lyricsStatus = document.getElementById("lyrics-status");
+    const deleteStatus = lyricsStatus;
+    const deleteButton = document.getElementById("copy-delete-command");
+    const autoNextButton = document.getElementById("auto-next");
+    const loopButton = document.getElementById("loop-mode");
+    const shuffleButton = document.getElementById("shuffle-mode");
+    const updateModeButtons = () => {
+      autoNextButton.classList.toggle("active", state.autoNext);
+      loopButton.classList.toggle("active", state.loop);
+      shuffleButton.classList.toggle("active", state.shuffle);
+    };
+    function isChecked(value) {
+      return value === true || value === 1 || value === "1" || `${value}`.toLowerCase() === "true" || `${value}`.toLowerCase() === "yes";
+    }
+    function lyricCheckSummary(track) {
+      const lyrics = window.vocalMp4LyricsById?.[track.id] || [];
+      if (!lyrics.length) return "";
+      return lyrics.some((lyric) => isChecked(lyric.checked)) ? "lyrics ok" : "lyrics check";
+    }
+    const filter = () => {
+      const q = document.getElementById("search").value.toLowerCase();
+      const filtered = (catalog.tracks || []).filter((track) => {
+        const c = track.plannedClassification || parseId(track.id);
+        if (q && !`${track.id} ${track.title || ""} ${track.sourceFile || ""}`.toLowerCase().includes(q)) return false;
+        for (const [key, select] of Object.entries(selects)) if (select.value && c?.[key] !== select.value) return false;
+        return true;
+      });
+      const sortKey = document.getElementById("sort").value;
+      filtered.sort((a, b) => `${a[sortKey] || a.id}`.localeCompare(`${b[sortKey] || b.id}`, "ja"));
+      state.filteredTracks = filtered;
+      document.getElementById("track-count").textContent = `${filtered.length} / ${(catalog.tracks || []).length}`;
+      document.getElementById("selected-summary").textContent = state.selected?.id || "not selected";
+      tracksEl.innerHTML = "";
+      for (const track of filtered) {
+        const button = document.createElement("button");
+        button.className = `track ${state.selected?.id === track.id ? "active" : ""}`;
+        const checkSummary = lyricCheckSummary(track);
+        button.innerHTML = `<div><div class="id">${track.id}</div><div class="track-title">${track.title || "(untitled)"}</div></div><div class="muted">${track.status || ""}</div><div class="track-check">${checkSummary}</div><div class="muted track-meta">${label(track.plannedClassification || parseId(track.id))}</div>`;
+        button.onclick = () => selectTrack(track, { autoplay: true });
+        tracksEl.appendChild(button);
+      }
+      if (!filtered.length) tracksEl.innerHTML = '<p class="muted">No tracks.</p>';
+    };
+    async function selectTrack(track, options = {}) {
+      state.selected = track;
+      state.activeLyricIndex = -1;
+      filter();
+      const metadata = await loadJson(`../assets/audio/vocalmp4/${track.id}.json`, window.vocalMp4MetadataById?.[track.id] || track);
+      const lyrics = metadata.lyricsFile
+        ? await loadCsv(`../assets/audio/vocalmp4/${metadata.lyricsFile}`, window.vocalMp4LyricsById?.[track.id] || [])
+        : (metadata.lyrics || window.vocalMp4LyricsById?.[track.id] || []);
+      document.getElementById("empty").hidden = true;
+      document.getElementById("detail").hidden = false;
+      state.metadata = metadata;
+      state.lyricsFile = metadata.lyricsFile || `${track.id}.lyrics.csv`;
+      state.dirty = false;
+      state.deleteArmed = false;
+      state.lyricsChecked = lyrics.some((seg) => isChecked(seg.checked));
+      deleteButton.textContent = "Arm delete";
+      lyricsStatus.textContent = "";
+      document.getElementById("lyrics-checked").checked = state.lyricsChecked;
+      document.getElementById("cover").src = `../assets/audio/vocalmp4/${metadata.coverFile || track.coverFile || `${track.id}.webp`}`;
+      document.getElementById("cover-large").src = document.getElementById("cover").src;
+      audio.src = `../assets/audio/vocalmp4/${metadata.audioFile || track.audioFile || `${track.id}.mp3`}`;
+      audio.currentTime = 0;
+      lyricSeek.value = "0";
+      lyricSeek.max = `${Number(metadata.durationSec) || 0}`;
+      state.scrubbing = false;
+      state.lyrics = lyrics
+        .map((seg) => ({
+          start: Number.parseFloat(seg.start),
+          end: Number.parseFloat(seg.end),
+          text: seg.text || "",
+          uncertain: seg.uncertain || "",
+          source: seg.source || "",
+        }))
+        .filter((seg) => Number.isFinite(seg.start) && Number.isFinite(seg.end))
+        .sort((a, b) => a.start - b.start);
+      updateSeekUi(0, Number(metadata.durationSec) || audio.duration || 0);
+      renderActiveLyric(0, true);
+      document.getElementById("duration").textContent = metadata.durationSec ? `${metadata.durationSec}s` : "";
+      renderLyricsEditor();
+      renderActiveLyric(audio.currentTime || 0, true);
+      if (options.autoplay) void audio.play().catch(() => {});
+    }
+    function renderActiveLyric(time, force = false) {
+      const lyrics = state.lyrics || [];
+      let index = -1;
+      for (let i = lyrics.length - 1; i >= 0; i--) {
+        if (time >= lyrics[i].start && time < lyrics[i].end) {
+          index = i;
+          break;
+        }
+      }
+      if (index < 0) index = lyrics.findIndex((seg) => time < seg.start);
+      const isUpcoming = index >= 0 && time < lyrics[index].start;
+      if (!force && index === state.activeLyricIndex) return;
+      state.activeLyricIndex = index;
+      const current = document.getElementById("lyric-current");
+      const next = document.getElementById("lyric-next");
+      document.querySelectorAll(".lyric-row.active").forEach((row) => row.classList.remove("active"));
+      if (index < 0 || !lyrics.length) {
+        current.textContent = "-";
+        next.textContent = "";
+        current.classList.remove("upcoming");
+        return;
+      }
+      current.classList.toggle("upcoming", isUpcoming);
+      current.textContent = formatLyricForDisplay(lyrics[index].text || "-", { maxChars: 16 });
+      next.textContent = isUpcoming ? "" : formatLyricForDisplay(lyrics[index + 1]?.text || "", { maxChars: 18 });
+      const activeRow = document.querySelector(`[data-lyric-index="${index}"]`);
+      activeRow?.classList.add("active");
+    }
+    function escapeHtml(value) {
+      return `${value}`.replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]);
+    }
+    function formatLyricForDisplay(text, options = {}) {
+      const normalized = normalizeManualLineBreaks(text);
+      if (options.autoSplit === false || normalized.includes("\n")) return normalized;
+      return splitLyricForDisplay(normalized, options.maxChars || 16);
+    }
+    function normalizeManualLineBreaks(text) {
+      return `${text}`.replace(/\\n/g, "\n").replace(/\\/g, "\n").trim();
+    }
+    function textareaRows(text) {
+      return Math.max(1, normalizeManualLineBreaks(text).split("\n").length);
+    }
+    function resizeTextarea(editor) {
+      editor.style.height = "auto";
+      editor.style.height = `${editor.scrollHeight}px`;
+    }
+    function renderLyricsEditor() {
+      const lyricsEl = document.getElementById("lyrics");
+      lyricsEl.innerHTML = state.lyrics.length
+        ? state.lyrics.map((seg, index) => `
+          <div class="lyric-row" data-lyric-index="${index}">
+            <button class="lyric-seek-button" type="button" data-lyric-action="seek" title="Seek">${formatTime(seg.start)}</button>
+            <input class="lyric-time lyric-start" type="number" min="0" step="0.01" value="${formatSeconds(seg.start)}" data-lyric-index="${index}" aria-label="start seconds">
+            <input class="lyric-time lyric-end" type="number" min="0" step="0.01" value="${formatSeconds(seg.end)}" data-lyric-index="${index}" aria-label="end seconds">
+            <textarea class="lyric-text" data-lyric-index="${index}" rows="${textareaRows(seg.text)}">${escapeHtml(formatLyricForDisplay(seg.text, { autoSplit: false }))}</textarea>
+            <button class="lyric-add" type="button" data-lyric-action="add" title="Add row after">+</button>
+            <button class="lyric-delete" type="button" data-lyric-action="delete" title="Delete row">-</button>
+          </div>
+        `).join("")
+        : '<p class="muted">No lyrics. Use Add row to create one.</p>';
+      lyricsEl.querySelectorAll(".lyric-text").forEach((editor) => resizeTextarea(editor));
+      renderActiveLyric(audio.currentTime || 0, true);
+    }
+    function formatSeconds(value) {
+      return `${Math.max(0, Number.isFinite(value) ? value : 0).toFixed(2)}`;
+    }
+    function readTimeInput(input, fallback) {
+      const value = Number.parseFloat(input.value);
+      return Number.isFinite(value) ? Math.max(0, value) : fallback;
+    }
+    function markLyricsDirty(message = "Unsaved changes") {
+      state.dirty = true;
+      lyricsStatus.textContent = message;
+    }
+    function sortLyrics() {
+      state.lyrics.sort((a, b) => a.start - b.start || a.end - b.end);
+    }
+    function addLyricAfter(index) {
+      const duration = Number.parseFloat(lyricSeek.max) || audio.duration || state.metadata?.durationSec || 0;
+      const current = state.lyrics[index];
+      const next = state.lyrics[index + 1];
+      const baseTime = Number.isFinite(audio.currentTime) ? audio.currentTime : 0;
+      let start = current ? current.end : baseTime;
+      let end = next ? next.start : start + 3;
+      if (!Number.isFinite(start)) start = 0;
+      if (!Number.isFinite(end) || end <= start) end = start + 3;
+      if (duration > 0) {
+        start = Math.min(start, Math.max(0, duration - 0.01));
+        end = Math.min(end, duration);
+      }
+      const row = {
+        start: Number(formatSeconds(start)),
+        end: Number(formatSeconds(Math.max(end, start + 0.01))),
+        text: "",
+        uncertain: "",
+        source: "manual",
+      };
+      state.lyrics.splice(index >= 0 ? index + 1 : state.lyrics.length, 0, row);
+      sortLyrics();
+      markLyricsDirty("Unsaved changes: row added");
+      renderLyricsEditor();
+      const newIndex = state.lyrics.indexOf(row);
+      const editor = document.querySelector(`.lyric-text[data-lyric-index="${newIndex}"]`);
+      editor?.focus();
+    }
+    function deleteLyric(index) {
+      if (!state.lyrics[index]) return;
+      state.lyrics.splice(index, 1);
+      markLyricsDirty("Unsaved changes: row deleted");
+      renderLyricsEditor();
+    }
+    function splitLyricForDisplay(text, maxChars = 16) {
+      const clean = `${text}`.replace(/\s+/g, " ").trim();
+      if (clean.length <= maxChars) return clean;
+      const breakpoints = [];
+      for (let i = 1; i < clean.length; i++) if (clean[i] === " ") breakpoints.push(i);
+      const target = clean.length / 2;
+      const splitAt = breakpoints.length
+        ? breakpoints.reduce((best, point) => Math.abs(point - target) < Math.abs(best - target) ? point : best, breakpoints[0])
+        : Math.round(target);
+      const first = clean.slice(0, splitAt).trim();
+      const second = clean.slice(splitAt).trim();
+      return `${first}\n${second}`;
+    }
+    function formatTime(value) {
+      if (!Number.isFinite(value) || value <= 0) return "0:00";
+      const minutes = Math.floor(value / 60);
+      const seconds = Math.floor(value % 60).toString().padStart(2, "0");
+      return `${minutes}:${seconds}`;
+    }
+    function updateSeekUi(time = audio.currentTime, duration = audio.duration) {
+      const safeTime = Number.isFinite(time) ? time : 0;
+      const safeDuration = Number.isFinite(duration) ? duration : 0;
+      if (safeDuration > 0) lyricSeek.max = `${safeDuration}`;
+      if (!state.scrubbing) lyricSeek.value = `${safeTime}`;
+      timeCurrent.textContent = formatTime(safeTime);
+      timeTotal.textContent = formatTime(safeDuration);
+    }
+    function previewSeekTime(time, force = true) {
+      updateSeekUi(time);
+      renderActiveLyric(time, force);
+    }
+    function pickNextTrack() {
+      const tracks = state.filteredTracks || [];
+      if (!tracks.length) return null;
+      if (state.shuffle && tracks.length > 1) {
+        const candidates = tracks.filter((track) => track.id !== state.selected?.id);
+        return candidates[Math.floor(Math.random() * candidates.length)];
+      }
+      const index = tracks.findIndex((track) => track.id === state.selected?.id);
+      const nextIndex = index + 1;
+      if (nextIndex < tracks.length) return tracks[nextIndex];
+      return state.loop ? tracks[0] : null;
+    }
+    function playNextTrack() {
+      const next = pickNextTrack();
+      if (next) selectTrack(next, { autoplay: true });
+      return Boolean(next);
+    }
+    function toggleCoverPlayback() {
+      if (!state.selected) return;
+      if (audio.paused) void audio.play().catch(() => {});
+      else audio.pause();
+    }
+    audio.ontimeupdate = (event) => {
+      if (state.scrubbing) return;
+      const time = event.currentTarget.currentTime;
+      updateSeekUi(time);
+      renderActiveLyric(time);
+    };
+    audio.onseeking = (event) => {
+      previewSeekTime(event.currentTarget.currentTime);
+    };
+    audio.onseeked = (event) => {
+      previewSeekTime(event.currentTarget.currentTime);
+    };
+    audio.onloadedmetadata = (event) => {
+      updateSeekUi(event.currentTarget.currentTime, event.currentTarget.duration);
+      renderActiveLyric(event.currentTarget.currentTime, true);
+    };
+    audio.ondurationchange = (event) => {
+      updateSeekUi(event.currentTarget.currentTime, event.currentTarget.duration);
+    };
+    audio.onended = () => {
+      state.scrubbing = false;
+      updateSeekUi(audio.duration || 0);
+      if (state.autoNext && playNextTrack()) return;
+      document.getElementById("lyric-current").textContent = "-";
+      document.getElementById("lyric-next").textContent = "";
+      document.getElementById("lyric-current").classList.remove("upcoming");
+      document.querySelectorAll(".lyric-row.active").forEach((row) => row.classList.remove("active"));
+    };
+    lyricSeek.onpointerdown = () => {
+      state.scrubbing = true;
+    };
+    lyricSeek.oninput = (event) => {
+      state.scrubbing = true;
+      previewSeekTime(Number.parseFloat(event.currentTarget.value));
+    };
+    function commitSeek(value = lyricSeek.value) {
+      const time = Number.parseFloat(value);
+      if (Number.isFinite(time)) audio.currentTime = time;
+      state.scrubbing = false;
+      previewSeekTime(Number.isFinite(time) ? time : audio.currentTime);
+    }
+    lyricSeek.onchange = (event) => {
+      commitSeek(event.currentTarget.value);
+    };
+    lyricSeek.onpointerup = () => {
+      commitSeek();
+    };
+    document.getElementById("lyrics").onclick = (event) => {
+      const actionButton = event.target.closest("[data-lyric-action]");
+      if (!actionButton) return;
+      const row = actionButton.closest(".lyric-row");
+      if (!row) return;
+      const index = Number.parseInt(row.dataset.lyricIndex || "-1", 10);
+      const action = actionButton.dataset.lyricAction;
+      if (action === "add") {
+        addLyricAfter(index);
+        return;
+      }
+      if (action === "delete") {
+        deleteLyric(index);
+        return;
+      }
+      const lyric = state.lyrics[index];
+      if (!lyric) return;
+      audio.currentTime = lyric.start;
+      state.scrubbing = false;
+      previewSeekTime(lyric.start);
+    };
+    document.getElementById("lyrics").oninput = (event) => {
+      const editor = event.target.closest(".lyric-text");
+      if (!editor) return;
+      const index = Number.parseInt(editor.dataset.lyricIndex || "-1", 10);
+      if (!state.lyrics[index]) return;
+      state.lyrics[index].text = editor.value;
+      resizeTextarea(editor);
+      markLyricsDirty();
+      renderActiveLyric(audio.currentTime || 0, true);
+    };
+    document.getElementById("lyrics").onchange = (event) => {
+      const input = event.target.closest(".lyric-time");
+      if (!input) return;
+      const index = Number.parseInt(input.dataset.lyricIndex || "-1", 10);
+      const lyric = state.lyrics[index];
+      if (!lyric) return;
+      if (input.classList.contains("lyric-start")) {
+        lyric.start = readTimeInput(input, lyric.start);
+        if (lyric.end <= lyric.start) lyric.end = lyric.start + 0.01;
+      } else {
+        lyric.end = Math.max(readTimeInput(input, lyric.end), lyric.start + 0.01);
+      }
+      lyric.start = Number(formatSeconds(lyric.start));
+      lyric.end = Number(formatSeconds(lyric.end));
+      sortLyrics();
+      markLyricsDirty("Unsaved changes: timing adjusted");
+      renderLyricsEditor();
+    };
+    document.getElementById("add-lyric-row").onclick = () => {
+      addLyricAfter(state.activeLyricIndex);
+    };
+    document.getElementById("lyrics-checked").onchange = (event) => {
+      state.lyricsChecked = event.currentTarget.checked;
+      markLyricsDirty("Unsaved changes: lyrics check updated");
+    };
+    document.querySelector(".cover-stage").onclick = toggleCoverPlayback;
+    document.getElementById("cover-zoom").onclick = (event) => {
+      event.stopPropagation();
+      document.getElementById("cover-dialog").showModal();
+    };
+    document.getElementById("cover-close").onclick = () => {
+      document.getElementById("cover-dialog").close();
+    };
+    document.getElementById("next-track").onclick = () => {
+      playNextTrack();
+    };
+    autoNextButton.onclick = () => {
+      state.autoNext = !state.autoNext;
+      updateModeButtons();
+    };
+    loopButton.onclick = () => {
+      state.loop = !state.loop;
+      updateModeButtons();
+    };
+    shuffleButton.onclick = () => {
+      state.shuffle = !state.shuffle;
+      updateModeButtons();
+    };
+    async function copyText(text) {
+      if (navigator.clipboard?.writeText && window.isSecureContext) {
+        await Promise.race([
+          navigator.clipboard.writeText(text),
+          new Promise((_, reject) => setTimeout(() => reject(new Error("clipboard timeout")), 600)),
+        ]);
+        return true;
+      }
+      const helper = document.createElement("textarea");
+      helper.value = text;
+      helper.style.position = "fixed";
+      helper.style.left = "-9999px";
+      document.body.appendChild(helper);
+      helper.focus();
+      helper.select();
+      const copied = document.execCommand("copy");
+      helper.remove();
+      return copied;
+    }
+    document.getElementById("copy-delete-command").onclick = async () => {
+      if (!state.selected) return;
+      const id = state.metadata?.id || state.selected.id;
+      const command = `Set-Location -LiteralPath ${quotePowerShell(projectRoot)}; vp run vocalmp4:unregister -- ${id}`;
+      if (location.protocol === "file:") {
+        deleteStatus.textContent = "Direct delete requires vp dev.";
+        return;
+      }
+      if (!state.deleteArmed) {
+        state.deleteArmed = true;
+        deleteButton.textContent = "Delete selected";
+        deleteStatus.textContent = `Armed: ${id}`;
+        return;
+      }
+      try {
+        const response = await fetch("/__devtools/vocalmp4/unregister", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ id }),
+        });
+        const result = await response.json();
+        if (!response.ok || !result.ok) throw new Error(result.error || "delete failed");
+        deleteStatus.textContent = `Deleted ${id}. Removed ${result.removed?.length || 0} files.`;
+        deleteButton.textContent = "Arm delete";
+        state.deleteArmed = false;
+        catalog.tracks = (catalog.tracks || []).filter((track) => track.id !== id);
+        state.selected = null;
+        document.getElementById("detail").hidden = true;
+        document.getElementById("empty").hidden = false;
+        filter();
+      } catch (error) {
+        state.deleteArmed = false;
+        deleteButton.textContent = "Arm delete";
+        deleteStatus.textContent = `Delete failed: ${error instanceof Error ? error.message : command}`;
+      }
+    };
+    document.getElementById("save-lyrics").onclick = async () => {
+      if (!state.selected || !state.lyricsFile) return;
+      if (location.protocol === "file:") {
+        lyricsStatus.textContent = "Save requires vp dev.";
+        return;
+      }
+      try {
+        const response = await fetch("/__devtools/vocalmp4/lyrics", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            file: state.lyricsFile,
+            rows: state.lyrics.map((lyric) => ({
+              start: lyric.start,
+              end: lyric.end,
+              text: lyric.text,
+              uncertain: lyric.uncertain || "",
+              source: lyric.source || "",
+              checked: state.lyricsChecked ? "1" : "",
+            })),
+          }),
+        });
+        const result = await response.json();
+        if (!response.ok || !result.ok) throw new Error(result.error || "save failed");
+        state.dirty = false;
+        lyricsStatus.textContent = `Saved ${result.rows} rows.`;
+        if (window.vocalMp4LyricsById && state.selected?.id) {
+          window.vocalMp4LyricsById[state.selected.id] = state.lyrics.map((lyric) => ({
+            start: lyric.start,
+            end: lyric.end,
+            text: lyric.text,
+            uncertain: lyric.uncertain || "",
+            source: lyric.source || "",
+            checked: state.lyricsChecked ? "1" : "",
+          }));
+          filter();
+        }
+      } catch (error) {
+        lyricsStatus.textContent = `Save failed: ${error instanceof Error ? error.message : "unknown error"}`;
+      }
+    };
+    document.getElementById("search").oninput = filter;
+    document.getElementById("sort").onchange = filter;
+    for (const select of Object.values(selects)) select.onchange = filter;
+    updateModeButtons();
+    filter();
+    const initialId = new URLSearchParams(location.search).get("id");
+    const initialTrack = initialId && (catalog.tracks || []).find((track) => track.id === initialId);
+    if (initialTrack) selectTrack(initialTrack, { autoplay: true });
+  </script>
+</body>
+</html>

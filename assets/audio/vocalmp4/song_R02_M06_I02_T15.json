@@ -1,0 +1,108 @@
+{
+  "id": "song_R02_M06_I02_T15",
+  "title": "すいかの風、君の影",
+  "plannedClassification": {
+    "requestId": "R02",
+    "moodId": "M06",
+    "instrumentId": "I02",
+    "themeId": "T15"
+  },
+  "confirmedClassification": null,
+  "genreTags": [],
+  "sourceFile": "assets_src/audio/vocalmp4/song_R02_M06_I02_T15すいかの風、君の影.mp4",
+  "audioFile": "song_R02_M06_I02_T15.mp3",
+  "coverFile": "song_R02_M06_I02_T15.webp",
+  "lyricsFile": "song_R02_M06_I02_T15.lyrics.csv",
+  "rawLyricsFile": "song_R02_M06_I02_T15.lyrics.raw.csv",
+  "vocalLyricsFile": "song_R02_M06_I02_T15.lyrics.vocal.csv",
+  "notesFile": "song_R02_M06_I02_T15.notes.csv",
+  "energyFile": "song_R02_M06_I02_T15.energy.csv",
+  "prompt": "",
+  "durationSec": 89.54,
+  "audio": {
+    "codec": "mp3",
+    "bitrate": 180324,
+    "sampleRate": 44100,
+    "channels": 2
+  },
+  "cover": {
+    "frameSec": 2,
+    "width": 1024,
+    "height": 1024
+  },
+  "analysis": {
+    "bpm": null,
+    "beatsFile": "",
+    "energyFile": "song_R02_M06_I02_T15.energy.csv",
+    "highlightSections": [
+      {
+        "start": 1.1,
+        "end": 2.6
+      },
+      {
+        "start": 2.1,
+        "end": 3.6
+      },
+      {
+        "start": 2.9,
+        "end": 4.4
+      },
+      {
+        "start": 3.8,
+        "end": 5.3
+      },
+      {
+        "start": 4.4,
+        "end": 5.9
+      },
+      {
+        "start": 5.4,
+        "end": 6.9
+      },
+      {
+        "start": 6.1,
+        "end": 7.6
+      },
+      {
+        "start": 7.1,
+        "end": 8.6
+      }
+    ],
+    "silenceSections": []
+  },
+  "transcription": {
+    "language": "ja",
+    "model": "large-v3-turbo",
+    "usedVocalSeparation": true,
+    "mergedStrategy": "vocal_text_with_raw_timing_and_raw_rescue",
+    "rawLyricsFile": "song_R02_M06_I02_T15.lyrics.raw.csv",
+    "vocalLyricsFile": "song_R02_M06_I02_T15.lyrics.vocal.csv",
+    "notes": [
+      "Raw transcription segment count: 10",
+      "Separated vocal transcription segment count: 18",
+      "Raw hallucinated check: False",
+      "Vocal hallucinated check: False",
+      "Cleaned up hallucinated raw segment at 89.06s: 'ご視聴ありがとうございました'",
+      "Cleaned up hallucinated vocal segment at 86.28s: 'ご視聴ありがとうございました'",
+      "Using separated vocal text with raw timing reconciliation.",
+      "Discrepancy at 12.94s: Vocal='くすぐ歌い いたずら飛び出す' vs Raw='スイカの香り'",
+      "Discrepancy at 16.56s: Vocal='君の影 追い出す' vs Raw='スイカの香り'",
+      "Discrepancy at 19.52s: Vocal='聞いて くるくる' vs Raw='スイカの香り'",
+      "Discrepancy at 22.64s: Vocal='魔法の種をくる' vs Raw='スイカの香り'",
+      "Discrepancy at 26.06s: Vocal='魔法の種をまいて' vs Raw='スイカの香り'",
+      "Discrepancy at 49.22s: Vocal='くすぐ歌い風が吹く' vs Raw='くすぐうたい風が吹く'"
+    ]
+  },
+  "noteGeneration": {
+    "automatic": true,
+    "generator": "scripts/generate-notes.js",
+    "status": "generated",
+    "notesFile": "song_R02_M06_I02_T15.notes.csv",
+    "difficultyCounts": {
+      "easy": 45,
+      "normal": 70,
+      "hard": 84
+    }
+  },
+  "status": "auto_raw"
+}

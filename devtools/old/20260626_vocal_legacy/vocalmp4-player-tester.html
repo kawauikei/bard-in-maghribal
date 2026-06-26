@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bard in Maghribal - VocalMP4 Tester</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #090d16;
+            --bg-card: #111827;
+            --primary: #38bdf8;
+            --primary-hover: #0ea5e9;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border: #374151;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--bg-body);
+            color: var(--text-main);
+            font-family: 'Inter','Noto Sans JP',sans-serif;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        h1 {
+            color: var(--primary);
+            margin-bottom: 2rem;
+            font-weight: 700;
+            font-size: 2rem;
+            text-align: center;
+        }
+        .back-link {
+            align-self: flex-start;
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+        .back-link:hover {
+            color: var(--primary);
+        }
+        .player-container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+        .selector-group {
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .selector-group label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        select {
+            background: var(--bg-body);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-size: 1rem;
+            outline: none;
+            cursor: pointer;
+            width: 100%;
+        }
+        select:focus {
+            border-color: var(--primary);
+        }
+        .cover-area {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background: #030712;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .cover-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            opacity: 1.0;
+            transition: opacity 0.3s;
+            display: none;
+        }
+        .lyrics-text {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            padding: 0 1.5rem;
+            text-align: center;
+            font-size: 1.35rem;
+            font-weight: 700;
+            line-height: 1.5;
+            color: #ffffff;
+            /* Black stroke outline style */
+            text-shadow: 
+                -2px -2px 0 #000,  
+                 2px -2px 0 #000,
+                -2px  2px 0 #000,
+                 2px  2px 0 #000,
+                -2px  0px 0 #000,
+                 2px  0px 0 #000,
+                 0px -2px 0 #000,
+                 0px  2px 0 #000,
+                 0 4px 8px rgba(0,0,0,0.8);
+            transition: color 0.15s ease;
+            pointer-events: none;
+        }
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .timeline {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-family: monospace;
+        }
+        input[type="range"] {
+            flex: 1;
+            height: 6px;
+            accent-color: var(--primary);
+            background: #1f2937;
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+        }
+        .btn-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+        .play-btn {
+            background: var(--primary);
+            color: #030712;
+            border: none;
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, background-color 0.2s;
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+        }
+        .play-btn:hover:not(:disabled) {
+            background: var(--primary-hover);
+            transform: scale(1.05);
+        }
+        .play-btn:active {
+            transform: scale(0.95);
+        }
+        .play-btn:disabled {
+            background: #374151;
+            color: #9ca3af;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .volume-control input[type="range"] {
+            width: 90px;
+        }
+        .metadata-panel {
+            margin-top: 1.5rem;
+            background: #030712;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: none;
+        }
+        .metadata-row {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed #1f2937;
+            padding: 0.35rem 0;
+        }
+        .metadata-row:last-child {
+            border: none;
+        }
+        .metadata-val {
+            color: var(--text-main);
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">← DevTools インデックスへ戻る</a>
+    <h1>🎵 VocalMP4 変換アセットテスター</h1>
+
+    <div class="player-container">
+        <div class="selector-group">
+            <label for="song-selector">再生する楽曲</label>
+            <select id="song-selector">
+                <option value="">-- 曲を読み込み中... --</option>
+            </select>
+        </div>
+
+        <div class="cover-area">
+            <img id="cover-img" class="cover-image" src="" alt="Jacket Cover">
+            <div id="lyrics-txt" class="lyrics-text">曲を選択してください</div>
+        </div>
+
+        <div class="controls">
+            <audio id="audio-player"></audio>
+            
+            <div class="timeline">
+                <span id="current-time">0:00</span>
+                <input type="range" id="seekbar" min="0" max="100" value="0" step="0.1">
+                <span id="total-time">0:00</span>
+            </div>
+
+            <div class="btn-row">
+                <button id="play-btn" class="play-btn" disabled>▶</button>
+                
+                <div class="volume-control">
+                    <span>🔊</span>
+                    <input type="range" id="volume" min="0" max="1" value="0.8" step="0.05">
+                </div>
+            </div>
+        </div>
+
+        <div id="meta-panel" class="metadata-panel">
+            <div class="metadata-row">
+                <span>楽曲ID</span>
+                <span id="meta-id" class="metadata-val">-</span>
+            </div>
+            <div class="metadata-row">
+                <span>演奏時間</span>
+                <span id="meta-dur" class="metadata-val">-</span>
+            </div>
+            <div class="metadata-row">
+                <span>ジャケット抽出時点</span>
+                <span id="meta-cover-sec" class="metadata-val">-</span>
+            </div>
+            <div class="metadata-row">
+                <span>ボーカル分離有無</span>
+                <span id="meta-sep" class="metadata-val">-</span>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        const songSelector = document.getElementById('song-selector');
+        const audio = document.getElementById('audio-player');
+        const coverImg = document.getElementById('cover-img');
+        const lyricsTxt = document.getElementById('lyrics-txt');
+        const playBtn = document.getElementById('play-btn');
+        const seekbar = document.getElementById('seekbar');
+        const volumeRange = document.getElementById('volume');
+        const currentTimeSpan = document.getElementById('current-time');
+        const totalTimeSpan = document.getElementById('total-time');
+
+        // Metadata panel elements
+        const metaPanel = document.getElementById('meta-panel');
+        const metaId = document.getElementById('meta-id');
+        const metaDur = document.getElementById('meta-dur');
+        const metaCoverSec = document.getElementById('meta-cover-sec');
+        const metaSep = document.getElementById('meta-sep');
+
+        let currentLyrics = [];
+
+        // catalog.json から曲リストを動的読み込み
+        async function loadCatalog() {
+            try {
+                const res = await fetch('/assets/audio/vocalmp4/catalog.json');
+                const data = await res.json();
+                const tracks = data.tracks || [];
+                songSelector.innerHTML = '<option value="">-- 曲を選択 --</option>';
+                tracks.forEach(t => {
+                    const opt = document.createElement('option');
+                    opt.value = t.id;
+                    opt.textContent = `${t.id}${t.title ? ': ' + t.title : ''}`;
+                    songSelector.appendChild(opt);
+                });
+                // URLパラメータ ?id=... で初期選択
+                const params = new URLSearchParams(location.search);
+                const initId = params.get('id');
+                if (initId) {
+                    songSelector.value = initId;
+                    if (songSelector.value) loadSong(initId);
+                }
+                if (tracks.length === 0) {
+                    lyricsTxt.textContent = '台帳に楽曲がありません';
+                }
+            } catch (e) {
+                console.warn('catalog.json の読み込みに失敗:', e);
+                // フォールバック: 既知の1曲をセット
+                songSelector.innerHTML = '<option value="">-- 曲を選択 --</option><option value="song_101_211_321">song_101_211_321: 星をなぞる指先</option>';
+            }
+        }
+
+        function formatTime(secs) {
+            if (isNaN(secs)) return "0:00";
+            const m = Math.floor(secs / 60);
+            const s = Math.floor(secs % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        async function loadSong(songId) {
+            if (!songId) {
+                audio.src = '';
+                coverImg.style.display = 'none';
+                lyricsTxt.textContent = '曲を選択してください';
+                playBtn.disabled = true;
+                playBtn.textContent = '▶';
+                metaPanel.style.display = 'none';
+                currentLyrics = [];
+                return;
+            }
+
+            try {
+                const res = await fetch(`/assets/audio/vocalmp4/${songId}.json`);
+                if (!res.ok) throw new Error('Metadata JSON not found');
+                const data = await res.json();
+
+                audio.src = `/assets/audio/vocalmp4/${data.audioFile}`;
+                coverImg.src = `/assets/audio/vocalmp4/${data.coverFile}`;
+                coverImg.style.display = 'block';
+                coverImg.style.opacity = '1.0';
+
+                currentLyrics = data.lyrics || [];
+                lyricsTxt.textContent = data.title;
+                
+                playBtn.disabled = false;
+                playBtn.textContent = '▶';
+
+                // Fill metadata panel
+                metaId.textContent = data.id;
+                metaDur.textContent = `${data.durationSec} 秒`;
+                metaCoverSec.textContent = `${data.coverFrameSec} 秒`;
+                metaSep.textContent = data.transcription.usedVocalSeparation ? "実行 (Demucs)" : "不実行/失敗";
+                metaPanel.style.display = 'block';
+            } catch (err) {
+                console.error(err);
+                lyricsTxt.textContent = 'データのロードに失敗しました。';
+                playBtn.disabled = true;
+            }
+        }
+
+        songSelector.addEventListener('change', (e) => {
+            loadSong(e.target.value);
+        });
+
+        playBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                playBtn.textContent = '⏸';
+            } else {
+                audio.pause();
+                playBtn.textContent = '▶';
+            }
+        });
+
+        audio.addEventListener('timeupdate', () => {
+            const cur = audio.currentTime;
+            currentTimeSpan.textContent = formatTime(cur);
+            if (audio.duration) {
+                seekbar.value = (cur / audio.duration) * 100;
+            }
+
+            // Sync lyrics: offset current playback time by +0.5s to show lyrics 0.5 seconds early
+            const offsetTime = cur + 0.5;
+            const active = currentLyrics.find(line => offsetTime >= line.start && offsetTime <= line.end);
+            if (active) {
+                lyricsTxt.textContent = active.text;
+            } else if (currentLyrics.length > 0) {
+                lyricsTxt.textContent = '';
+            }
+        });
+
+        audio.addEventListener('loadedmetadata', () => {
+            totalTimeSpan.textContent = formatTime(audio.duration);
+        });
+
+        seekbar.addEventListener('input', () => {
+            if (audio.duration) {
+                audio.currentTime = (seekbar.value / 100) * audio.duration;
+            }
+        });
+
+        volumeRange.addEventListener('input', () => {
+            audio.volume = volumeRange.value;
+        });
+
+        audio.addEventListener('ended', () => {
+            playBtn.textContent = '▶';
+            seekbar.value = 0;
+            currentTimeSpan.textContent = "0:00";
+        });
+
+        // 初期化
+        loadCatalog();
+    </script>
+</body>
+</html>

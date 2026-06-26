@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bard in Maghribal - VocalMP4 管理ツール</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #07111f;
+            --bg-card: #0f1e30;
+            --bg-input: #071020;
+            --primary: #38bdf8;
+            --primary-glow: rgba(56, 189, 248, 0.15);
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --text: #e2e8f0;
+            --text-muted: #64748b;
+            --border: #1e3a5f;
+            --brave: #f97316;
+            --elegant: #a855f7;
+            --mystic: #06b6d4;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--bg-body);
+            color: var(--text);
+            font-family: 'Inter','Noto Sans JP',sans-serif;
+            min-height: 100vh;
+        }
+        header {
+            background: linear-gradient(135deg, #0a1628 0%, #0f2340 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        header a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+        header a:hover { color: var(--primary); }
+        header h1 { font-size: 1.4rem; color: var(--primary); font-weight: 700; }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-card);
+            padding: 0 2rem;
+        }
+        .tab {
+            padding: 0.9rem 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        .tab:hover { color: var(--text); }
+        .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+        .tab-content { display: none; padding: 2rem; max-width: 1000px; margin: 0 auto; }
+        .tab-content.active { display: block; }
+
+        /* ─── カード ─── */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* ─── 分布バー ─── */
+        .dist-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
+        .dist-item { text-align: center; }
+        .dist-label { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.4rem; }
+        .dist-bar-wrap { background: #0a1525; border-radius: 6px; height: 10px; overflow: hidden; }
+        .dist-bar { height: 100%; border-radius: 6px; transition: width 0.5s ease; }
+        .dist-count { font-size: 1.1rem; font-weight: 700; margin-top: 0.3rem; }
+        .attr-brave    { --c: var(--brave); }
+        .attr-elegant  { --c: var(--elegant); }
+        .attr-mystic   { --c: var(--mystic); }
+        .dist-bar { background: var(--c, var(--primary)); }
+        .dist-count { color: var(--c, var(--primary)); }
+
+        /* ─── 候補カード ─── */
+        .candidate-box {
+            background: linear-gradient(135deg, #0a1a2e, #0f2344);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+        .candidate-box.visible { display: block; }
+        .candidate-id {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            font-family: monospace;
+            margin-bottom: 0.5rem;
+        }
+        .candidate-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .meta-chip {
+            background: #0a1525;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.4rem 0.75rem;
+            font-size: 0.8rem;
+        }
+        .meta-chip span { color: var(--text-muted); }
+
+        /* ─── プロンプトボックス ─── */
+        .prompt-box {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: monospace;
+            font-size: 0.82rem;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            max-height: 320px;
+            overflow-y: auto;
+            color: #a5f3fc;
+        }
+
+        /* ─── ボタン ─── */
+        .btn {
+            padding: 0.6rem 1.4rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        .btn-primary { background: var(--primary); color: #030c1a; }
+        .btn-primary:hover { background: #0ea5e9; transform: translateY(-1px); }
+        .btn-sm { padding: 0.4rem 0.9rem; font-size: 0.8rem; }
+        .btn-copy { background: #1e3a5f; color: var(--text); }
+        .btn-copy:hover { background: #265580; }
+        .btn-success { background: var(--success); color: #030c1a; }
+        .btn-row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem; }
+
+        /* ─── フィルタ ─── */
+        .filter-row { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        select, input[type="number"] {
+            background: var(--bg-input);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.85rem;
+            font-family: inherit;
+        }
+        select:focus, input[type="number"]:focus { border-color: var(--primary); outline: none; }
+
+        /* ─── 台帳テーブル ─── */
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        th {
+            text-align: left;
+            padding: 0.6rem 0.75rem;
+            background: #0a1525;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--border);
+        }
+        td { padding: 0.6rem 0.75rem; border-bottom: 1px solid #0f1e30; }
+        tr:hover td { background: #0a1a2e; }
+        .badge {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+        .badge-brave    { background: rgba(249,115,22,0.15); color: var(--brave); }
+        .badge-elegant  { background: rgba(168,85,247,0.15); color: var(--elegant); }
+        .badge-mystic   { background: rgba(6,182,212,0.15); color: var(--mystic); }
+        .badge-active   { background: rgba(16,185,129,0.15); color: var(--success); }
+
+        .no-data { color: var(--text-muted); text-align: center; padding: 3rem; font-size: 0.9rem; }
+
+        /* ─── コマンドパネル ─── */
+        .cmd-box {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #86efac;
+        }
+        .step { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem; }
+        .step-num {
+            background: var(--primary);
+            color: #030c1a;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .step-body h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.4rem; }
+        .step-body p { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem; }
+
+        /* ─── ローディング ─── */
+        .loading { color: var(--text-muted); font-size: 0.85rem; padding: 1rem 0; }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html">← DevTools インデックスへ</a>
+        <h1>🎛 VocalMP4 楽曲管理ツール</h1>
+    </header>
+
+    <div class="tabs">
+        <div class="tab active" data-tab="pick">🎲 候補抽選</div>
+        <div class="tab" data-tab="flow">📋 変換フロー</div>
+        <div class="tab" data-tab="catalog">📚 台帳・分布</div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         タブ1: 候補抽選
+    ══════════════════════════════════════════════ -->
+    <div id="tab-pick" class="tab-content active">
+        <div class="card">
+            <div class="card-title">🎲 未生成スロットから候補を抽選</div>
+
+            <div class="filter-row">
+                <div>
+                    <label style="font-size:0.8rem;color:var(--text-muted);display:block;margin-bottom:0.3rem">属性フィルタ</label>
+                    <select id="attr-filter">
+                        <option value="">全属性</option>
+                        <option value="brave">勇猛 (brave)</option>
+                        <option value="elegant">優美 (elegant)</option>
+                        <option value="mystic">神秘 (mystic)</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="font-size:0.8rem;color:var(--text-muted);display:block;margin-bottom:0.3rem">面フィルタ</label>
+                    <select id="side-filter">
+                        <option value="">両面</option>
+                        <option value="surface">表面 (surface)</option>
+                        <option value="reverse">裏面 (reverse)</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="font-size:0.8rem;color:var(--text-muted);display:block;margin-bottom:0.3rem">Seed (空=ランダム)</label>
+                    <input type="number" id="seed-input" placeholder="例: 42" style="width:120px">
+                </div>
+            </div>
+
+            <button class="btn btn-primary" id="btn-pick">🎲 抽選する</button>
+        </div>
+
+        <!-- 候補結果 -->
+        <div class="candidate-box" id="candidate-box">
+            <div class="candidate-id" id="c-id">-</div>
+            <div class="candidate-meta">
+                <div class="meta-chip"><span>属性: </span><span id="c-attr">-</span></div>
+                <div class="meta-chip"><span>面: </span><span id="c-side">-</span></div>
+                <div class="meta-chip"><span>楽器: </span><span id="c-ins">-</span></div>
+                <div class="meta-chip"><span>曲調: </span><span id="c-sng">-</span></div>
+                <div class="meta-chip"><span>主題: </span><span id="c-thm">-</span></div>
+                <div class="meta-chip"><span>Seed: </span><span id="c-seed">-</span></div>
+            </div>
+            <div style="margin-bottom:0.5rem;font-size:0.8rem;color:var(--text-muted)">副題: <span id="c-sub" style="color:var(--text)">-</span></div>
+
+            <div style="font-size:0.85rem;font-weight:600;margin-bottom:0.5rem;color:var(--accent)">📋 Gemini/Lyria プロンプト</div>
+            <div class="prompt-box" id="prompt-box">-</div>
+            <div class="btn-row">
+                <button class="btn btn-copy" id="btn-copy-prompt">📋 プロンプトをコピー</button>
+                <button class="btn btn-sm" id="btn-reroll" style="background:#1e3a5f;color:var(--text)">🔄 再抽選</button>
+            </div>
+        </div>
+
+        <!-- 進捗サマリ -->
+        <div class="card">
+            <div class="card-title">📊 生成進捗</div>
+            <div class="loading" id="progress-loading">プール読み込み中...</div>
+            <div id="progress-body" style="display:none">
+                <div style="margin-bottom:1rem;font-size:0.9rem">
+                    <span id="gen-count">0</span>/<span id="total-count">0</span> 生成済み
+                    （未生成: <span id="pending-count">0</span>件）
+                </div>
+                <div class="dist-grid" id="dist-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         タブ2: 変換フロー
+    ══════════════════════════════════════════════ -->
+    <div id="tab-flow" class="tab-content">
+        <div class="card">
+            <div class="card-title">📋 MP4変換から登録までの手順</div>
+
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-body">
+                    <h3>「候補抽選」タブでプロンプトを取得</h3>
+                    <p>プロンプトをコピーしてGemini/Lyria 3で楽曲を生成してください。</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-body">
+                    <h3>採用MP4を格納</h3>
+                    <p>生成した楽曲のMP4ファイルを以下に配置してください（タイトルを末尾に付与）：</p>
+                    <div class="cmd-box" style="margin-top:0.5rem" id="mp4-dest-path">assets_src/audio/vocalmp4/song_xxx_xxx_xxx&lt;タイトル&gt;.mp4</div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-body">
+                    <h3>音声変換 + ジャケット + 歌詞生成</h3>
+                    <p>ターミナルで実行（台帳に自動登録）：</p>
+                    <div class="cmd-box" style="margin-top:0.5rem" id="convert-cmd">npm run vocalmp4:convert -- "assets_src/audio/vocalmp4/song_xxx_xxx_xxx&lt;タイトル&gt;.mp4" --register</div>
+                    <div class="btn-row"><button class="btn btn-copy btn-sm" onclick="copyCmd('convert-cmd')">📋 コピー</button></div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-num">4</div>
+                <div class="step-body">
+                    <h3>ノーツ生成</h3>
+                    <p>変換後のMP3からリズムゲーム用ノーツを自動生成：</p>
+                    <div class="cmd-box" style="margin-top:0.5rem" id="notes-cmd">node scripts/generate-notes.js public/assets/audio/vocalmp4/song_xxx_xxx_xxx.mp3</div>
+                    <div class="btn-row"><button class="btn btn-copy btn-sm" onclick="copyCmd('notes-cmd')">📋 コピー</button></div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-num">5</div>
+                <div class="step-body">
+                    <h3>再生確認</h3>
+                    <p>VocalMP4テスターで音源・ジャケット・歌詞を確認：</p>
+                    <a href="vocalmp4-player-tester.html" target="_blank" class="btn btn-primary btn-sm" style="display:inline-block;text-decoration:none">▶ Player Tester を開く</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 候補ID選択でコマンドを自動生成 -->
+        <div class="card">
+            <div class="card-title">⚡ コマンド生成</div>
+            <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem">候補IDからコマンドを自動生成します。タイトルは手入力してください。</p>
+            <div class="filter-row">
+                <div>
+                    <label style="font-size:0.8rem;color:var(--text-muted);display:block;margin-bottom:0.3rem">曲ID</label>
+                    <select id="cmd-song-id"></select>
+                </div>
+                <div>
+                    <label style="font-size:0.8rem;color:var(--text-muted);display:block;margin-bottom:0.3rem">タイトル（日本語）</label>
+                    <input type="text" id="cmd-title" placeholder="例: 星をなぞる指先" style="width:220px;padding:0.5rem 0.75rem;border-radius:6px;border:1px solid var(--border);background:var(--bg-input);color:var(--text);font-family:inherit">
+                </div>
+            </div>
+            <div class="cmd-box" id="generated-cmd" style="margin-top:0.5rem">IDとタイトルを入力してください</div>
+            <div class="btn-row"><button class="btn btn-copy btn-sm" onclick="copyCmd('generated-cmd')">📋 コピー</button></div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         タブ3: 台帳・分布
+    ══════════════════════════════════════════════ -->
+    <div id="tab-catalog" class="tab-content">
+        <div class="card">
+            <div class="card-title">📊 属性別分布</div>
+            <div class="loading" id="catalog-loading">台帳を読み込み中...</div>
+            <div id="catalog-dist" style="display:none" class="dist-grid"></div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">📚 生成済み楽曲台帳</div>
+            <div id="catalog-table-wrap">
+                <div class="loading">台帳を読み込み中...</div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // ══════════════════════════
+        // データ読み込み
+        // ══════════════════════════
+        let poolData = null;
+        let catalogData = null;
+
+        async function loadPool() {
+            const res = await fetch('/devtools/vocalmp4-pool.json');
+            poolData = await res.json();
+        }
+
+        async function loadCatalog() {
+            try {
+                const res = await fetch('/assets/audio/vocalmp4/catalog.json');
+                catalogData = await res.json();
+            } catch {
+                catalogData = { tracks: [] };
+            }
+        }
+
+        // ══════════════════════════
+        // タブ切替
+        // ══════════════════════════
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
+            });
+        });
+
+        // ══════════════════════════
+        // 乱数（mulberry32）
+        // ══════════════════════════
+        function createRng(seed) {
+            let s = seed >>> 0;
+            return () => {
+                s += 0x6d2b79f5;
+                let t = Math.imul(s ^ (s >>> 15), 1 | s);
+                t ^= t + Math.imul(t ^ (t >>> 7), 61 | t);
+                return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+            };
+        }
+
+        const SUBTHEME_POOL = [
+            ["夜明け前の静けさ","昼下がりの熱気","夕暮れの長い影","乾いた夜風","朝霧の向こう","月が高い時間","砂が冷える夕方","熱が残る部屋","風が止まる一瞬"],
+            ["細い路地の奥","白い屋根の上","市場の裏口","砂道の曲がり角","隊商宿の中庭","高い塔の窓","王宮の外廊","墓地の石段","森の入口"],
+            ["遠ざかる声","言えなかった言葉","忘れたふりの痛み","名前を呼ぶ声","溢れる涙","ひとりの朝","踏み出す足","曖昧な微笑み"],
+            ["月の光が差す","たいまつの揺れ","星が滲む夜","金色に輝く","灯台の光","逆光の影","燃える夕焼け"],
+            ["風の音が遠い","鈴の音が遠い","太鼓の響き","弦が震える瞬間","歓声が聞こえる","波音が混じる"],
+            ["砂が舞い上がる","風が頬を切る","足音が石畳に響く","汗ばむ掌","震える唇"],
+            ["古い地図の端","錆びた鍵","折れた矢","布に包まれた何か","割れた鏡"],
+            ["街道沿いの宿","見知らぬ港","砂漠の途中で","遠い故郷","峠の向こう"],
+            ["影が揺れる","誰かの気配","壁に残された傷","夢で見た景色","血の跡"],
+            ["剣を抜く瞬間","走り出す","振り返る","手を差し伸べる","扉を開ける"],
+            ["息を殺す","心拍が早い","崖の縁","最後の砦","決断の瞬間"],
+            ["石板に刻まれた文字","精霊が囁く","禁じられた扉","夢と現の境","失われた記憶"],
+        ];
+
+        function pickSubthemes(rng) {
+            const shuffled = [...SUBTHEME_POOL].sort(() => rng() - 0.5);
+            const selected = [];
+            const usedIdx = new Set();
+            for (let i = 0; i < shuffled.length && selected.length < 3; i++) {
+                const catIdx = SUBTHEME_POOL.indexOf(shuffled[i]);
+                if (!usedIdx.has(catIdx)) {
+                    usedIdx.add(catIdx);
+                    const items = shuffled[i];
+                    selected.push(items[Math.floor(rng() * items.length)]);
+                }
+            }
+            return selected;
+        }
+
+        // ══════════════════════════
+        // 抽選ロジック
+        // ══════════════════════════
+        let lastCandidate = null;
+
+        function doPick() {
+            if (!poolData) return;
+            const attr = document.getElementById('attr-filter').value;
+            const side = document.getElementById('side-filter').value;
+            const seedVal = document.getElementById('seed-input').value;
+            const seed = seedVal ? parseInt(seedVal) : Date.now();
+
+            // 生成済みIDセット
+            const generatedIds = new Set((catalogData?.tracks || []).map(t => t.id));
+
+            let pending = poolData.slots.filter(s => s.status === 'pending' && !generatedIds.has(s.id));
+            if (attr) pending = pending.filter(s => s.attr === attr);
+            if (side) pending = pending.filter(s => s.side === side);
+
+            if (!pending.length) {
+                alert('条件に合う未生成スロットがありません。');
+                return;
+            }
+
+            const rng = createRng(seed);
+            const slot = pending[Math.floor(rng() * pending.length)];
+            const ins   = poolData.codes.instrument[slot.ins];
+            const sng   = poolData.codes.song_type[slot.sng];
+            const thm   = poolData.codes.theme[slot.thm];
+            const subs  = pickSubthemes(rng);
+
+            const prompt = poolData.prompt_template
+                .replace('{id}', slot.id)
+                .replace('{instrument}', ins.name)
+                .replace('{song_type}', sng.name)
+                .replace('{theme}', thm.name)
+                .replace('{sub1}', subs[0] || '')
+                .replace('{sub2}', subs[1] || '')
+                .replace('{sub3}', subs[2] || '');
+
+            // 表示
+            document.getElementById('candidate-box').classList.add('visible');
+            document.getElementById('c-id').textContent = slot.id;
+            document.getElementById('c-attr').textContent = `${slot.attr}`;
+            document.getElementById('c-side').textContent = `${slot.side}`;
+            document.getElementById('c-ins').textContent = `${ins.name} (${slot.ins})`;
+            document.getElementById('c-sng').textContent = `${sng.name} (${slot.sng})`;
+            document.getElementById('c-thm').textContent = `${thm.name} (${slot.thm})`;
+            document.getElementById('c-seed').textContent = seed;
+            document.getElementById('c-sub').textContent = subs.join(' / ');
+            document.getElementById('prompt-box').textContent = prompt;
+            lastCandidate = { slot, prompt };
+
+            // フローパネルのコマンド更新
+            updateFlowCommands(slot.id, '');
+        }
+
+        document.getElementById('btn-pick').addEventListener('click', doPick);
+        document.getElementById('btn-reroll').addEventListener('click', () => {
+            document.getElementById('seed-input').value = '';
+            doPick();
+        });
+        document.getElementById('btn-copy-prompt').addEventListener('click', () => {
+            const txt = document.getElementById('prompt-box').textContent;
+            navigator.clipboard.writeText(txt).then(() => {
+                const btn = document.getElementById('btn-copy-prompt');
+                btn.textContent = '✅ コピー完了';
+                setTimeout(() => btn.textContent = '📋 プロンプトをコピー', 2000);
+            });
+        });
+
+        // ══════════════════════════
+        // 進捗バー
+        // ══════════════════════════
+        function renderProgress() {
+            if (!poolData) return;
+            const generatedIds = new Set((catalogData?.tracks || []).map(t => t.id));
+            const slots = poolData.slots;
+            const total = slots.length;
+            const gen = slots.filter(s => s.status === 'generated' || generatedIds.has(s.id)).length;
+            const pend = total - gen;
+
+            document.getElementById('gen-count').textContent = gen;
+            document.getElementById('total-count').textContent = total;
+            document.getElementById('pending-count').textContent = pend;
+
+            const attrs = ['brave', 'elegant', 'mystic'];
+            const labels = { brave: '勇猛', elegant: '優美', mystic: '神秘' };
+            const grid = document.getElementById('dist-grid');
+            grid.innerHTML = attrs.map(a => {
+                const total_a = slots.filter(s => s.attr === a).length;
+                const gen_a   = slots.filter(s => s.attr === a && (s.status === 'generated' || generatedIds.has(s.id))).length;
+                const pct     = total_a > 0 ? (gen_a / total_a * 100) : 0;
+                return `<div class="dist-item attr-${a}">
+                    <div class="dist-label">${labels[a]}</div>
+                    <div class="dist-bar-wrap"><div class="dist-bar" style="width:${pct}%"></div></div>
+                    <div class="dist-count">${gen_a}/${total_a}</div>
+                </div>`;
+            }).join('');
+
+            document.getElementById('progress-loading').style.display = 'none';
+            document.getElementById('progress-body').style.display = 'block';
+        }
+
+        // ══════════════════════════
+        // フローコマンド生成
+        // ══════════════════════════
+        function updateFlowCommands(id, title) {
+            const safeTitle = title || '<タイトル>';
+            document.getElementById('mp4-dest-path').textContent =
+                `assets_src/audio/vocalmp4/${id}${safeTitle}.mp4`;
+            document.getElementById('convert-cmd').textContent =
+                `npm run vocalmp4:convert -- "assets_src/audio/vocalmp4/${id}${safeTitle}.mp4" --register`;
+            document.getElementById('notes-cmd').textContent =
+                `node scripts/generate-notes.js public/assets/audio/vocalmp4/${id}.mp3`;
+        }
+
+        // コマンド生成パネル
+        function buildCmdSelect() {
+            if (!poolData) return;
+            const generatedIds = new Set((catalogData?.tracks || []).map(t => t.id));
+            const pending = poolData.slots.filter(s => s.status === 'pending' && !generatedIds.has(s.id));
+            const sel = document.getElementById('cmd-song-id');
+            sel.innerHTML = `<option value="">-- IDを選択 --</option>` +
+                pending.map(s => `<option value="${s.id}">${s.id} (${s.attr})</option>`).join('');
+        }
+
+        document.getElementById('cmd-song-id').addEventListener('change', () => {
+            const id = document.getElementById('cmd-song-id').value;
+            const title = document.getElementById('cmd-title').value.trim();
+            if (id) updateFlowCommands(id, title);
+        });
+        document.getElementById('cmd-title').addEventListener('input', () => {
+            const id = document.getElementById('cmd-song-id').value;
+            const title = document.getElementById('cmd-title').value.trim();
+            if (id) updateFlowCommands(id, title);
+        });
+
+        // ══════════════════════════
+        // 台帳テーブル
+        // ══════════════════════════
+        function renderCatalog() {
+            const tracks = catalogData?.tracks || [];
+            const wrap = document.getElementById('catalog-table-wrap');
+            document.getElementById('catalog-loading').style.display = 'none';
+
+            if (!tracks.length) {
+                wrap.innerHTML = '<p class="no-data">生成済みの楽曲がまだありません。</p>';
+                return;
+            }
+
+            const attrLabels = { brave: '勇猛', elegant: '優美', mystic: '神秘' };
+            wrap.innerHTML = `<table>
+                <thead><tr>
+                    <th>ID</th><th>タイトル</th><th>属性</th><th>面</th><th>時間</th><th>歌詞</th><th>確認</th>
+                </tr></thead>
+                <tbody>
+                ${tracks.map(t => `<tr>
+                    <td style="font-family:monospace;font-size:0.8rem">${t.id}</td>
+                    <td>${t.title || '-'}</td>
+                    <td><span class="badge badge-${t.attr}">${attrLabels[t.attr] || t.attr}</span></td>
+                    <td style="font-size:0.78rem;color:var(--text-muted)">${t.side || '-'}</td>
+                    <td style="font-size:0.8rem">${t.durationSec ? t.durationSec + 's' : '-'}</td>
+                    <td style="font-size:0.78rem;color:var(--text-muted)">${t.lyricsStatus || '-'}</td>
+                    <td><a href="vocalmp4-player-tester.html?id=${t.id}" target="_blank" style="color:var(--primary);font-size:0.8rem;text-decoration:none">▶ 再生</a></td>
+                </tr>`).join('')}
+                </tbody>
+            </table>`;
+
+            // 属性分布
+            const attrs = ['brave','elegant','mystic'];
+            const labels = {brave:'勇猛',elegant:'優美',mystic:'神秘'};
+            const totalSlots = poolData?.slots || [];
+            document.getElementById('catalog-dist').innerHTML = attrs.map(a => {
+                const total_a = totalSlots.filter(s => s.attr === a).length || 1;
+                const gen_a = tracks.filter(t => t.attr === a).length;
+                const pct = (gen_a / total_a * 100);
+                return `<div class="dist-item attr-${a}">
+                    <div class="dist-label">${labels[a]}</div>
+                    <div class="dist-bar-wrap"><div class="dist-bar" style="width:${pct}%"></div></div>
+                    <div class="dist-count">${gen_a}/${total_a}</div>
+                </div>`;
+            }).join('');
+            document.getElementById('catalog-loading').style.display = 'none';
+            document.getElementById('catalog-dist').style.display = 'grid';
+        }
+
+        // ══════════════════════════
+        // コピーユーティリティ
+        // ══════════════════════════
+        window.copyCmd = function(elId) {
+            const txt = document.getElementById(elId).textContent;
+            navigator.clipboard.writeText(txt).catch(() => {});
+        };
+
+        // ══════════════════════════
+        // 初期化
+        // ══════════════════════════
+        (async () => {
+            await Promise.all([loadPool(), loadCatalog()]);
+            renderProgress();
+            renderCatalog();
+            buildCmdSelect();
+        })();
+    </script>
+</body>
+</html>

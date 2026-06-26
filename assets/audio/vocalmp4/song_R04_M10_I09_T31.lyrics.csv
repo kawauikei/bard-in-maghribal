@@ -1,0 +1,14 @@
+start,end,text,uncertain,source
+9,15,星影 揺れる砂の海,1,raw_rescue
+15,21,こがねの月が見守る,1,raw_rescue
+21,25,千年過ぎた風の中,1,raw_rescue
+25,29,あなたの声が聞こえる,1,raw_rescue
+29,33.88,尖らし触れた指の先,1,vocal_text_raw_start
+33.88,38.86,いつかの約束ほどけて,0,vocal
+38.86,44,長い旅を終えて今,1,vocal_text_raw_start
+44,49.82,二人の時が巡り合う,0,vocal
+49,54.52,どこまでも続く空へ,0,vocal_text_raw_start
+54.52,56.88,手を伸ばして,0,vocal
+60,69,愛を誓い合う この愛は永遠,1,vocal
+65,75.8,この目に映る あなたの姿,0,vocal_text_raw_time
+79,83.24,空へと届ける,0,vocal_text_raw_time

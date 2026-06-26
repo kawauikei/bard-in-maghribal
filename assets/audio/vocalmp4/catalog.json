@@ -1,0 +1,526 @@
+{
+  "version": "2.0.0",
+  "updatedAt": "2026-06-26T23:44:16.874Z",
+  "tracks": [
+    {
+      "id": "song_R06_M05_I11_T50",
+      "title": "琥珀の空",
+      "status": "auto_raw",
+      "audioFile": "song_R06_M05_I11_T50.mp3",
+      "coverFile": "song_R06_M05_I11_T50.webp",
+      "notesFile": "song_R06_M05_I11_T50.notes.csv",
+      "lyricsFile": "song_R06_M05_I11_T50.lyrics.csv",
+      "energyFile": "song_R06_M05_I11_T50.energy.csv",
+      "durationSec": 90.12,
+      "plannedClassification": {
+        "requestId": "R06",
+        "moodId": "M05",
+        "instrumentId": "I11",
+        "themeId": "T50"
+      },
+      "confirmedClassification": null,
+      "genreTags": [],
+      "labels": {
+        "request": {
+          "id": "R06",
+          "name": "不思議な",
+          "description": "未知、幻、夢、異界感"
+        },
+        "mood": {
+          "id": "M05",
+          "name": "神秘的",
+          "description": "未知、幻想、宗教的、不可思議"
+        },
+        "instrument": {
+          "id": "I11",
+          "name": "シンセサイザー"
+        },
+        "theme": {
+          "id": "T50",
+          "name": "忘れられた神"
+        }
+      },
+      "generatedAt": "2026-06-26"
+    },
+    {
+      "id": "song_R04_M10_I09_T31",
+      "title": "千年の約束",
+      "status": "auto_raw",
+      "audioFile": "song_R04_M10_I09_T31.mp3",
+      "coverFile": "song_R04_M10_I09_T31.webp",
+      "notesFile": "song_R04_M10_I09_T31.notes.csv",
+      "lyricsFile": "song_R04_M10_I09_T31.lyrics.csv",
+      "energyFile": "song_R04_M10_I09_T31.energy.csv",
+      "durationSec": 87.84,
+      "plannedClassification": {
+        "requestId": "R04",
+        "moodId": "M10",
+        "instrumentId": "I09",
+        "themeId": "T31"
+      },
+      "confirmedClassification": null,
+      "genreTags": [],
+      "labels": {
+        "request": {
+          "id": "R04",
+          "name": "感動する",
+          "description": "別れ、記憶、祈り、胸を打つ展開"
+        },
+        "mood": {
+          "id": "M10",
+          "name": "壮大",
+          "description": "運命、集結、大規模、使命感"
+        },
+        "instrument": {
+          "id": "I09",
+          "name": "フルート"
+        },
+        "theme": {
+          "id": "T31",
+          "name": "千年越しの再会"
+        }
+      },
+      "generatedAt": "2026-06-26"
+    },
+    {
+      "id": "song_R01_M03_I01_T06",
+      "title": "星降る夜の市場",
+      "status": "auto_raw",
+      "audioFile": "song_R01_M03_I01_T06.mp3",
+      "coverFile": "song_R01_M03_I01_T06.webp",
+      "notesFile": "song_R01_M03_I01_T06.notes.csv",
+      "lyricsFile": "song_R01_M03_I01_T06.lyrics.csv",
+      "energyFile": "song_R01_M03_I01_T06.energy.csv",
+      "durationSec": 89.09,
+      "plannedClassification": {
+        "requestId": "R01",
+        "moodId": "M03",
+        "instrumentId": "I01",
+        "themeId": "T06"
+      },
+      "confirmedClassification": null,
+      "genreTags": [],
+      "labels": {
+        "request": {
+          "id": "R01",
+          "name": "盛り上がる",
+          "description": "勢い、勝利、祝祭、突破感"
+        },
+        "mood": {
+          "id": "M03",
+          "name": "華やか",
+          "description": "豪華、祝祭的、きらびやか"
+        },
+        "instrument": {
+          "id": "I01",
+          "name": "フレームドラム"
+        },
+        "theme": {
+          "id": "T06",
+          "name": "英雄の帰還"
+        }
+      },
+      "generatedAt": "2026-06-26"
+    },
+    {
+      "id": "song_R04_M04_I07_T31",
+      "title": "真珠の夜",
+      "status": "auto_raw",
+      "audioFile": "song_R04_M04_I07_T31.mp3",
+      "coverFile": "song_R04_M04_I07_T31.webp",
+      "notesFile": "song_R04_M04_I07_T31.notes.csv",
+      "lyricsFile": "song_R04_M04_I07_T31.lyrics.csv",
+      "energyFile": "song_R04_M04_I07_T31.energy.csv",
+      "durationSec": 89.98,
+      "plannedClassification": {
+        "requestId": "R04",
+        "moodId": "M04",
+        "instrumentId": "I07",
+        "themeId": "T31"
+      },
+      "confirmedClassification": null,
+      "genreTags": [],
+      "labels": {
+        "request": {
+          "id": "R04",
+          "name": "感動する",
+          "description": "別れ、記憶、祈り、胸を打つ展開"
+        },
+        "mood": {
+          "id": "M04",
+          "name": "切ない",
+          "description": "喪失、未練、孤独、静かな痛み"
+        },
+        "instrument": {
+          "id": "I07",
+          "name": "ヴァイオリン"
+        },
+        "theme": {
+          "id": "T31",
+          "name": "千年越しの再会"
+        }
+      },
+      "generatedAt": "2026-06-26"
+    },
+    {
+      "id": "song_R03_M05_I13_T21",
+      "title": "銀の鎧と月の砂漠",
+      "status": "auto_raw",
+      "audioFile": "song_R03_M05_I13_T21.mp3",
+      "coverFile": "song_R03_M05_I13_T21.webp",
+      "notesFile": "song_R03_M05_I13_T21.notes.csv",
+      "lyricsFile": "song_R03_M05_I13_T21.lyrics.csv",
+      "energyFile": "song_R03_M05_I13_T21.energy.csv",
+      "durationSec": 90.81,
+      "plannedClassification": {
+        "requestId": "R03",
+        "moodId": "M05",
+        "instrumentId": "I13",
+        "themeId": "T21"
+      },
+      "confirmedClassification": null,
+      "genreTags": [],
+      "labels": {
+        "request": {
+          "id": "R03",
+          "name": "落ち着いた",
+          "description": "静けさ、余韻、内省"
+        },
+        "mood": {
+          "id": "M05",
+          "name": "神秘的",
+          "description": "未知、幻想、宗教的、不可思議"
+        },
+        "instrument": {
+          "id": "I13",
+          "name": "ハンドパン"
+        },
+        "theme": {
+          "id": "T21",
+          "name": "眠れる王国"
+        }
+      },
+      "generatedAt": "2026-06-26"
+    },
+    {
+      "id": "song_R02_M09_I14_T16",
+      "title": "ももいろの朝",
+      "status": "auto_raw",
+      "audioFile": "song_R02_M09_I14_T16.mp3",
+      "coverFile": "song_R02_M09_I14_T16.webp",
+      "notesFile": "song_R02_M09_I14_T16.notes.csv",
+      "lyricsFile": "song_R02_M09_I14_T16.lyrics.csv",
+      "energyFile": "song_R02_M09_I14_T16.energy.csv",
+      "durationSec": 90.33,
+      "plannedClassification": {
+        "requestId": "R02",
+        "moodId": "M09",
+        "instrumentId": "I14",
+        "themeId": "T16"
+      },
+      "confirmedClassification": null,
+      "genreTags": [],
+      "labels": {
+        "request": {
+          "id": "R02",
+          "name": "明るい",
+          "description": "軽快、親しみ、日常の高揚"
+        },
+        "mood": {
+          "id": "M09",
+          "name": "可愛い",
+          "description": "愛らしい、弾む心、親しみやすい"
+        },
+        "instrument": {
+          "id": "I14",
+          "name": "琴"
+        },
+        "theme": {
+          "id": "T16",
+          "name": "春を呼ぶ歌"
+        }
+      },
+      "generatedAt": "2026-06-26"
+    },
+    {
+      "id": "song_R03_M05_I09_T21",
+      "title": "紫紺の月下の都",
+      "status": "auto_raw",
+      "audioFile": "song_R03_M05_I09_T21.mp3",
+      "coverFile": "song_R03_M05_I09_T21.webp",
+      "notesFile": "song_R03_M05_I09_T21.notes.csv",
+      "lyricsFile": "song_R03_M05_I09_T21.lyrics.csv",
+      "energyFile": "song_R03_M05_I09_T21.energy.csv",
+      "durationSec": 87.7,
+      "plannedClassification": {
+        "requestId": "R03",
+        "moodId": "M05",
+        "instrumentId": "I09",
+        "themeId": "T21"
+      },
+      "confirmedClassification": null,
+      "genreTags": [],
+      "labels": {
+        "request": {
+          "id": "R03",
+          "name": "落ち着いた",
+          "description": "静けさ、余韻、内省"
+        },
+        "mood": {
+          "id": "M05",
+          "name": "神秘的",
+          "description": "未知、幻想、宗教的、不可思議"
+        },
+        "instrument": {
+          "id": "I09",
+          "name": "フルート"
+        },
+        "theme": {
+          "id": "T21",
+          "name": "眠れる王国"
+        }
+      },
+      "generatedAt": "2026-06-26"
+    },
+    {
+      "id": "song_R02_M06_I02_T15",
+      "title": "すいかの風、君の影",
+      "status": "auto_raw",
+      "audioFile": "song_R02_M06_I02_T15.mp3",
+      "coverFile": "song_R02_M06_I02_T15.webp",
+      "notesFile": "song_R02_M06_I02_T15.notes.csv",
+      "lyricsFile": "song_R02_M06_I02_T15.lyrics.csv",
+      "energyFile": "song_R02_M06_I02_T15.energy.csv",
+      "durationSec": 89.54,
+      "plannedClassification": {
+        "requestId": "R02",
+        "moodId": "M06",
+        "instrumentId": "I02",
+        "themeId": "T15"
+      },
+      "confirmedClassification": null,
+      "genreTags": [],
+      "labels": {
+        "request": {
+          "id": "R02",
+          "name": "明るい",
+          "description": "軽快、親しみ、日常の高揚"
+        },
+        "mood": {
+          "id": "M06",
+          "name": "爽やか",
+          "description": "青空、風、開放感、軽快"
+        },
+        "instrument": {
+          "id": "I02",
+          "name": "ピアノ"
+        },
+        "theme": {
+          "id": "T15",
+          "name": "妖精のいたずら"
+        }
+      },
+      "generatedAt": "2026-06-26"
+    },
+    {
+      "id": "song_R04_M04_I02_T25",
+      "title": "さよならの温度",
+      "status": "auto_raw",
+      "audioFile": "song_R04_M04_I02_T25.mp3",
+      "coverFile": "song_R04_M04_I02_T25.webp",
+      "notesFile": "song_R04_M04_I02_T25.notes.csv",
+      "lyricsFile": "song_R04_M04_I02_T25.lyrics.csv",
+      "energyFile": "song_R04_M04_I02_T25.energy.csv",
+      "durationSec": 87.98,
+      "plannedClassification": {
+        "requestId": "R04",
+        "moodId": "M04",
+        "instrumentId": "I02",
+        "themeId": "T25"
+      },
+      "confirmedClassification": null,
+      "genreTags": [],
+      "labels": {
+        "request": {
+          "id": "R04",
+          "name": "感動する",
+          "description": "別れ、記憶、祈り、胸を打つ展開"
+        },
+        "mood": {
+          "id": "M04",
+          "name": "切ない",
+          "description": "喪失、未練、孤独、静かな痛み"
+        },
+        "instrument": {
+          "id": "I02",
+          "name": "ピアノ"
+        },
+        "theme": {
+          "id": "T25",
+          "name": "別れ"
+        }
+      },
+      "generatedAt": "2026-06-26"
+    },
+    {
+      "id": "song_R03_M05_I02_T23",
+      "title": "空わたる帆",
+      "status": "auto_raw",
+      "audioFile": "song_R03_M05_I02_T23.mp3",
+      "coverFile": "song_R03_M05_I02_T23.webp",
+      "notesFile": "song_R03_M05_I02_T23.notes.csv",
+      "lyricsFile": "song_R03_M05_I02_T23.lyrics.csv",
+      "energyFile": "song_R03_M05_I02_T23.energy.csv",
+      "durationSec": 88.65,
+      "plannedClassification": {
+        "requestId": "R03",
+        "moodId": "M05",
+        "instrumentId": "I02",
+        "themeId": "T23"
+      },
+      "confirmedClassification": null,
+      "genreTags": [],
+      "labels": {
+        "request": {
+          "id": "R03",
+          "name": "落ち着いた",
+          "description": "静けさ、余韻、内省"
+        },
+        "mood": {
+          "id": "M05",
+          "name": "神秘的",
+          "description": "未知、幻想、宗教的、不可思議"
+        },
+        "instrument": {
+          "id": "I02",
+          "name": "ピアノ"
+        },
+        "theme": {
+          "id": "T23",
+          "name": "精霊との対話"
+        }
+      },
+      "generatedAt": "2026-06-26"
+    },
+    {
+      "id": "song_R05_M01_I10_T39",
+      "title": "紫の王座",
+      "status": "auto_raw",
+      "audioFile": "song_R05_M01_I10_T39.mp3",
+      "coverFile": "song_R05_M01_I10_T39.webp",
+      "notesFile": "song_R05_M01_I10_T39.notes.csv",
+      "lyricsFile": "song_R05_M01_I10_T39.lyrics.csv",
+      "energyFile": "song_R05_M01_I10_T39.energy.csv",
+      "durationSec": 89.61,
+      "plannedClassification": {
+        "requestId": "R05",
+        "moodId": "M01",
+        "instrumentId": "I10",
+        "themeId": "T39"
+      },
+      "confirmedClassification": null,
+      "genreTags": [],
+      "labels": {
+        "request": {
+          "id": "R05",
+          "name": "格好いい",
+          "description": "鋭さ、疾走感、都会的な強さ"
+        },
+        "mood": {
+          "id": "M01",
+          "name": "クール",
+          "description": "冷静、鋭い、都会的、洗練"
+        },
+        "instrument": {
+          "id": "I10",
+          "name": "サックス"
+        },
+        "theme": {
+          "id": "T39",
+          "name": "宿命の女王"
+        }
+      },
+      "generatedAt": "2026-06-26"
+    },
+    {
+      "id": "song_R03_M05_I08_T22",
+      "title": "星を待つ塔",
+      "status": "auto_raw",
+      "audioFile": "song_R03_M05_I08_T22.mp3",
+      "coverFile": "song_R03_M05_I08_T22.webp",
+      "notesFile": "song_R03_M05_I08_T22.notes.csv",
+      "lyricsFile": "song_R03_M05_I08_T22.lyrics.csv",
+      "energyFile": "song_R03_M05_I08_T22.energy.csv",
+      "durationSec": 88.31,
+      "plannedClassification": {
+        "requestId": "R03",
+        "moodId": "M05",
+        "instrumentId": "I08",
+        "themeId": "T22"
+      },
+      "confirmedClassification": null,
+      "genreTags": [],
+      "labels": {
+        "request": {
+          "id": "R03",
+          "name": "落ち着いた",
+          "description": "静けさ、余韻、内省"
+        },
+        "mood": {
+          "id": "M05",
+          "name": "神秘的",
+          "description": "未知、幻想、宗教的、不可思議"
+        },
+        "instrument": {
+          "id": "I08",
+          "name": "チェロ"
+        },
+        "theme": {
+          "id": "T22",
+          "name": "星を待つ塔"
+        }
+      },
+      "generatedAt": "2026-06-26"
+    },
+    {
+      "id": "song_R06_M08_I11_T44",
+      "title": "うすあおい_いせかい",
+      "status": "auto_raw",
+      "audioFile": "song_R06_M08_I11_T44.mp3",
+      "coverFile": "song_R06_M08_I11_T44.webp",
+      "notesFile": "song_R06_M08_I11_T44.notes.csv",
+      "lyricsFile": "song_R06_M08_I11_T44.lyrics.csv",
+      "energyFile": "song_R06_M08_I11_T44.energy.csv",
+      "durationSec": 89.16,
+      "plannedClassification": {
+        "requestId": "R06",
+        "moodId": "M08",
+        "instrumentId": "I11",
+        "themeId": "T44"
+      },
+      "confirmedClassification": null,
+      "genreTags": [],
+      "labels": {
+        "request": {
+          "id": "R06",
+          "name": "不思議な",
+          "description": "未知、幻、夢、異界感"
+        },
+        "mood": {
+          "id": "M08",
+          "name": "不安",
+          "description": "緊張、ざわめき、恐れ、予兆"
+        },
+        "instrument": {
+          "id": "I11",
+          "name": "シンセサイザー"
+        },
+        "theme": {
+          "id": "T44",
+          "name": "深海"
+        }
+      },
+      "generatedAt": "2026-06-26"
+    }
+  ]
+}
