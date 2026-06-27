@@ -1,0 +1,108 @@
+{
+  "id": "song_R03_M04_I01_T24とけいとひみつのとびら",
+  "title": "とけいとひみつのとびら",
+  "plannedClassification": {
+    "requestId": "R03",
+    "moodId": "M04",
+    "instrumentId": "I01",
+    "themeId": "T24"
+  },
+  "confirmedClassification": null,
+  "genreTags": [],
+  "sourceFile": "assets_src/audio/vocalmp4/song_R03_M04_I01_T24とけいとひみつのとびら.mp4",
+  "audioFile": "song_R03_M04_I01_T24とけいとひみつのとびら.mp3",
+  "coverFile": "song_R03_M04_I01_T24とけいとひみつのとびら.webp",
+  "lyricsFile": "song_R03_M04_I01_T24とけいとひみつのとびら.lyrics.csv",
+  "rawLyricsFile": "song_R03_M04_I01_T24とけいとひみつのとびら.lyrics.raw.csv",
+  "vocalLyricsFile": "song_R03_M04_I01_T24とけいとひみつのとびら.lyrics.vocal.csv",
+  "notesFile": "song_R03_M04_I01_T24とけいとひみつのとびら.notes.csv",
+  "energyFile": "song_R03_M04_I01_T24とけいとひみつのとびら.energy.csv",
+  "prompt": "",
+  "durationSec": 90.91,
+  "audio": {
+    "codec": "mp3",
+    "bitrate": 177016,
+    "sampleRate": 44100,
+    "channels": 2
+  },
+  "cover": {
+    "frameSec": 2,
+    "width": 1024,
+    "height": 1024
+  },
+  "analysis": {
+    "bpm": null,
+    "beatsFile": "",
+    "energyFile": "song_R03_M04_I01_T24とけいとひみつのとびら.energy.csv",
+    "highlightSections": [
+      {
+        "start": 0.5,
+        "end": 2
+      },
+      {
+        "start": 1.7,
+        "end": 3.2
+      },
+      {
+        "start": 2.3,
+        "end": 3.8
+      },
+      {
+        "start": 3.5,
+        "end": 5
+      },
+      {
+        "start": 5.3,
+        "end": 6.8
+      },
+      {
+        "start": 6,
+        "end": 7.5
+      },
+      {
+        "start": 7.1,
+        "end": 8.6
+      },
+      {
+        "start": 8.3,
+        "end": 9.8
+      }
+    ],
+    "silenceSections": []
+  },
+  "transcription": {
+    "language": "ja",
+    "model": "large-v3-turbo",
+    "usedVocalSeparation": true,
+    "mergedStrategy": "vocal_text_with_raw_timing_and_raw_rescue",
+    "rawLyricsFile": "song_R03_M04_I01_T24とけいとひみつのとびら.lyrics.raw.csv",
+    "vocalLyricsFile": "song_R03_M04_I01_T24とけいとひみつのとびら.lyrics.vocal.csv",
+    "notes": [
+      "Raw transcription segment count: 9",
+      "Separated vocal transcription segment count: 12",
+      "Raw hallucinated check: False",
+      "Vocal hallucinated check: False",
+      "Cleaned up hallucinated vocal segment at 0.0s: '作詞・作曲 初音ミク'",
+      "Using separated vocal text with raw timing reconciliation.",
+      "Discrepancy at 43.2s: Vocal='七つの空をあめぐるたび' vs Raw='七つの空を巡るたび, 君と絆探してる'",
+      "Segment only found in separated vocal track at 54.5s: '真夜中の左順'",
+      "Discrepancy at 56.5s: Vocal='真夜中のさじまころに' vs Raw='真夜中のさじま頃に 秘密の扉開いてく'",
+      "Discrepancy at 74.08s: Vocal='七つの空をあめぐるたび' vs Raw='空に描いた星の模様 七つの空をあめくるたび, 人の絆輝いた 時またたき明日へ行こう'",
+      "Discrepancy at 83.18s: Vocal='大きい瞬き明日へ行く' vs Raw='人の絆輝いた 時またたき明日へ行こう'",
+      "Rescued raw-only segment at 0.0s: '遠く瞬く星の声 白い真珠の光揺れる'",
+      "Rescued raw-only segment at 18.4s: 'くるくる回る時計の音 今はるか時間を止める'"
+    ]
+  },
+  "noteGeneration": {
+    "automatic": true,
+    "generator": "scripts/generate-notes.js",
+    "status": "generated",
+    "notesFile": "song_R03_M04_I01_T24とけいとひみつのとびら.notes.csv",
+    "difficultyCounts": {
+      "easy": 45,
+      "normal": 70,
+      "hard": 81
+    }
+  },
+  "status": "auto_raw"
+}

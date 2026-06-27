@@ -1,0 +1,112 @@
+{
+  "id": "song_R03_M05_I09_T21紫紺の月下の都",
+  "title": "紫紺の月下の都",
+  "plannedClassification": {
+    "requestId": "R03",
+    "moodId": "M05",
+    "instrumentId": "I09",
+    "themeId": "T21"
+  },
+  "confirmedClassification": null,
+  "genreTags": [],
+  "sourceFile": "assets_src/audio/vocalmp4/song_R03_M05_I09_T21紫紺の月下の都.mp4",
+  "audioFile": "song_R03_M05_I09_T21紫紺の月下の都.mp3",
+  "coverFile": "song_R03_M05_I09_T21紫紺の月下の都.webp",
+  "lyricsFile": "song_R03_M05_I09_T21紫紺の月下の都.lyrics.csv",
+  "rawLyricsFile": "song_R03_M05_I09_T21紫紺の月下の都.lyrics.raw.csv",
+  "vocalLyricsFile": "song_R03_M05_I09_T21紫紺の月下の都.lyrics.vocal.csv",
+  "notesFile": "song_R03_M05_I09_T21紫紺の月下の都.notes.csv",
+  "energyFile": "song_R03_M05_I09_T21紫紺の月下の都.energy.csv",
+  "prompt": "",
+  "durationSec": 87.7,
+  "audio": {
+    "codec": "mp3",
+    "bitrate": 172374,
+    "sampleRate": 44100,
+    "channels": 2
+  },
+  "cover": {
+    "frameSec": 2,
+    "width": 1024,
+    "height": 1024
+  },
+  "analysis": {
+    "bpm": null,
+    "beatsFile": "",
+    "energyFile": "song_R03_M05_I09_T21紫紺の月下の都.energy.csv",
+    "highlightSections": [
+      {
+        "start": 2.9,
+        "end": 4.4
+      },
+      {
+        "start": 4.4,
+        "end": 5.9
+      },
+      {
+        "start": 5.7,
+        "end": 7.2
+      },
+      {
+        "start": 6.5,
+        "end": 8
+      },
+      {
+        "start": 8.5,
+        "end": 10
+      },
+      {
+        "start": 11.5,
+        "end": 13
+      },
+      {
+        "start": 12.2,
+        "end": 13.7
+      },
+      {
+        "start": 12.8,
+        "end": 14.3
+      }
+    ],
+    "silenceSections": []
+  },
+  "transcription": {
+    "language": "ja",
+    "model": "large-v3-turbo",
+    "usedVocalSeparation": true,
+    "mergedStrategy": "vocal_text_with_raw_timing_and_raw_rescue",
+    "rawLyricsFile": "song_R03_M05_I09_T21紫紺の月下の都.lyrics.raw.csv",
+    "vocalLyricsFile": "song_R03_M05_I09_T21紫紺の月下の都.lyrics.vocal.csv",
+    "notes": [
+      "Raw transcription segment count: 13",
+      "Separated vocal transcription segment count: 9",
+      "Raw hallucinated check: False",
+      "Vocal hallucinated check: False",
+      "Cleaned up hallucinated raw segment at 0.0s: '作詞・作曲・編曲 初音ミク'",
+      "Cleaned up hallucinated raw segment at 85.96s: 'ご視聴ありがとうございました'",
+      "Cleaned up hallucinated vocal segment at 0.0s: '作詞・作曲・編曲 初音ミク'",
+      "Using separated vocal text with raw timing reconciliation.",
+      "Discrepancy at 30.0s: Vocal='帰るとき' vs Raw='夢の都に帰る時'",
+      "Discrepancy at 34.0s: Vocal='封印を解く古戸の音' vs Raw='封印ごとく古都の音'",
+      "Discrepancy at 50.0s: Vocal='静寂を破り広がるよ' vs Raw='至今の空よ 目覚めよと, 縮まを破り 広がるよ'",
+      "Discrepancy at 55.56s: Vocal='静寂を破り広がるよ' vs Raw='縮まを破り 広がるよ, 静寂を破り 広がるよ'",
+      "Discrepancy at 62.5s: Vocal='眠りの都に朝が来る' vs Raw='眠りの都に 朝が来る'",
+      "Discrepancy at 73.44s: Vocal='思魂の光が照らすのさ' vs Raw='眠りの都に 朝が来る, 至今の光が 照らすのさ'",
+      "Rescued raw-only segment at 11.0s: '眠りについた街の中'",
+      "Rescued raw-only segment at 16.0s: '四根の月が見下ろすよ'",
+      "Rescued raw-only segment at 21.0s: '静寂の中で時が止まる'"
+    ]
+  },
+  "noteGeneration": {
+    "automatic": true,
+    "generator": "scripts/generate-notes.js",
+    "status": "generated",
+    "notesFile": "song_R03_M05_I09_T21紫紺の月下の都.notes.csv",
+    "difficultyCounts": {
+      "easy": 45,
+      "normal": 58,
+      "hard": 65
+    }
+  },
+  "status": "auto_raw"
+}

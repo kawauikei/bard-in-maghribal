@@ -1,0 +1,11 @@
+start,end,text,uncertain,source,checked
+11,16,眠りについた街の中,1,raw_rescue,1
+16,21,紫紺の月が見下ろすよ,1,raw_rescue,1
+21,27,静寂の中で時が止まる,1,raw_rescue,1
+27,34.08,夢の都に 帰るとき,1,vocal_text_raw_time,1
+34.08,39.56,封印を解く古戸の音,1,vocal_text_raw_time,1
+39.56,45,記憶の中で呼びかける,0,vocal_text_raw_start,1
+45,50.44,紫紺の空よ 目覚めよと,0,vocal_text_raw_time,1
+50.44,68.16,静寂を破り広がるよ,1,vocal_text_raw_start,1
+68.16,73.74,眠りの都に朝が来る,1,vocal_text_raw_time,1
+73.74,82.96,紫紺の光が照らすのさ,1,vocal_text_raw_time,1

@@ -1,0 +1,14 @@
+start,end,text,uncertain,source,checked
+11,14,定め 糸巻き取る,1,raw_rescue,1
+14,18,厳しい 王座つく,1,raw_rescue,1
+18,25,紫 まとう身 サクサク 歩く道,1,raw_rescue,1
+25,32.2,定め 塗り替える 女王の魂,1,raw_rescue,1
+32.2,47.56,高く掲げた冠 確かな意思持つ 司る運命,1,raw_rescue,1
+47.56,54.5,さだめ 女王の歌,1,raw_rescue,1
+60,63.68,紫の輝き 厳しい未来,0,vocal,1
+62.96,70.9,時間巻き戻す臼,0,vocal_text_raw_time,1
+67.38,70.9,毛穴が騒ぐ静かに,0,vocal,1
+70.9,78.3,厳しい 異界女王,1,vocal_text_raw_time,1
+74.76,78.3,紫の原理上の,1,vocal,1
+78.3,83.46,歌声 定め上の,1,vocal_text_raw_time,1
+83.46,88.06,厳しい 剣,1,vocal_text_raw_time,1

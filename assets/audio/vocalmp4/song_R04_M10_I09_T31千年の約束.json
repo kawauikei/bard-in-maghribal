@@ -1,0 +1,109 @@
+{
+  "id": "song_R04_M10_I09_T31千年の約束",
+  "title": "千年の約束",
+  "plannedClassification": {
+    "requestId": "R04",
+    "moodId": "M10",
+    "instrumentId": "I09",
+    "themeId": "T31"
+  },
+  "confirmedClassification": null,
+  "genreTags": [],
+  "sourceFile": "assets_src/audio/vocalmp4/song_R04_M10_I09_T31千年の約束.mp4",
+  "audioFile": "song_R04_M10_I09_T31千年の約束.mp3",
+  "coverFile": "song_R04_M10_I09_T31千年の約束.webp",
+  "lyricsFile": "song_R04_M10_I09_T31千年の約束.lyrics.csv",
+  "rawLyricsFile": "song_R04_M10_I09_T31千年の約束.lyrics.raw.csv",
+  "vocalLyricsFile": "song_R04_M10_I09_T31千年の約束.lyrics.vocal.csv",
+  "notesFile": "song_R04_M10_I09_T31千年の約束.notes.csv",
+  "energyFile": "song_R04_M10_I09_T31千年の約束.energy.csv",
+  "prompt": "",
+  "durationSec": 87.84,
+  "audio": {
+    "codec": "mp3",
+    "bitrate": 176165,
+    "sampleRate": 44100,
+    "channels": 2
+  },
+  "cover": {
+    "frameSec": 2,
+    "width": 1024,
+    "height": 1024
+  },
+  "analysis": {
+    "bpm": null,
+    "beatsFile": "",
+    "energyFile": "song_R04_M10_I09_T31千年の約束.energy.csv",
+    "highlightSections": [
+      {
+        "start": 2.1,
+        "end": 3.6
+      },
+      {
+        "start": 3.4,
+        "end": 4.9
+      },
+      {
+        "start": 4.2,
+        "end": 5.7
+      },
+      {
+        "start": 4.9,
+        "end": 6.4
+      },
+      {
+        "start": 6,
+        "end": 7.5
+      },
+      {
+        "start": 6.7,
+        "end": 8.2
+      },
+      {
+        "start": 8.8,
+        "end": 10.3
+      },
+      {
+        "start": 10.2,
+        "end": 11.7
+      }
+    ],
+    "silenceSections": []
+  },
+  "transcription": {
+    "language": "ja",
+    "model": "large-v3-turbo",
+    "usedVocalSeparation": true,
+    "mergedStrategy": "vocal_text_with_raw_timing_and_raw_rescue",
+    "rawLyricsFile": "song_R04_M10_I09_T31千年の約束.lyrics.raw.csv",
+    "vocalLyricsFile": "song_R04_M10_I09_T31千年の約束.lyrics.vocal.csv",
+    "notes": [
+      "Raw transcription segment count: 10",
+      "Separated vocal transcription segment count: 10",
+      "Raw hallucinated check: False",
+      "Vocal hallucinated check: False",
+      "Cleaned up hallucinated raw segment at 0.0s: '作詞・作曲・編曲 初音ミク'",
+      "Cleaned up hallucinated vocal segment at 0.0s: '作詞・作曲 初音ミク'",
+      "Using separated vocal text with raw timing reconciliation.",
+      "Discrepancy at 30.0s: Vocal='鋼がらし触れた指の先' vs Raw='木枯らし 触れた指の先 いつかの約束ほどけて'",
+      "Discrepancy at 38.86s: Vocal='長い旅を終えて今' vs Raw='長い旅を終えています 二人の時が巡り合う'",
+      "Discrepancy at 60.0s: Vocal='愛を誓い合う この愛は永遠' vs Raw='どこまでも続く空へ 手を伸ばして 愛を誓い合う, この愛は永遠 この目に映る あなたの姿'",
+      "Rescued raw-only segment at 9.0s: '星影 揺れる砂の海'",
+      "Rescued raw-only segment at 15.0s: '黄金の月が見守る'",
+      "Rescued raw-only segment at 21.0s: '千年過ぎた風の中'",
+      "Rescued raw-only segment at 25.0s: 'あなたの声が聞こえる'"
+    ]
+  },
+  "noteGeneration": {
+    "automatic": true,
+    "generator": "scripts/generate-notes.js",
+    "status": "generated",
+    "notesFile": "song_R04_M10_I09_T31千年の約束.notes.csv",
+    "difficultyCounts": {
+      "easy": 45,
+      "normal": 61,
+      "hard": 73
+    }
+  },
+  "status": "auto_raw"
+}

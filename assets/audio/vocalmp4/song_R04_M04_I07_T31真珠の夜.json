@@ -1,0 +1,105 @@
+{
+  "id": "song_R04_M04_I07_T31真珠の夜",
+  "title": "真珠の夜",
+  "plannedClassification": {
+    "requestId": "R04",
+    "moodId": "M04",
+    "instrumentId": "I07",
+    "themeId": "T31"
+  },
+  "confirmedClassification": null,
+  "genreTags": [],
+  "sourceFile": "assets_src/audio/vocalmp4/song_R04_M04_I07_T31真珠の夜.mp4",
+  "audioFile": "song_R04_M04_I07_T31真珠の夜.mp3",
+  "coverFile": "song_R04_M04_I07_T31真珠の夜.webp",
+  "lyricsFile": "song_R04_M04_I07_T31真珠の夜.lyrics.csv",
+  "rawLyricsFile": "song_R04_M04_I07_T31真珠の夜.lyrics.raw.csv",
+  "vocalLyricsFile": "song_R04_M04_I07_T31真珠の夜.lyrics.vocal.csv",
+  "notesFile": "song_R04_M04_I07_T31真珠の夜.notes.csv",
+  "energyFile": "song_R04_M04_I07_T31真珠の夜.energy.csv",
+  "prompt": "",
+  "durationSec": 89.98,
+  "audio": {
+    "codec": "mp3",
+    "bitrate": 174728,
+    "sampleRate": 44100,
+    "channels": 2
+  },
+  "cover": {
+    "frameSec": 2,
+    "width": 1024,
+    "height": 1024
+  },
+  "analysis": {
+    "bpm": null,
+    "beatsFile": "",
+    "energyFile": "song_R04_M04_I07_T31真珠の夜.energy.csv",
+    "highlightSections": [
+      {
+        "start": 1.2,
+        "end": 2.7
+      },
+      {
+        "start": 1.7,
+        "end": 3.2
+      },
+      {
+        "start": 2.7,
+        "end": 4.2
+      },
+      {
+        "start": 3.5,
+        "end": 5
+      },
+      {
+        "start": 5.9,
+        "end": 7.4
+      },
+      {
+        "start": 7,
+        "end": 8.5
+      },
+      {
+        "start": 7.8,
+        "end": 9.3
+      },
+      {
+        "start": 8.4,
+        "end": 9.9
+      }
+    ],
+    "silenceSections": []
+  },
+  "transcription": {
+    "language": "ja",
+    "model": "large-v3-turbo",
+    "usedVocalSeparation": true,
+    "mergedStrategy": "vocal_text_with_raw_timing_and_raw_rescue",
+    "rawLyricsFile": "song_R04_M04_I07_T31真珠の夜.lyrics.raw.csv",
+    "vocalLyricsFile": "song_R04_M04_I07_T31真珠の夜.lyrics.vocal.csv",
+    "notes": [
+      "Raw transcription segment count: 13",
+      "Separated vocal transcription segment count: 11",
+      "Raw hallucinated check: False",
+      "Vocal hallucinated check: False",
+      "Cleaned up hallucinated raw segment at 0.0s: '作詞・作曲・編曲 初音ミク'",
+      "Using separated vocal text with raw timing reconciliation.",
+      "Discrepancy at 0.0s: Vocal='長い旅が終わる' vs Raw='長い旅が終る 真珠の夜に'",
+      "Discrepancy at 58.44s: Vocal='香ばしい香りは命遠い昔を尋ねて' vs Raw='空を駆ける夢 真珠の色は記憶, 香ばしい香りは命 遠い昔を尋ねて'",
+      "Discrepancy at 66.42s: Vocal='一人声と呼ぶ声' vs Raw='一人呼ぶ声, 千年の涙が今繋がるから 忘れはしない'",
+      "Discrepancy at 75.58s: Vocal='忘れはしない温もり' vs Raw='千年の涙が今繋がるから 忘れはしない, ぬくもり 空を駆ける夢'"
+    ]
+  },
+  "noteGeneration": {
+    "automatic": true,
+    "generator": "scripts/generate-notes.js",
+    "status": "generated",
+    "notesFile": "song_R04_M04_I07_T31真珠の夜.notes.csv",
+    "difficultyCounts": {
+      "easy": 45,
+      "normal": 67,
+      "hard": 82
+    }
+  },
+  "status": "auto_raw"
+}

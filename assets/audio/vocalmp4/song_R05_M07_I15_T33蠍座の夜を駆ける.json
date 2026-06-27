@@ -1,0 +1,109 @@
+{
+  "id": "song_R05_M07_I15_T33蠍座の夜を駆ける",
+  "title": "蠍座の夜を駆ける",
+  "plannedClassification": {
+    "requestId": "R05",
+    "moodId": "M07",
+    "instrumentId": "I15",
+    "themeId": "T33"
+  },
+  "confirmedClassification": null,
+  "genreTags": [],
+  "sourceFile": "assets_src/audio/vocalmp4/song_R05_M07_I15_T33蠍座の夜を駆ける.mp4",
+  "audioFile": "song_R05_M07_I15_T33蠍座の夜を駆ける.mp3",
+  "coverFile": "song_R05_M07_I15_T33蠍座の夜を駆ける.webp",
+  "lyricsFile": "song_R05_M07_I15_T33蠍座の夜を駆ける.lyrics.csv",
+  "rawLyricsFile": "song_R05_M07_I15_T33蠍座の夜を駆ける.lyrics.raw.csv",
+  "vocalLyricsFile": "song_R05_M07_I15_T33蠍座の夜を駆ける.lyrics.vocal.csv",
+  "notesFile": "song_R05_M07_I15_T33蠍座の夜を駆ける.notes.csv",
+  "energyFile": "song_R05_M07_I15_T33蠍座の夜を駆ける.energy.csv",
+  "prompt": "",
+  "durationSec": 93.18,
+  "audio": {
+    "codec": "mp3",
+    "bitrate": 178766,
+    "sampleRate": 44100,
+    "channels": 2
+  },
+  "cover": {
+    "frameSec": 2,
+    "width": 1024,
+    "height": 1024
+  },
+  "analysis": {
+    "bpm": null,
+    "beatsFile": "",
+    "energyFile": "song_R05_M07_I15_T33蠍座の夜を駆ける.energy.csv",
+    "highlightSections": [
+      {
+        "start": 0.5,
+        "end": 2
+      },
+      {
+        "start": 1.3,
+        "end": 2.8
+      },
+      {
+        "start": 2,
+        "end": 3.5
+      },
+      {
+        "start": 2.5,
+        "end": 4
+      },
+      {
+        "start": 4,
+        "end": 5.5
+      },
+      {
+        "start": 4.5,
+        "end": 6
+      },
+      {
+        "start": 6,
+        "end": 7.5
+      },
+      {
+        "start": 6.5,
+        "end": 8
+      }
+    ],
+    "silenceSections": []
+  },
+  "transcription": {
+    "language": "ja",
+    "model": "large-v3-turbo",
+    "usedVocalSeparation": true,
+    "mergedStrategy": "vocal_text_with_raw_timing_and_raw_rescue",
+    "rawLyricsFile": "song_R05_M07_I15_T33蠍座の夜を駆ける.lyrics.raw.csv",
+    "vocalLyricsFile": "song_R05_M07_I15_T33蠍座の夜を駆ける.lyrics.vocal.csv",
+    "notes": [
+      "Raw transcription segment count: 15",
+      "Separated vocal transcription segment count: 11",
+      "Raw hallucinated check: False",
+      "Vocal hallucinated check: False",
+      "Cleaned up hallucinated raw segment at 0.0s: '作詞・作曲・編曲 初音ミク'",
+      "Cleaned up hallucinated vocal segment at 0.0s: 'ご視聴ありがとうございました'",
+      "Using separated vocal text with raw timing reconciliation.",
+      "Discrepancy at 30.0s: Vocal='見逃さない瞬きさえ 命を懸けたこの檻に' vs Raw='君のお城すり抜ける 見逃さない瞬きさえ, 命を懸けたこの檻に 真昼の月もお息を呑む'",
+      "Discrepancy at 51.3s: Vocal='印を追いかけてゆく' vs Raw='逃げられない運命の中 印を蓋追いかけてゆく'",
+      "Discrepancy at 58.06s: Vocal='影が長く足跡と この手につかむまで' vs Raw='影が長く足跡と この手に掴むまで'",
+      "Discrepancy at 77.66s: Vocal='誰にも止められない この嵐 燃える眼差しに止まらない' vs Raw='誰にも止められないこの嵐, 燃える眼差し止まらない'",
+      "Discrepancy at 86.96s: Vocal='静かにとらえる眼差し' vs Raw='揺らめく愛のおしるべ, 静かに捉える眼差し'",
+      "Rescued raw-only segment at 10.0s: '砂煙い舞う影を 追い詰めるこの鼓動'",
+      "Rescued raw-only segment at 18.0s: '白段のお香り辿るウール'"
+    ]
+  },
+  "noteGeneration": {
+    "automatic": true,
+    "generator": "scripts/generate-notes.js",
+    "status": "generated",
+    "notesFile": "song_R05_M07_I15_T33蠍座の夜を駆ける.notes.csv",
+    "difficultyCounts": {
+      "easy": 45,
+      "normal": 75,
+      "hard": 93
+    }
+  },
+  "status": "auto_raw"
+}

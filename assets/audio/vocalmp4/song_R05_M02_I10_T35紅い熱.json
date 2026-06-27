@@ -1,0 +1,109 @@
+{
+  "id": "song_R05_M02_I10_T35紅い熱",
+  "title": "紅い熱",
+  "plannedClassification": {
+    "requestId": "R05",
+    "moodId": "M02",
+    "instrumentId": "I10",
+    "themeId": "T35"
+  },
+  "confirmedClassification": null,
+  "genreTags": [],
+  "sourceFile": "assets_src/audio/vocalmp4/song_R05_M02_I10_T35紅い熱.mp4",
+  "audioFile": "song_R05_M02_I10_T35紅い熱.mp3",
+  "coverFile": "song_R05_M02_I10_T35紅い熱.webp",
+  "lyricsFile": "song_R05_M02_I10_T35紅い熱.lyrics.csv",
+  "rawLyricsFile": "song_R05_M02_I10_T35紅い熱.lyrics.raw.csv",
+  "vocalLyricsFile": "song_R05_M02_I10_T35紅い熱.lyrics.vocal.csv",
+  "notesFile": "song_R05_M02_I10_T35紅い熱.notes.csv",
+  "energyFile": "song_R05_M02_I10_T35紅い熱.energy.csv",
+  "prompt": "",
+  "durationSec": 89.84,
+  "audio": {
+    "codec": "mp3",
+    "bitrate": 177083,
+    "sampleRate": 44100,
+    "channels": 2
+  },
+  "cover": {
+    "frameSec": 2,
+    "width": 1024,
+    "height": 1024
+  },
+  "analysis": {
+    "bpm": null,
+    "beatsFile": "",
+    "energyFile": "song_R05_M02_I10_T35紅い熱.energy.csv",
+    "highlightSections": [
+      {
+        "start": 0.9,
+        "end": 2.4
+      },
+      {
+        "start": 2.5,
+        "end": 4
+      },
+      {
+        "start": 4.3,
+        "end": 5.8
+      },
+      {
+        "start": 5.1,
+        "end": 6.6
+      },
+      {
+        "start": 6,
+        "end": 7.5
+      },
+      {
+        "start": 7.9,
+        "end": 9.4
+      },
+      {
+        "start": 8.7,
+        "end": 10.2
+      },
+      {
+        "start": 9.5,
+        "end": 11
+      }
+    ],
+    "silenceSections": []
+  },
+  "transcription": {
+    "language": "ja",
+    "model": "large-v3-turbo",
+    "usedVocalSeparation": true,
+    "mergedStrategy": "vocal_text_with_raw_timing_and_raw_rescue",
+    "rawLyricsFile": "song_R05_M02_I10_T35紅い熱.lyrics.raw.csv",
+    "vocalLyricsFile": "song_R05_M02_I10_T35紅い熱.lyrics.vocal.csv",
+    "notes": [
+      "Raw transcription segment count: 11",
+      "Separated vocal transcription segment count: 14",
+      "Raw hallucinated check: False",
+      "Vocal hallucinated check: False",
+      "Cleaned up hallucinated raw segment at 0.0s: '作詞・作曲・編曲・編曲 初音ミク'",
+      "Cleaned up hallucinated vocal segment at 0.0s: '作詞・作曲・編曲 初音ミク'",
+      "Cleaned up hallucinated vocal segment at 86.0s: 'ご視聴ありがとうございました'",
+      "Using separated vocal text with raw timing reconciliation.",
+      "Discrepancy at 30.0s: Vocal='夜の向こう 今 暑い月が 見下ろすステージ' vs Raw='こばしい風 街にあふれ 誘う夜の向こう, 今 暑い月が 見下ろすステージ 赤に染まる街'",
+      "Discrepancy at 38.0s: Vocal='赤に染まる街 香ばしい熱 踊り続ける' vs Raw='今 暑い月が 見下ろすステージ 赤に染まる街, こばしい熱 踊り続ける'",
+      "Discrepancy at 56.0s: Vocal='おさえられぬ愛を' vs Raw='夜が終わる前 高ぶる心, 抑えられぬ愛を 撒き散らすステージ'",
+      "Discrepancy at 61.52s: Vocal='まき散らすステージ' vs Raw='抑えられぬ愛を 撒き散らすステージ'",
+      "Discrepancy at 63.76s: Vocal='影が揺れる美女の舞' vs Raw='抑えられぬ愛を 撒き散らすステージ, 影が揺れる 美女の舞'",
+      "Rescued raw-only segment at 15.0s: '夜道が歌う 赤の灯火'"
+    ]
+  },
+  "noteGeneration": {
+    "automatic": true,
+    "generator": "scripts/generate-notes.js",
+    "status": "generated",
+    "notesFile": "song_R05_M02_I10_T35紅い熱.notes.csv",
+    "difficultyCounts": {
+      "easy": 45,
+      "normal": 68,
+      "hard": 83
+    }
+  },
+  "status": "auto_raw"
+}

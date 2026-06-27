@@ -1,0 +1,110 @@
+{
+  "id": "song_R06_M05_I11_T50琥珀の空",
+  "title": "琥珀の空",
+  "plannedClassification": {
+    "requestId": "R06",
+    "moodId": "M05",
+    "instrumentId": "I11",
+    "themeId": "T50"
+  },
+  "confirmedClassification": null,
+  "genreTags": [],
+  "sourceFile": "assets_src/audio/vocalmp4/song_R06_M05_I11_T50琥珀の空.mp4",
+  "audioFile": "song_R06_M05_I11_T50琥珀の空.mp3",
+  "coverFile": "song_R06_M05_I11_T50琥珀の空.webp",
+  "lyricsFile": "song_R06_M05_I11_T50琥珀の空.lyrics.csv",
+  "rawLyricsFile": "song_R06_M05_I11_T50琥珀の空.lyrics.raw.csv",
+  "vocalLyricsFile": "song_R06_M05_I11_T50琥珀の空.lyrics.vocal.csv",
+  "notesFile": "song_R06_M05_I11_T50琥珀の空.notes.csv",
+  "energyFile": "song_R06_M05_I11_T50琥珀の空.energy.csv",
+  "prompt": "",
+  "durationSec": 90.12,
+  "audio": {
+    "codec": "mp3",
+    "bitrate": 176416,
+    "sampleRate": 44100,
+    "channels": 2
+  },
+  "cover": {
+    "frameSec": 2,
+    "width": 1024,
+    "height": 1024
+  },
+  "analysis": {
+    "bpm": null,
+    "beatsFile": "",
+    "energyFile": "song_R06_M05_I11_T50琥珀の空.energy.csv",
+    "highlightSections": [
+      {
+        "start": 2.5,
+        "end": 4
+      },
+      {
+        "start": 3.4,
+        "end": 4.9
+      },
+      {
+        "start": 5.7,
+        "end": 7.2
+      },
+      {
+        "start": 7.4,
+        "end": 8.9
+      },
+      {
+        "start": 7.9,
+        "end": 9.4
+      },
+      {
+        "start": 9.1,
+        "end": 10.6
+      },
+      {
+        "start": 10.1,
+        "end": 11.6
+      },
+      {
+        "start": 12.3,
+        "end": 13.8
+      }
+    ],
+    "silenceSections": []
+  },
+  "transcription": {
+    "language": "ja",
+    "model": "large-v3-turbo",
+    "usedVocalSeparation": true,
+    "mergedStrategy": "vocal_text_with_raw_timing_and_raw_rescue",
+    "rawLyricsFile": "song_R06_M05_I11_T50琥珀の空.lyrics.raw.csv",
+    "vocalLyricsFile": "song_R06_M05_I11_T50琥珀の空.lyrics.vocal.csv",
+    "notes": [
+      "Raw transcription segment count: 15",
+      "Separated vocal transcription segment count: 15",
+      "Raw hallucinated check: False",
+      "Vocal hallucinated check: False",
+      "Using separated vocal text with raw timing reconciliation.",
+      "Discrepancy at 29.16s: Vocal='砂に積もる時の震え' vs Raw='砂に積もる 時の震え'",
+      "Discrepancy at 33.86s: Vocal='消えてしまったお城の跡' vs Raw='消えてしまった お城の跡'",
+      "Discrepancy at 38.26s: Vocal='お香の煙空に舞う' vs Raw='お香の煙 空に舞う'",
+      "Discrepancy at 42.86s: Vocal='昔の名前風が囁く' vs Raw='昔の名前 風が囁く'",
+      "Discrepancy at 47.56s: Vocal='忘れられた髪のプロポロ' vs Raw='忘れられた 神の心'",
+      "Discrepancy at 60.6s: Vocal='キタキよく繋ぎ合わせる' vs Raw='光は遠く 影は近く つなぎ合わせる'",
+      "Discrepancy at 62.9s: Vocal='秘められた力が今目覚める' vs Raw='秘められた力が今 目覚める'",
+      "Discrepancy at 66.18s: Vocal='消えてしまったお城の跡' vs Raw='消えてしまった お城の跡'",
+      "Discrepancy at 77.02s: Vocal='忘れられた永遠の眠り' vs Raw='忘れられた 永遠の眠り'",
+      "Discrepancy at 85.9s: Vocal='琥珀の空' vs Raw='小白な空'"
+    ]
+  },
+  "noteGeneration": {
+    "automatic": true,
+    "generator": "scripts/generate-notes.js",
+    "status": "generated",
+    "notesFile": "song_R06_M05_I11_T50琥珀の空.notes.csv",
+    "difficultyCounts": {
+      "easy": 45,
+      "normal": 66,
+      "hard": 82
+    }
+  },
+  "status": "auto_raw"
+}

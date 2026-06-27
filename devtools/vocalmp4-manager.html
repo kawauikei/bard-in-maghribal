@@ -18,13 +18,16 @@
     button { margin-top: 14px; background: #0f766e; cursor: pointer; font-weight: 700; }
     textarea { min-height: 318px; resize: vertical; white-space: pre-wrap; }
     .stack { display: grid; gap: 14px; }
-    .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 12px; }
+    .stats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin-bottom: 12px; }
     .stat { border: 1px solid #2b3b4c; border-radius: 6px; padding: 10px; background: #0f172a; }
     .stat strong { display: block; font-size: 20px; color: #f8fafc; }
     .stat span { color: #94a3b8; font-size: 12px; }
     .toolbar { display: grid; grid-template-columns: minmax(180px, 1.6fr) repeat(4, minmax(110px, 1fr)) minmax(100px, 0.7fr); gap: 8px; align-items: end; margin-bottom: 10px; }
     .toolbar label { margin: 0 0 4px; }
     .table-wrap { max-height: calc(100vh - 300px); min-height: 260px; overflow: auto; border: 1px solid #2b3b4c; border-radius: 8px; }
+    .source-wrap { max-height: 260px; min-height: 120px; margin-top: 14px; overflow: auto; border: 1px solid #2b3b4c; border-radius: 8px; }
+    .ok { color: #5eead4; font-weight: 700; }
+    .warn { color: #facc15; font-weight: 700; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     th, td { border-bottom: 1px solid #2b3b4c; padding: 8px; text-align: left; vertical-align: top; }
     th { position: sticky; top: 0; z-index: 1; color: #bae6fd; background: #162231; }
@@ -32,7 +35,7 @@
     .muted { color: #94a3b8; font-size: 13px; }
     .id { font-family: ui-monospace, Consolas, monospace; color: #facc15; }
     .compact { white-space: nowrap; }
-    @media (max-width: 1100px) { main, .toolbar { grid-template-columns: 1fr; } .table-wrap { max-height: 520px; } }
+    @media (max-width: 1100px) { main, .toolbar, .stats { grid-template-columns: 1fr; } .table-wrap { max-height: 520px; } }
   </style>
   <script src="vocalmp4-data.js"></script>
 </head>
@@ -67,7 +70,8 @@
       <div class="stats">
         <div class="stat"><strong id="stat-total">0</strong><span>generated</span></div>
         <div class="stat"><strong id="stat-filtered">0</strong><span>shown</span></div>
-        <div class="stat"><strong id="stat-unused">0</strong><span>open IDs</span></div>
+        <div class="stat"><strong id="stat-source">0</strong><span>source MP4s</span></div>
+        <div class="stat"><strong id="stat-pending">0</strong><span>not analyzed</span></div>
         <div class="stat"><strong id="stat-updated">-</strong><span>updated</span></div>
       </div>
       <div class="toolbar">
@@ -84,6 +88,13 @@
           <tbody id="catalog"><tr><td colspan="8" class="muted">Loading...</td></tr></tbody>
         </table>
       </div>
+      <h2 style="margin-top: 16px;">Source MP4 Coverage</h2>
+      <div class="source-wrap">
+        <table>
+          <thead><tr><th>ID</th><th>Title</th><th>R</th><th>M</th><th>I</th><th>T</th><th>Status</th></tr></thead>
+          <tbody id="sources"><tr><td colspan="7" class="muted">Loading...</td></tr></tbody>
+        </table>
+      </div>
     </section>
   </main>
   <script type="module">
@@ -98,6 +109,8 @@
     };
     const pool = await loadJson("vocalmp4-pool.json", window.vocalMp4Pool);
     const catalog = await loadJson("../assets/audio/vocalmp4/catalog.json", window.vocalMp4Catalog || { tracks: [] });
+    let sourceMp4s = window.vocalMp4SourceMp4s || [];
+    const metadataById = window.vocalMp4MetadataById || {};
     const byId = (items) => Object.fromEntries(items.map((item) => [item.id, item]));
     const maps = { r: byId(pool.requests), m: byId(pool.moods), i: byId(pool.instruments), t: byId(pool.themes) };
     const fill = (id, items) => {
@@ -121,7 +134,7 @@
     ]) fill(id, items);
 
     const parseId = (id) => {
-      const m = id.match(/^song_(R\d{2})_(M\d{2})_(I\d{2})_(T\d{2})$/);
+      const m = id.match(/^song_(R\d{2})_(M\d{2})_(I\d{2})_(T\d{2})(?:[_-]?.*)?$/);
       return m && { requestId: m[1], moodId: m[2], instrumentId: m[3], themeId: m[4] };
     };
     const promptFor = (chosen) => {
@@ -133,7 +146,7 @@
         theme: maps.t[c.themeId],
       };
       if (typeof window.vocalMp4BuildPrompt === "function") {
-        return window.vocalMp4BuildPrompt({ ...chosen, labels });
+        return window.vocalMp4BuildPrompt({ ...chosen, labels, lyricAvoidance: window.vocalMp4LyricAvoidance });
       }
       const request = labels.request?.name || c.requestId;
       const mood = labels.mood?.name || c.moodId;
@@ -183,10 +196,68 @@
         status.textContent = "Copy failed. Select the prompt manually.";
       }
     };
-    const used = new Set([...(pool.generationHistory || []), ...(catalog.tracks || [])].map((item) => item.id));
     const makeId = (r, m, i, t) => `song_${r}_${m}_${i}_${t}`;
+    const history = [...(pool.generationHistory || []), ...(catalog.tracks || [])]
+      .map((item) => {
+        const metadata = metadataById[item.id] || {};
+        return {
+          id: item.id,
+          sourceFile: item.sourceFile || metadata.sourceFile || "",
+          classification: item.classification || item.plannedClassification || parseId(item.id),
+        };
+      })
+      .filter((item) => item.classification);
+    const usage = {
+      r: new Map(),
+      m: new Map(),
+      i: new Map(),
+      t: new Map(),
+      pair: new Map(),
+      triple: new Map(),
+    };
+    const inc = (map, key, weight = 1) => map.set(key, (map.get(key) || 0) + weight);
+    const addUsage = (c, weight = 1) => {
+      inc(usage.r, c.requestId, weight);
+      inc(usage.m, c.moodId, weight);
+      inc(usage.i, c.instrumentId, weight);
+      inc(usage.t, c.themeId, weight);
+      for (const key of [
+        `${c.requestId}|${c.moodId}`,
+        `${c.requestId}|${c.instrumentId}`,
+        `${c.requestId}|${c.themeId}`,
+        `${c.moodId}|${c.instrumentId}`,
+        `${c.moodId}|${c.themeId}`,
+        `${c.instrumentId}|${c.themeId}`,
+      ]) usage.pair.set(key, (usage.pair.get(key) || 0) + weight);
+      usage.triple.set(`${c.requestId}|${c.moodId}|${c.instrumentId}`, (usage.triple.get(`${c.requestId}|${c.moodId}|${c.instrumentId}`) || 0) + weight);
+      usage.triple.set(`${c.requestId}|${c.moodId}|${c.themeId}`, (usage.triple.get(`${c.requestId}|${c.moodId}|${c.themeId}`) || 0) + weight);
+    };
+    const rebuildUsage = () => {
+      for (const map of Object.values(usage)) map.clear();
+      const sourceKeys = new Set(sourceMp4s.map((source) => source.sourceFile));
+      for (const source of sourceMp4s) addUsage(source.classification, 1);
+      for (const item of history) {
+        if (item.sourceFile && sourceKeys.has(item.sourceFile)) continue;
+        addUsage(item.classification, 1);
+      }
+    };
+    rebuildUsage();
     const score = (r, m, i, t, rnd) => {
       let s = 1000 + rnd;
+      s -= (usage.r.get(r) || 0) * 28;
+      s -= (usage.m.get(m) || 0) * 24;
+      s -= (usage.i.get(i) || 0) * 24;
+      s -= (usage.t.get(t) || 0) * 20;
+      for (const key of [
+        `${r}|${m}`,
+        `${r}|${i}`,
+        `${r}|${t}`,
+        `${m}|${i}`,
+        `${m}|${t}`,
+        `${i}|${t}`,
+      ]) s -= (usage.pair.get(key) || 0) * 14;
+      s -= (usage.triple.get(`${r}|${m}|${i}`) || 0) * 18;
+      s -= (usage.triple.get(`${r}|${m}|${t}`) || 0) * 18;
       const rw = pool.weights.requestMood[r];
       if (rw?.primary.includes(m)) s += 35;
       if (rw?.secondary.includes(m)) s += 18;
@@ -198,7 +269,9 @@
       let n = (seed || Date.now()) >>> 0;
       return () => ((n = Math.imul(1664525, n) + 1013904223) >>> 0) / 4294967296;
     };
-    document.getElementById("pick").onclick = () => {
+    document.getElementById("pick").onclick = async () => {
+      await refreshSourceCoverage();
+      rebuildUsage();
       const constraints = {
         r: document.getElementById("request").value,
         m: document.getElementById("mood").value,
@@ -213,7 +286,7 @@
         if (constraints.i && constraints.i !== i.id) continue;
         if (constraints.t && constraints.t !== t.id) continue;
         const id = makeId(r.id, m.id, i.id, t.id);
-        if (!used.has(id)) candidates.push({ id, classification: parseId(id), score: score(r.id, m.id, i.id, t.id, rnd()) });
+        candidates.push({ id, classification: parseId(id), score: score(r.id, m.id, i.id, t.id, rnd()) });
       }
       candidates.sort((a, b) => b.score - a.score);
       const chosen = candidates[Math.floor(rnd() * Math.min(30, candidates.length))];
@@ -223,7 +296,43 @@
       copyPrompt(promptText);
     };
 
-    const totalCombinations = pool.requests.length * pool.moods.length * pool.instruments.length * pool.themes.length;
+    const sourceRegistered = (source) => (catalog.tracks || []).some((track) => {
+      const metadata = metadataById[track.id] || {};
+      return track.id === source.id || track.sourceFile === source.sourceFile || metadata.sourceFile === source.sourceFile;
+    });
+    const renderSourceCoverage = () => {
+      const tbody = document.getElementById("sources");
+      const rows = sourceMp4s.map((source) => ({ source, registered: sourceRegistered(source) }));
+      const pending = rows.filter((row) => !row.registered).length;
+      document.getElementById("stat-source").textContent = `${rows.length}`;
+      document.getElementById("stat-pending").textContent = `${pending}`;
+      tbody.innerHTML = "";
+      for (const { source, registered } of rows) {
+        const c = source.classification;
+        const tr = document.createElement("tr");
+        const status = registered ? '<span class="ok">analyzed</span>' : '<span class="warn">source only</span>';
+        tr.innerHTML = `<td class="id compact">${source.id}</td><td>${source.title || ""}</td><td>${c.requestId} ${maps.r[c.requestId]?.name || ""}</td><td>${c.moodId} ${maps.m[c.moodId]?.name || ""}</td><td>${c.instrumentId} ${maps.i[c.instrumentId]?.name || ""}</td><td>${c.themeId} ${maps.t[c.themeId]?.name || ""}</td><td>${status}</td>`;
+        tbody.appendChild(tr);
+      }
+      if (!tbody.children.length) tbody.innerHTML = '<tr><td colspan="7" class="muted">No source MP4 files.</td></tr>';
+    };
+    async function refreshSourceCoverage() {
+      if (location.protocol === "file:") {
+        renderSourceCoverage();
+        return;
+      }
+      try {
+        const response = await fetch("/__devtools/vocalmp4/source-mp4s", { cache: "no-store" });
+        const result = await response.json();
+        if (response.ok && result.ok && Array.isArray(result.sourceMp4s)) {
+          sourceMp4s = result.sourceMp4s;
+          rebuildUsage();
+        }
+      } catch {
+        // Keep the bundled list if the dev endpoint is unavailable.
+      }
+      renderSourceCoverage();
+    }
     const catalogFilters = {
       q: document.getElementById("catalog-search"),
       requestId: document.getElementById("catalog-request"),
@@ -245,7 +354,6 @@
       rows.sort((a, b) => `${a.track[sortKey] || a.track.id}`.localeCompare(`${b.track[sortKey] || b.track.id}`, "ja"));
       document.getElementById("stat-total").textContent = `${(catalog.tracks || []).length}`;
       document.getElementById("stat-filtered").textContent = `${rows.length}`;
-      document.getElementById("stat-unused").textContent = `${Math.max(0, totalCombinations - used.size)}`;
       document.getElementById("stat-updated").textContent = catalog.updatedAt ? catalog.updatedAt.slice(5, 10) : "-";
       tbody.innerHTML = "";
       for (const { track, c } of rows) {
@@ -260,6 +368,7 @@
       control.oninput = renderCatalog;
       control.onchange = renderCatalog;
     }
+    refreshSourceCoverage();
     renderCatalog();
   </script>
 </body>

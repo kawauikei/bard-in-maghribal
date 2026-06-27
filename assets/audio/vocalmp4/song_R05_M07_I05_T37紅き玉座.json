@@ -1,0 +1,111 @@
+{
+  "id": "song_R05_M07_I05_T37紅き玉座",
+  "title": "紅き玉座",
+  "plannedClassification": {
+    "requestId": "R05",
+    "moodId": "M07",
+    "instrumentId": "I05",
+    "themeId": "T37"
+  },
+  "confirmedClassification": null,
+  "genreTags": [],
+  "sourceFile": "assets_src/audio/vocalmp4/song_R05_M07_I05_T37紅き玉座.mp4",
+  "audioFile": "song_R05_M07_I05_T37紅き玉座.mp3",
+  "coverFile": "song_R05_M07_I05_T37紅き玉座.webp",
+  "lyricsFile": "song_R05_M07_I05_T37紅き玉座.lyrics.csv",
+  "rawLyricsFile": "song_R05_M07_I05_T37紅き玉座.lyrics.raw.csv",
+  "vocalLyricsFile": "song_R05_M07_I05_T37紅き玉座.lyrics.vocal.csv",
+  "notesFile": "song_R05_M07_I05_T37紅き玉座.notes.csv",
+  "energyFile": "song_R05_M07_I05_T37紅き玉座.energy.csv",
+  "prompt": "",
+  "durationSec": 91.44,
+  "audio": {
+    "codec": "mp3",
+    "bitrate": 186188,
+    "sampleRate": 44100,
+    "channels": 2
+  },
+  "cover": {
+    "frameSec": 2,
+    "width": 1024,
+    "height": 1024
+  },
+  "analysis": {
+    "bpm": null,
+    "beatsFile": "",
+    "energyFile": "song_R05_M07_I05_T37紅き玉座.energy.csv",
+    "highlightSections": [
+      {
+        "start": 2,
+        "end": 3.5
+      },
+      {
+        "start": 2.8,
+        "end": 4.3
+      },
+      {
+        "start": 4,
+        "end": 5.5
+      },
+      {
+        "start": 5.3,
+        "end": 6.8
+      },
+      {
+        "start": 6,
+        "end": 7.5
+      },
+      {
+        "start": 6.8,
+        "end": 8.3
+      },
+      {
+        "start": 8.1,
+        "end": 9.6
+      },
+      {
+        "start": 9.8,
+        "end": 11.3
+      }
+    ],
+    "silenceSections": []
+  },
+  "transcription": {
+    "language": "ja",
+    "model": "large-v3-turbo",
+    "usedVocalSeparation": true,
+    "mergedStrategy": "vocal_text_with_raw_timing_and_raw_rescue",
+    "rawLyricsFile": "song_R05_M07_I05_T37紅き玉座.lyrics.raw.csv",
+    "vocalLyricsFile": "song_R05_M07_I05_T37紅き玉座.lyrics.vocal.csv",
+    "notes": [
+      "Raw transcription segment count: 14",
+      "Separated vocal transcription segment count: 14",
+      "Raw hallucinated check: False",
+      "Vocal hallucinated check: False",
+      "Cleaned up hallucinated raw segment at 0.0s: '作詞・作曲・編曲 初音ミク'",
+      "Cleaned up hallucinated vocal segment at 0.0s: '作詞・作曲・編曲 初音ミク'",
+      "Using separated vocal text with raw timing reconciliation.",
+      "Discrepancy at 30.0s: Vocal='我が絡むうねじれた王座' vs Raw='胸が絡む 胸じれた方さ'",
+      "Discrepancy at 33.22s: Vocal='我は闇より生まれ死の地' vs Raw='我は闇より 生まれ死の地'",
+      "Discrepancy at 37.38s: Vocal='暁を壊す魔王の目覚め' vs Raw='暁を壊す 魔王の目覚め'",
+      "Discrepancy at 41.36s: Vocal='震える嘘だよ跪きなさい' vs Raw='震える空よ 刻まずきなさい'",
+      "Discrepancy at 49.02s: Vocal='サソリのお群れが千葉を込めき' vs Raw='サソリのオムレが誓うゴメキ'",
+      "Discrepancy at 63.46s: Vocal='紅に染まる 天魔の眉毛' vs Raw='紅に染まる 手間の眉毛'",
+      "Discrepancy at 69.26s: Vocal='略弾の煙 呪いを結ぶ' vs Raw='白弾の煙 呪いを結ぶ'",
+      "Discrepancy at 77.38s: Vocal='暁を壊す 魔王の目覚め' vs Raw='暁を壊す 魔法の目覚め'",
+      "Discrepancy at 81.34s: Vocal='震える空よ 跪きなさい' vs Raw='震える空よ 刻まずきなさい'"
+    ]
+  },
+  "noteGeneration": {
+    "automatic": true,
+    "generator": "scripts/generate-notes.js",
+    "status": "generated",
+    "notesFile": "song_R05_M07_I05_T37紅き玉座.notes.csv",
+    "difficultyCounts": {
+      "easy": 45,
+      "normal": 75,
+      "hard": 95
+    }
+  },
+  "status": "auto_raw"
+}

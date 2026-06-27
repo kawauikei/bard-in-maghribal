@@ -1,0 +1,102 @@
+{
+  "id": "song_R02_M09_I04_T11星を紡ぐ夢",
+  "title": "星を紡ぐ夢",
+  "plannedClassification": {
+    "requestId": "R02",
+    "moodId": "M09",
+    "instrumentId": "I04",
+    "themeId": "T11"
+  },
+  "confirmedClassification": null,
+  "genreTags": [],
+  "sourceFile": "assets_src/audio/vocalmp4/song_R02_M09_I04_T11星を紡ぐ夢.mp4",
+  "audioFile": "song_R02_M09_I04_T11星を紡ぐ夢.mp3",
+  "coverFile": "song_R02_M09_I04_T11星を紡ぐ夢.webp",
+  "lyricsFile": "song_R02_M09_I04_T11星を紡ぐ夢.lyrics.csv",
+  "rawLyricsFile": "song_R02_M09_I04_T11星を紡ぐ夢.lyrics.raw.csv",
+  "vocalLyricsFile": "song_R02_M09_I04_T11星を紡ぐ夢.lyrics.vocal.csv",
+  "notesFile": "song_R02_M09_I04_T11星を紡ぐ夢.notes.csv",
+  "energyFile": "song_R02_M09_I04_T11星を紡ぐ夢.energy.csv",
+  "prompt": "",
+  "durationSec": 88.05,
+  "audio": {
+    "codec": "mp3",
+    "bitrate": 181073,
+    "sampleRate": 44100,
+    "channels": 2
+  },
+  "cover": {
+    "frameSec": 2,
+    "width": 1024,
+    "height": 1024
+  },
+  "analysis": {
+    "bpm": null,
+    "beatsFile": "",
+    "energyFile": "song_R02_M09_I04_T11星を紡ぐ夢.energy.csv",
+    "highlightSections": [
+      {
+        "start": 3.3,
+        "end": 4.8
+      },
+      {
+        "start": 4.6,
+        "end": 6.1
+      },
+      {
+        "start": 5.9,
+        "end": 7.4
+      },
+      {
+        "start": 7,
+        "end": 8.5
+      },
+      {
+        "start": 7.4,
+        "end": 8.9
+      },
+      {
+        "start": 9.1,
+        "end": 10.6
+      },
+      {
+        "start": 9.6,
+        "end": 11.1
+      },
+      {
+        "start": 10.4,
+        "end": 11.9
+      }
+    ],
+    "silenceSections": []
+  },
+  "transcription": {
+    "language": "ja",
+    "model": "large-v3-turbo",
+    "usedVocalSeparation": true,
+    "mergedStrategy": "vocal_text_with_raw_timing_and_raw_rescue",
+    "rawLyricsFile": "song_R02_M09_I04_T11星を紡ぐ夢.lyrics.raw.csv",
+    "vocalLyricsFile": "song_R02_M09_I04_T11星を紡ぐ夢.lyrics.vocal.csv",
+    "notes": [
+      "Raw transcription segment count: 13",
+      "Separated vocal transcription segment count: 16",
+      "Raw hallucinated check: False",
+      "Vocal hallucinated check: False",
+      "Using separated vocal text with raw timing reconciliation.",
+      "Discrepancy at 29.96s: Vocal='光時計見つめてる' vs Raw='魔法が消えるその前に'",
+      "Discrepancy at 82.16s: Vocal='銀の色に染まる' vs Raw='香り私だけ絵の魔法, 金の色に染まる'"
+    ]
+  },
+  "noteGeneration": {
+    "automatic": true,
+    "generator": "scripts/generate-notes.js",
+    "status": "generated",
+    "notesFile": "song_R02_M09_I04_T11星を紡ぐ夢.notes.csv",
+    "difficultyCounts": {
+      "easy": 45,
+      "normal": 70,
+      "hard": 82
+    }
+  },
+  "status": "auto_raw"
+}

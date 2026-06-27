@@ -1,0 +1,10 @@
+start,end,text,uncertain,source,checked
+12,21,琥珀のぬくもり 塩気の涙 塩気の涙,1,raw_rescue,1
+21,30,僕らの時が遠く 時が遠くなるよ,1,raw_rescue,1
+30,37,愛を残してさよなら告げる,0,vocal_text_raw_time,1
+37,43.84,心の奥が苦しくなるよ,0,vocal_text_raw_start,1
+44,49.68,愛をささやき遠くに消える,0,vocal_text_raw_start,1
+50,55.33,琥珀の光 苦の光,0,vocal_text_raw_start,1
+55.33,67.8,塩気の涙 君を想うよ 遠くに消える,0,vocal_text_raw_time,1
+67.8,79.8,塩気の涙 琥珀の夢 琥珀の夢 さよなら,0,vocal_text_raw_time,1
+79.8,84.88,静かに遠くに消える,0,vocal_text_raw_start,1

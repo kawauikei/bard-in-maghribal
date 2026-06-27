@@ -1,0 +1,114 @@
+{
+  "id": "song_R01_M07_I15_T01祈りの形",
+  "title": "祈りの形",
+  "plannedClassification": {
+    "requestId": "R01",
+    "moodId": "M07",
+    "instrumentId": "I15",
+    "themeId": "T01"
+  },
+  "confirmedClassification": null,
+  "genreTags": [],
+  "sourceFile": "assets_src/audio/vocalmp4/song_R01_M07_I15_T01祈りの形.mp4",
+  "audioFile": "song_R01_M07_I15_T01祈りの形.mp3",
+  "coverFile": "song_R01_M07_I15_T01祈りの形.webp",
+  "lyricsFile": "song_R01_M07_I15_T01祈りの形.lyrics.csv",
+  "rawLyricsFile": "song_R01_M07_I15_T01祈りの形.lyrics.raw.csv",
+  "vocalLyricsFile": "song_R01_M07_I15_T01祈りの形.lyrics.vocal.csv",
+  "notesFile": "song_R01_M07_I15_T01祈りの形.notes.csv",
+  "energyFile": "song_R01_M07_I15_T01祈りの形.energy.csv",
+  "prompt": "",
+  "durationSec": 90.37,
+  "audio": {
+    "codec": "mp3",
+    "bitrate": 177931,
+    "sampleRate": 44100,
+    "channels": 2
+  },
+  "cover": {
+    "frameSec": 2,
+    "width": 1024,
+    "height": 1024
+  },
+  "analysis": {
+    "bpm": null,
+    "beatsFile": "",
+    "energyFile": "song_R01_M07_I15_T01祈りの形.energy.csv",
+    "highlightSections": [
+      {
+        "start": 0.5,
+        "end": 2
+      },
+      {
+        "start": 1,
+        "end": 2.5
+      },
+      {
+        "start": 2.9,
+        "end": 4.4
+      },
+      {
+        "start": 4.5,
+        "end": 6
+      },
+      {
+        "start": 5,
+        "end": 6.5
+      },
+      {
+        "start": 6,
+        "end": 7.5
+      },
+      {
+        "start": 6.8,
+        "end": 8.3
+      },
+      {
+        "start": 7.5,
+        "end": 9
+      }
+    ],
+    "silenceSections": []
+  },
+  "transcription": {
+    "language": "ja",
+    "model": "large-v3-turbo",
+    "usedVocalSeparation": true,
+    "mergedStrategy": "vocal_text_with_raw_timing_and_raw_rescue",
+    "rawLyricsFile": "song_R01_M07_I15_T01祈りの形.lyrics.raw.csv",
+    "vocalLyricsFile": "song_R01_M07_I15_T01祈りの形.lyrics.vocal.csv",
+    "notes": [
+      "Raw transcription segment count: 9",
+      "Separated vocal transcription segment count: 16",
+      "Raw hallucinated check: False",
+      "Vocal hallucinated check: False",
+      "Cleaned up hallucinated raw segment at 0.0s: '作詞・作曲・編曲 初音ミク'",
+      "Using separated vocal text with raw timing reconciliation.",
+      "Segment only found in separated vocal track at 0.0s: '地を押す石垣伝う'",
+      "Segment only found in separated vocal track at 13.06s: '震える指詰めた闇夜'",
+      "Segment only found in separated vocal track at 16.74s: '秘められた守りの雫'",
+      "Segment only found in separated vocal track at 20.64s: '今時が満ちて溢れる'",
+      "Segment only found in separated vocal track at 24.86s: 'たてまつる祈りの形'",
+      "Discrepancy at 28.6s: Vocal='たてまつる祈りのかたち' vs Raw='祭る祈りの形 月の色力なに変わる'",
+      "Discrepancy at 40.9s: Vocal='定めさえ消し去る意思' vs Raw='熱く燃えみなぎる想い 定めさえ消し去る意志'",
+      "Discrepancy at 43.38s: Vocal='貫く愛の叫びよ' vs Raw='熱く燃えみなぎる想い 定めさえ消し去る意志, 貫く愛の叫びを'",
+      "Discrepancy at 47.02s: Vocal='煌めく未道を照らせ' vs Raw='煌めく海道を照らせ 必ず勝ちを得てみせる'",
+      "Discrepancy at 51.16s: Vocal='必ず勝ち燃えてみせる' vs Raw='煌めく海道を照らせ 必ず勝ちを得てみせる'",
+      "Discrepancy at 55.14s: Vocal='世間を見たた時 あの日を 眩しい色に変えて' vs Raw='世間を見た赤と沖あの日を 眩しい色に変えて'",
+      "Discrepancy at 62.74s: Vocal='命の輪 全てを注ぎ 決戦の時を行く' vs Raw='命の忘れてを注ぎ 決戦の時を呼ぶ'",
+      "Discrepancy at 80.64s: Vocal='血の色は消えなくななる 風のささやき' vs Raw='血の色は消えなくなれる 風のささやき'"
+    ]
+  },
+  "noteGeneration": {
+    "automatic": true,
+    "generator": "scripts/generate-notes.js",
+    "status": "generated",
+    "notesFile": "song_R01_M07_I15_T01祈りの形.notes.csv",
+    "difficultyCounts": {
+      "easy": 45,
+      "normal": 74,
+      "hard": 89
+    }
+  },
+  "status": "auto_raw"
+}

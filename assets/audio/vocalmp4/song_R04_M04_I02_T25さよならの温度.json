@@ -1,0 +1,104 @@
+{
+  "id": "song_R04_M04_I02_T25さよならの温度",
+  "title": "さよならの温度",
+  "plannedClassification": {
+    "requestId": "R04",
+    "moodId": "M04",
+    "instrumentId": "I02",
+    "themeId": "T25"
+  },
+  "confirmedClassification": null,
+  "genreTags": [],
+  "sourceFile": "assets_src/audio/vocalmp4/song_R04_M04_I02_T25さよならの温度.mp4",
+  "audioFile": "song_R04_M04_I02_T25さよならの温度.mp3",
+  "coverFile": "song_R04_M04_I02_T25さよならの温度.webp",
+  "lyricsFile": "song_R04_M04_I02_T25さよならの温度.lyrics.csv",
+  "rawLyricsFile": "song_R04_M04_I02_T25さよならの温度.lyrics.raw.csv",
+  "vocalLyricsFile": "song_R04_M04_I02_T25さよならの温度.lyrics.vocal.csv",
+  "notesFile": "song_R04_M04_I02_T25さよならの温度.notes.csv",
+  "energyFile": "song_R04_M04_I02_T25さよならの温度.energy.csv",
+  "prompt": "",
+  "durationSec": 87.98,
+  "audio": {
+    "codec": "mp3",
+    "bitrate": 170572,
+    "sampleRate": 44100,
+    "channels": 2
+  },
+  "cover": {
+    "frameSec": 2,
+    "width": 1024,
+    "height": 1024
+  },
+  "analysis": {
+    "bpm": null,
+    "beatsFile": "",
+    "energyFile": "song_R04_M04_I02_T25さよならの温度.energy.csv",
+    "highlightSections": [
+      {
+        "start": 1.5,
+        "end": 3
+      },
+      {
+        "start": 3.3,
+        "end": 4.8
+      },
+      {
+        "start": 4.5,
+        "end": 6
+      },
+      {
+        "start": 5.5,
+        "end": 7
+      },
+      {
+        "start": 7.8,
+        "end": 9.3
+      },
+      {
+        "start": 8.2,
+        "end": 9.7
+      },
+      {
+        "start": 9.3,
+        "end": 10.8
+      },
+      {
+        "start": 10,
+        "end": 11.5
+      }
+    ],
+    "silenceSections": []
+  },
+  "transcription": {
+    "language": "ja",
+    "model": "large-v3-turbo",
+    "usedVocalSeparation": true,
+    "mergedStrategy": "vocal_text_with_raw_timing_and_raw_rescue",
+    "rawLyricsFile": "song_R04_M04_I02_T25さよならの温度.lyrics.raw.csv",
+    "vocalLyricsFile": "song_R04_M04_I02_T25さよならの温度.lyrics.vocal.csv",
+    "notes": [
+      "Raw transcription segment count: 12",
+      "Separated vocal transcription segment count: 8",
+      "Raw hallucinated check: False",
+      "Vocal hallucinated check: False",
+      "Cleaned up hallucinated raw segment at 0.0s: '作詞・作曲・編曲 初音ミク'",
+      "Cleaned up hallucinated vocal segment at 0.0s: '詞・作曲・編曲 初音ミク'",
+      "Using separated vocal text with raw timing reconciliation.",
+      "Rescued raw-only segment at 12.0s: '琥珀のぬくもり 塩気の涙 塩気の涙'",
+      "Rescued raw-only segment at 21.0s: '僕らの時が遠く 時が遠くなるよ'"
+    ]
+  },
+  "noteGeneration": {
+    "automatic": true,
+    "generator": "scripts/generate-notes.js",
+    "status": "generated",
+    "notesFile": "song_R04_M04_I02_T25さよならの温度.notes.csv",
+    "difficultyCounts": {
+      "easy": 45,
+      "normal": 69,
+      "hard": 76
+    }
+  },
+  "status": "auto_raw"
+}

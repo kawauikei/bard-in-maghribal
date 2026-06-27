@@ -1,0 +1,109 @@
+{
+  "id": "song_R03_M05_I02_T23空わたる帆",
+  "title": "空わたる帆",
+  "plannedClassification": {
+    "requestId": "R03",
+    "moodId": "M05",
+    "instrumentId": "I02",
+    "themeId": "T23"
+  },
+  "confirmedClassification": null,
+  "genreTags": [],
+  "sourceFile": "assets_src/audio/vocalmp4/song_R03_M05_I02_T23空わたる帆.mp4",
+  "audioFile": "song_R03_M05_I02_T23空わたる帆.mp3",
+  "coverFile": "song_R03_M05_I02_T23空わたる帆.webp",
+  "lyricsFile": "song_R03_M05_I02_T23空わたる帆.lyrics.csv",
+  "rawLyricsFile": "song_R03_M05_I02_T23空わたる帆.lyrics.raw.csv",
+  "vocalLyricsFile": "song_R03_M05_I02_T23空わたる帆.lyrics.vocal.csv",
+  "notesFile": "song_R03_M05_I02_T23空わたる帆.notes.csv",
+  "energyFile": "song_R03_M05_I02_T23空わたる帆.energy.csv",
+  "prompt": "",
+  "durationSec": 88.65,
+  "audio": {
+    "codec": "mp3",
+    "bitrate": 176405,
+    "sampleRate": 44100,
+    "channels": 2
+  },
+  "cover": {
+    "frameSec": 2,
+    "width": 1024,
+    "height": 1024
+  },
+  "analysis": {
+    "bpm": null,
+    "beatsFile": "",
+    "energyFile": "song_R03_M05_I02_T23空わたる帆.energy.csv",
+    "highlightSections": [
+      {
+        "start": 1.2,
+        "end": 2.7
+      },
+      {
+        "start": 2.5,
+        "end": 4
+      },
+      {
+        "start": 4.2,
+        "end": 5.7
+      },
+      {
+        "start": 4.9,
+        "end": 6.4
+      },
+      {
+        "start": 6.8,
+        "end": 8.3
+      },
+      {
+        "start": 7.4,
+        "end": 8.9
+      },
+      {
+        "start": 8.4,
+        "end": 9.9
+      },
+      {
+        "start": 9.2,
+        "end": 10.7
+      }
+    ],
+    "silenceSections": []
+  },
+  "transcription": {
+    "language": "ja",
+    "model": "large-v3-turbo",
+    "usedVocalSeparation": true,
+    "mergedStrategy": "vocal_text_with_raw_timing_and_raw_rescue",
+    "rawLyricsFile": "song_R03_M05_I02_T23空わたる帆.lyrics.raw.csv",
+    "vocalLyricsFile": "song_R03_M05_I02_T23空わたる帆.lyrics.vocal.csv",
+    "notes": [
+      "Raw transcription segment count: 15",
+      "Separated vocal transcription segment count: 13",
+      "Raw hallucinated check: False",
+      "Vocal hallucinated check: False",
+      "Cleaned up hallucinated raw segment at 0.0s: '作詞・作曲・編曲 初音ミク'",
+      "Cleaned up hallucinated raw segment at 83.24s: 'ご視聴ありがとうございました'",
+      "Cleaned up hallucinated vocal segment at 0.0s: '作詞・作曲・編曲 初音ミク'",
+      "Using separated vocal text with raw timing reconciliation.",
+      "Discrepancy at 62.0s: Vocal='静かに響く波の子守唄' vs Raw='静かに響く 波の子守唄'",
+      "Discrepancy at 77.0s: Vocal='また会える日まで忘れはしない' vs Raw='旅の終わりを告げる音, また会える日まで 忘れはしない'",
+      "Segment only found in separated vocal track at 88.0s: 'ありがとうございました。'",
+      "Rescued raw-only segment at 14.0s: '海猫さえず 潮風渡る'",
+      "Rescued raw-only segment at 19.0s: '空色の方が 夢を運ぶ'",
+      "Rescued raw-only segment at 24.0s: 'キラキラ光る 波場の輝き'"
+    ]
+  },
+  "noteGeneration": {
+    "automatic": true,
+    "generator": "scripts/generate-notes.js",
+    "status": "generated",
+    "notesFile": "song_R03_M05_I02_T23空わたる帆.notes.csv",
+    "difficultyCounts": {
+      "easy": 45,
+      "normal": 68,
+      "hard": 80
+    }
+  },
+  "status": "auto_raw"
+}

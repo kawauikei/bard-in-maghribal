@@ -1,0 +1,12 @@
+start,end,text,uncertain,source,checked
+0,22,黒い砂漠を走り抜け 銀の鎧は月夜に踊る,1,raw_rescue,1
+22,29,聖者を切り裂く風の絵と 影に潜んだ刃が牙を剥く,1,raw_rescue,1
+30,42.5,孤独な使命背負い込み 追跡の果てに見える幻,0,vocal_text_raw_time,1
+38.12,44,速さを競う影と影,0,vocal_text_raw_start,1
+42.5,50,サックスが叫ぶ砂の嵐に,1,vocal_text_raw_start,1
+49.54,56.14,追い詰め追い越せこの瞬間を 誰にも邪魔せぬ追跡行,0,vocal_text_raw_time,1
+56.14,59.66,誇り高き黒い騎士よ,1,vocal_text_raw_start,1
+59.66,66.46,運命の扉を叩き割れ,0,vocal_text_raw_time,1
+66.46,72.97,月は沈み闇は溶けて 足跡は風に消えゆく,0,vocal_text_raw_time,1
+72.97,78.76,また黒い騎士は一人進む サクスの投げ引く夜空に,1,vocal_text_raw_time,1
+78.76,81.36,静かな終焉訪れる,0,vocal_text_raw_time,1

@@ -1,0 +1,12 @@
+start,end,text,uncertain,source,checked
+14,21,砂がこぼれ落ちる 時がとどまる,1,raw_rescue,1
+21,28,石樹の月も ねっとりと沈む,1,raw_rescue,1
+28,37,遠くの影が またささやく ねじれた時間,1,vocal,1
+37,43.74,狂う秒針まわるまわる時間,1,vocal,1
+43.74,52.73,時計の秒針届かぬ夢の,0,vocal_text_raw_time,1
+52.73,60.9,静寂の中で 赤重の空が,0,vocal_text_raw_time,1
+60.9,68.9,ねっとりと濡れる 心が揺れる,0,vocal_text_raw_time,1
+68.9,75.26,溶け出す過去 未来が凍る,0,vocal_text_raw_start,1
+75.9,78.93,砂の音,0,vocal_text_raw_start,1
+75.91,82.9,溶け出す過去,0,vocal_text_raw_time,1
+82.9,84.5,沈む月,0,vocal_text_raw_start,1
