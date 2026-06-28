@@ -16,6 +16,9 @@
     label { display: block; margin: 10px 0 5px; color: #b9c6d3; font-size: 12px; }
     select, input, button, textarea { width: 100%; box-sizing: border-box; border-radius: 6px; border: 1px solid #405469; background: #0f172a; color: #f8fafc; padding: 8px 10px; font: inherit; }
     button { margin-top: 14px; background: #0f766e; cursor: pointer; font-weight: 700; }
+    .copy-tools { display: grid; grid-template-columns: minmax(180px, 260px) minmax(180px, 1fr); gap: 8px; align-items: center; margin-bottom: 12px; }
+    .copy-tools button { margin-top: 0; }
+    .copy-tools .status { min-height: 1.4em; }
     textarea { min-height: 318px; resize: vertical; white-space: pre-wrap; }
     .stack { display: grid; gap: 14px; }
     .stats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin-bottom: 12px; }
@@ -35,7 +38,7 @@
     .muted { color: #94a3b8; font-size: 13px; }
     .id { font-family: ui-monospace, Consolas, monospace; color: #facc15; }
     .compact { white-space: nowrap; }
-    @media (max-width: 1100px) { main, .toolbar, .stats { grid-template-columns: 1fr; } .table-wrap { max-height: 520px; } }
+    @media (max-width: 1100px) { main, .toolbar, .stats, .copy-tools { grid-template-columns: 1fr; } .table-wrap { max-height: 520px; } }
   </style>
   <script src="vocalmp4-data.js"></script>
 </head>
@@ -74,6 +77,10 @@
         <div class="stat"><strong id="stat-pending">0</strong><span>not analyzed</span></div>
         <div class="stat"><strong id="stat-updated">-</strong><span>updated</span></div>
       </div>
+      <div class="copy-tools">
+        <button id="copy-title-lyrics" type="button">Copy titles + lyrics</button>
+        <div id="catalog-copy-status" class="muted status" aria-live="polite"></div>
+      </div>
       <div class="toolbar">
         <div><label for="catalog-search">Search</label><input id="catalog-search" placeholder="id / title / source"></div>
         <div><label for="catalog-request">R</label><select id="catalog-request"><option value="">all</option></select></div>
@@ -111,6 +118,7 @@
     const catalog = await loadJson("../assets/audio/vocalmp4/catalog.json", window.vocalMp4Catalog || { tracks: [] });
     let sourceMp4s = window.vocalMp4SourceMp4s || [];
     const metadataById = window.vocalMp4MetadataById || {};
+    const lyricsById = window.vocalMp4LyricsById || {};
     const byId = (items) => Object.fromEntries(items.map((item) => [item.id, item]));
     const maps = { r: byId(pool.requests), m: byId(pool.moods), i: byId(pool.instruments), t: byId(pool.themes) };
     const fill = (id, items) => {
@@ -152,6 +160,10 @@
       const mood = labels.mood?.name || c.moodId;
       const instrument = labels.instrument?.name || c.instrumentId;
       const theme = labels.theme?.name || c.themeId;
+      const avoidanceWords = (window.vocalMp4LyricAvoidance?.words || []).filter((item) => item.word && (item.total > 0 || item.watch)).slice(0, 10);
+      const avoidanceLines = avoidanceWords.length
+        ? ["", "既存曲で目立つため主役にしないモチーフ:", ...avoidanceWords.map((item) => item.word)]
+        : [];
       return [
         `ID: ${chosen.id}`,
         "",
@@ -160,42 +172,80 @@
         `中心となる楽器: ${instrument}`,
         `テーマ: ${theme}`,
         "",
-        "世界観はアラビアンナイト風のファンタジー世界。",
-        "現代的な高層ビルや機械文明の雰囲気にはしない。",
+        "短編フック:",
+        "農村の少年と旅芸人の少女が、祭り前夜に初めて互いの歌を交換する小さな初恋物語。",
+        "上の設定はテーマを壊さない範囲で、タイトル、歌詞、ジャケット背景の方向性として使う。",
+        "場所や職業がテーマと合わない場合は、関係性と出来事だけ残してテーマに合う場所へ置き換える。",
+        ...avoidanceLines,
         "",
-        "華奢で可憐な若い女性による日本語ボーカル。",
-        "ただし、添付画像の女性の容姿や服装は歌詞に組み込まないこと。",
+        "ルール:",
+        "- 中東西洋ファンタジーとして制作する。",
+        "- 短編フックを発想の起点にして、タイトル、歌詞、ジャケット背景に自然に反映する。",
+        "- 添付キャラクターシートはジャケット画像の被写体資料としてのみ使う。",
+        "- ジャケット画像は1:1。画像内テキストは楽曲タイトルのみ。",
+        "- 歌詞にキャラクターの容姿や服装を入れない。",
+        "- Lyria 3向けに短い構成指定、タイトル、歌詞を作る。",
+        "- タイトルはひらがなのみにしない。",
+        "- 歌詞本文はひらがなのみ。漢字、カタカナ、「、」「。」は禁止。",
+        "- 半角スペースと短い改行を使う。",
+        "- 助詞の「は」「へ」はできるだけ避ける。",
+        `- ${instrument}を明確に聞かせる。`,
+        "- 音ゲー向けの明確なリズムにする。",
+        "- 無音区間は禁止。",
+        "- 長さは85〜95秒。",
+        "- 盛り上がりの途中で切らず、自然に完結させる。",
+        "- 最終出力として、ジャケット画像と楽曲音声の両方を画面に表示する。",
         "",
-        "音ゲー向けの明確なリズムと、平坦にならない展開にする。",
-        `${instrument}を明確に聞かせる。`,
-        "無音区間は作らない。",
-        "長さは65〜75秒。",
-        "盛り上がりの途中で切らず、自然に完結させる。",
-        "",
-        "歌詞は聞き取りやすく自然な日本語にする。",
-        "助詞の「は」の発音は特に気をつける。",
-        "歌詞本文はひらがなのみとし、漢字、カタカナ、「、」「。」は使わない。",
-        "半角スペースと短い改行を使う。",
-        "",
-        "楽曲生成後日本語発音が妥当か評価すること。"
+        "ジャケット画像、タイトル、歌詞、楽曲を新規制作してください。",
       ].join("\n");
     };
-    const copyPrompt = async (text) => {
-      const status = document.getElementById("copy-status");
+    const copyText = async (text, status, fallbackElement = null) => {
       try {
         if (navigator.clipboard?.writeText && window.isSecureContext) {
           await navigator.clipboard.writeText(text);
         } else {
-          const promptBox = document.getElementById("prompt");
-          promptBox.focus();
-          promptBox.select();
+          const textArea = fallbackElement || document.createElement("textarea");
+          textArea.value = text;
+          if (!fallbackElement) {
+            textArea.style.position = "fixed";
+            textArea.style.left = "-9999px";
+            document.body.appendChild(textArea);
+          }
+          textArea.focus();
+          textArea.select();
           document.execCommand("copy");
+          if (!fallbackElement) textArea.remove();
         }
-        status.textContent = "Prompt copied.";
+        return true;
       } catch {
-        status.textContent = "Copy failed. Select the prompt manually.";
+        status.textContent = "Copy failed.";
+        return false;
       }
     };
+    const copyPrompt = async (text) => {
+      const status = document.getElementById("copy-status");
+      const ok = await copyText(text, status, document.getElementById("prompt"));
+      if (ok) status.textContent = "Prompt copied.";
+    };
+    const sortedTracks = () => [...(catalog.tracks || [])].sort((a, b) => `${a.id}`.localeCompare(`${b.id}`, "ja"));
+    const lyricsText = (track) => (lyricsById[track.id] || [])
+      .map((row) => `${row.start || ""}-${row.end || ""} ${row.text || ""}`.trim())
+      .filter(Boolean)
+      .join("\n");
+    const buildTitleLyricsExport = () => [
+      "以下は生成済みの楽曲の内容一覧である。",
+      "",
+      "以降はタイトル・歌詞ができるだけ被らないように創作するために記憶せよ。",
+      "",
+      "Bard in Maghribal vocal song titles and lyrics",
+      "",
+      ...sortedTracks().map((track) => [
+        `ID: ${track.id}`,
+        `タイトル: ${track.title || ""}`,
+        "歌詞:",
+        lyricsText(track) || "(no lyrics)",
+      ].join("\n")),
+    ].join("\n\n");
     const makeId = (r, m, i, t) => `song_${r}_${m}_${i}_${t}`;
     const history = [...(pool.generationHistory || []), ...(catalog.tracks || [])]
       .map((item) => {
@@ -294,6 +344,12 @@
       const promptText = promptFor(chosen);
       document.getElementById("prompt").value = promptText;
       copyPrompt(promptText);
+    };
+    document.getElementById("copy-title-lyrics").onclick = async () => {
+      const status = document.getElementById("catalog-copy-status");
+      const text = buildTitleLyricsExport();
+      const ok = await copyText(text, status);
+      if (ok) status.textContent = `Copied titles and lyrics for ${sortedTracks().length} songs.`;
     };
 
     const sourceRegistered = (source) => (catalog.tracks || []).some((track) => {

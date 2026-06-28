@@ -347,6 +347,86 @@
     {
       "id": "T50",
       "name": "忘れられた神"
+    },
+    {
+      "id": "T51",
+      "name": "農村の朝"
+    },
+    {
+      "id": "T52",
+      "name": "草原の風"
+    },
+    {
+      "id": "T53",
+      "name": "森の小道"
+    },
+    {
+      "id": "T54",
+      "name": "滝のほとり"
+    },
+    {
+      "id": "T55",
+      "name": "麦畑"
+    },
+    {
+      "id": "T56",
+      "name": "羊飼いの丘"
+    },
+    {
+      "id": "T57",
+      "name": "川辺の昼下がり"
+    },
+    {
+      "id": "T58",
+      "name": "花咲く庭"
+    },
+    {
+      "id": "T59",
+      "name": "雨上がりの畑"
+    },
+    {
+      "id": "T60",
+      "name": "小さな橋"
+    },
+    {
+      "id": "T61",
+      "name": "木陰の昼寝"
+    },
+    {
+      "id": "T62",
+      "name": "井戸端の歌"
+    },
+    {
+      "id": "T63",
+      "name": "夕暮れの牧場"
+    },
+    {
+      "id": "T64",
+      "name": "小さな納屋"
+    },
+    {
+      "id": "T65",
+      "name": "野花の道"
+    },
+    {
+      "id": "T66",
+      "name": "山里の灯り"
+    },
+    {
+      "id": "T67",
+      "name": "泉の広場"
+    },
+    {
+      "id": "T68",
+      "name": "果樹園"
+    },
+    {
+      "id": "T69",
+      "name": "静かな湖畔"
+    },
+    {
+      "id": "T70",
+      "name": "春の牧草地"
     }
   ],
   "weights": {
@@ -354,61 +434,74 @@
       "R01": {
         "primary": [
           "M02",
-          "M03"
+          "M03",
+          "M10"
         ],
         "secondary": [
+          "M01",
           "M06",
-          "M10"
+          "M07"
         ]
       },
       "R02": {
         "primary": [
+          "M03",
           "M06",
           "M09"
         ],
         "secondary": [
-          "M03",
-          "M02"
+          "M01",
+          "M02",
+          "M10"
         ]
       },
       "R03": {
         "primary": [
           "M04",
-          "M05"
+          "M05",
+          "M06"
         ],
         "secondary": [
-          "M06",
-          "M07"
+          "M07",
+          "M09",
+          "M10"
         ]
       },
       "R04": {
         "primary": [
           "M04",
+          "M05",
           "M10"
         ],
         "secondary": [
+          "M02",
           "M03",
-          "M05"
+          "M06"
         ]
       },
       "R05": {
         "primary": [
           "M01",
-          "M02"
+          "M02",
+          "M08"
         ],
         "secondary": [
+          "M03",
+          "M05",
           "M07",
-          "M08",
           "M10"
         ]
       },
       "R06": {
         "primary": [
           "M05",
+          "M07",
           "M08"
         ],
         "secondary": [
-          "M07",
+          "M01",
+          "M04",
+          "M06",
           "M10"
         ]
       }
@@ -417,24 +510,32 @@
       "R01": [
         "I01",
         "I03",
+        "I04",
         "I06",
         "I07",
+        "I10",
         "I11",
+        "I14",
         "I15"
       ],
       "R02": [
+        "I01",
         "I02",
         "I04",
         "I06",
+        "I07",
         "I09",
         "I12",
+        "I13",
         "I14"
       ],
       "R03": [
+        "I01",
         "I02",
         "I04",
         "I08",
         "I09",
+        "I11",
         "I12",
         "I13",
         "I14"
@@ -442,26 +543,35 @@
       "R04": [
         "I02",
         "I04",
+        "I05",
         "I07",
         "I08",
         "I09",
+        "I10",
+        "I12",
         "I15"
       ],
       "R05": [
         "I03",
         "I05",
         "I06",
+        "I07",
         "I10",
         "I11",
+        "I13",
+        "I14",
         "I15"
       ],
       "R06": [
+        "I01",
+        "I02",
         "I08",
         "I09",
         "I11",
         "I12",
         "I13",
-        "I14"
+        "I14",
+        "I15"
       ]
     },
     "requestTheme": {
@@ -473,9 +583,19 @@
         "T05",
         "T06",
         "T07",
-        "T08"
+        "T08",
+        "T13",
+        "T16",
+        "T33",
+        "T35",
+        "T52",
+        "T56",
+        "T60",
+        "T66"
       ],
       "R02": [
+        "T05",
+        "T07",
         "T09",
         "T10",
         "T11",
@@ -483,9 +603,23 @@
         "T13",
         "T14",
         "T15",
-        "T16"
+        "T16",
+        "T30",
+        "T42",
+        "T51",
+        "T52",
+        "T53",
+        "T55",
+        "T56",
+        "T57",
+        "T58",
+        "T62",
+        "T65",
+        "T68",
+        "T70"
       ],
       "R03": [
+        "T14",
         "T17",
         "T18",
         "T19",
@@ -493,9 +627,25 @@
         "T21",
         "T22",
         "T23",
-        "T24"
+        "T24",
+        "T28",
+        "T43",
+        "T48",
+        "T51",
+        "T53",
+        "T54",
+        "T57",
+        "T59",
+        "T61",
+        "T63",
+        "T65",
+        "T67",
+        "T69",
+        "T70"
       ],
       "R04": [
+        "T06",
+        "T17",
         "T25",
         "T26",
         "T27",
@@ -503,9 +653,19 @@
         "T29",
         "T30",
         "T31",
-        "T32"
+        "T32",
+        "T39",
+        "T50",
+        "T51",
+        "T57",
+        "T63",
+        "T66",
+        "T69"
       ],
       "R05": [
+        "T01",
+        "T03",
+        "T08",
         "T33",
         "T34",
         "T35",
@@ -513,9 +673,18 @@
         "T37",
         "T38",
         "T39",
-        "T40"
+        "T40",
+        "T47",
+        "T54",
+        "T60",
+        "T66",
+        "T69"
       ],
       "R06": [
+        "T19",
+        "T22",
+        "T24",
+        "T36",
         "T41",
         "T42",
         "T43",
@@ -525,382 +694,14 @@
         "T47",
         "T48",
         "T49",
-        "T50"
+        "T50",
+        "T53",
+        "T54",
+        "T61",
+        "T67",
+        "T69"
       ]
     }
   },
-  "generationHistory": [
-    {
-      "id": "song_R06_M08_I11_T44うすあおい_いせかい",
-      "title": "うすあおい_いせかい",
-      "classification": {
-        "requestId": "R06",
-        "moodId": "M08",
-        "instrumentId": "I11",
-        "themeId": "T44"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R06_M08_I11_T44うすあおい_いせかい.mp4",
-      "generatedAt": "2026-06-27T00:23:28.876Z"
-    },
-    {
-      "id": "song_R06_M08_I11_T44名もなき城跡",
-      "title": "名もなき城跡",
-      "classification": {
-        "requestId": "R06",
-        "moodId": "M08",
-        "instrumentId": "I11",
-        "themeId": "T44"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R06_M08_I11_T44名もなき城跡.mp4",
-      "generatedAt": "2026-06-27T00:24:57.976Z"
-    },
-    {
-      "id": "song_R01_M03_I01_T06星降る夜の市場",
-      "title": "星降る夜の市場",
-      "classification": {
-        "requestId": "R01",
-        "moodId": "M03",
-        "instrumentId": "I01",
-        "themeId": "T06"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R01_M03_I01_T06星降る夜の市場.mp4",
-      "generatedAt": "2026-06-27T01:04:45.294Z"
-    },
-    {
-      "id": "song_R01_M03_I07_T07砂上の舞踏",
-      "title": "砂上の舞踏",
-      "classification": {
-        "requestId": "R01",
-        "moodId": "M03",
-        "instrumentId": "I07",
-        "themeId": "T07"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R01_M03_I07_T07砂上の舞踏.mp4",
-      "generatedAt": "2026-06-27T02:08:07.884Z"
-    },
-    {
-      "id": "song_R01_M07_I03_T04迷わぬ翼",
-      "title": "迷わぬ翼",
-      "classification": {
-        "requestId": "R01",
-        "moodId": "M07",
-        "instrumentId": "I03",
-        "themeId": "T04"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R01_M07_I03_T04迷わぬ翼.mp4",
-      "generatedAt": "2026-06-27T02:13:58.863Z"
-    },
-    {
-      "id": "song_R01_M07_I06_T02曙の彼方",
-      "title": "曙の彼方",
-      "classification": {
-        "requestId": "R01",
-        "moodId": "M07",
-        "instrumentId": "I06",
-        "themeId": "T02"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R01_M07_I06_T02曙の彼方.mp4",
-      "generatedAt": "2026-06-27T03:16:25.030Z"
-    },
-    {
-      "id": "song_R01_M07_I15_T01祈りの形",
-      "title": "祈りの形",
-      "classification": {
-        "requestId": "R01",
-        "moodId": "M07",
-        "instrumentId": "I15",
-        "themeId": "T01"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R01_M07_I15_T01祈りの形.mp4",
-      "generatedAt": "2026-06-27T03:16:25.033Z"
-    },
-    {
-      "id": "song_R02_M01_I04_T13空を渡る白い船",
-      "title": "空を渡る白い船",
-      "classification": {
-        "requestId": "R02",
-        "moodId": "M01",
-        "instrumentId": "I04",
-        "themeId": "T13"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R02_M01_I04_T13空を渡る白い船.mp4",
-      "generatedAt": "2026-06-27T03:16:25.036Z"
-    },
-    {
-      "id": "song_R02_M06_I02_T15すいかの風、君の影",
-      "title": "すいかの風、君の影",
-      "classification": {
-        "requestId": "R02",
-        "moodId": "M06",
-        "instrumentId": "I02",
-        "themeId": "T15"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R02_M06_I02_T15すいかの風、君の影.mp4",
-      "generatedAt": "2026-06-27T03:16:25.039Z"
-    },
-    {
-      "id": "song_R02_M09_I04_T11星を紡ぐ夢",
-      "title": "星を紡ぐ夢",
-      "classification": {
-        "requestId": "R02",
-        "moodId": "M09",
-        "instrumentId": "I04",
-        "themeId": "T11"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R02_M09_I04_T11星を紡ぐ夢.mp4",
-      "generatedAt": "2026-06-27T03:16:25.041Z"
-    },
-    {
-      "id": "song_R02_M09_I14_T16ももいろの朝",
-      "title": "ももいろの朝",
-      "classification": {
-        "requestId": "R02",
-        "moodId": "M09",
-        "instrumentId": "I14",
-        "themeId": "T16"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R02_M09_I14_T16ももいろの朝.mp4",
-      "generatedAt": "2026-06-27T03:16:25.045Z"
-    },
-    {
-      "id": "song_R03_M05_I02_T23空わたる帆",
-      "title": "空わたる帆",
-      "classification": {
-        "requestId": "R03",
-        "moodId": "M05",
-        "instrumentId": "I02",
-        "themeId": "T23"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R03_M05_I02_T23空わたる帆.mp4",
-      "generatedAt": "2026-06-27T03:16:25.047Z"
-    },
-    {
-      "id": "song_R03_M05_I09_T21紫紺の月下の都",
-      "title": "紫紺の月下の都",
-      "classification": {
-        "requestId": "R03",
-        "moodId": "M05",
-        "instrumentId": "I09",
-        "themeId": "T21"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R03_M05_I09_T21紫紺の月下の都.mp4",
-      "generatedAt": "2026-06-27T03:16:25.051Z"
-    },
-    {
-      "id": "song_R03_M05_I13_T21銀の鎧と月の砂漠",
-      "title": "銀の鎧と月の砂漠",
-      "classification": {
-        "requestId": "R03",
-        "moodId": "M05",
-        "instrumentId": "I13",
-        "themeId": "T21"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R03_M05_I13_T21銀の鎧と月の砂漠.mp4",
-      "generatedAt": "2026-06-27T03:16:25.054Z"
-    },
-    {
-      "id": "song_R04_M04_I02_T25さよならの温度",
-      "title": "さよならの温度",
-      "classification": {
-        "requestId": "R04",
-        "moodId": "M04",
-        "instrumentId": "I02",
-        "themeId": "T25"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R04_M04_I02_T25さよならの温度.mp4",
-      "generatedAt": "2026-06-27T03:16:25.057Z"
-    },
-    {
-      "id": "song_R04_M04_I07_T31真珠の夜",
-      "title": "真珠の夜",
-      "classification": {
-        "requestId": "R04",
-        "moodId": "M04",
-        "instrumentId": "I07",
-        "themeId": "T31"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R04_M04_I07_T31真珠の夜.mp4",
-      "generatedAt": "2026-06-27T03:16:25.060Z"
-    },
-    {
-      "id": "song_R04_M04_I09_T32さいごのまほう",
-      "title": "さいごのまほう",
-      "classification": {
-        "requestId": "R04",
-        "moodId": "M04",
-        "instrumentId": "I09",
-        "themeId": "T32"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R04_M04_I09_T32さいごのまほう.mp4",
-      "generatedAt": "2026-06-27T03:16:25.062Z"
-    },
-    {
-      "id": "song_R04_M10_I09_T31千年の約束",
-      "title": "千年の約束",
-      "classification": {
-        "requestId": "R04",
-        "moodId": "M10",
-        "instrumentId": "I09",
-        "themeId": "T31"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R04_M10_I09_T31千年の約束.mp4",
-      "generatedAt": "2026-06-27T03:16:25.065Z"
-    },
-    {
-      "id": "song_R05_M01_I10_T39紫の王座",
-      "title": "紫の王座",
-      "classification": {
-        "requestId": "R05",
-        "moodId": "M01",
-        "instrumentId": "I10",
-        "themeId": "T39"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R05_M01_I10_T39紫の王座.mp4",
-      "generatedAt": "2026-06-27T03:16:25.068Z"
-    },
-    {
-      "id": "song_R05_M07_I05_T37紅き玉座",
-      "title": "紅き玉座",
-      "classification": {
-        "requestId": "R05",
-        "moodId": "M07",
-        "instrumentId": "I05",
-        "themeId": "T37"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R05_M07_I05_T37紅き玉座.mp4",
-      "generatedAt": "2026-06-27T05:09:55.607Z"
-    },
-    {
-      "id": "song_R05_M07_I06_T36銀の夜明けを越えて",
-      "title": "銀の夜明けを越えて",
-      "classification": {
-        "requestId": "R05",
-        "moodId": "M07",
-        "instrumentId": "I06",
-        "themeId": "T36"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R05_M07_I06_T36銀の夜明けを越えて.mp4",
-      "generatedAt": "2026-06-27T05:09:55.616Z"
-    },
-    {
-      "id": "song_R05_M07_I15_T33蠍座の夜を駆ける",
-      "title": "蠍座の夜を駆ける",
-      "classification": {
-        "requestId": "R05",
-        "moodId": "M07",
-        "instrumentId": "I15",
-        "themeId": "T33"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R05_M07_I15_T33蠍座の夜を駆ける.mp4",
-      "generatedAt": "2026-06-27T05:09:55.623Z"
-    },
-    {
-      "id": "song_R06_M05_I11_T50琥珀の空",
-      "title": "琥珀の空",
-      "classification": {
-        "requestId": "R06",
-        "moodId": "M05",
-        "instrumentId": "I11",
-        "themeId": "T50"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R06_M05_I11_T50琥珀の空.mp4",
-      "generatedAt": "2026-06-27T05:09:55.645Z"
-    },
-    {
-      "id": "song_R06_M08_I13_T43溶ける月",
-      "title": "溶ける月",
-      "classification": {
-        "requestId": "R06",
-        "moodId": "M08",
-        "instrumentId": "I13",
-        "themeId": "T43"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R06_M08_I13_T43溶ける月.mp4",
-      "generatedAt": "2026-06-27T05:09:55.661Z"
-    },
-    {
-      "id": "song_R05_M02_I10_T35紅い熱",
-      "title": "紅い熱",
-      "classification": {
-        "requestId": "R05",
-        "moodId": "M02",
-        "instrumentId": "I10",
-        "themeId": "T35"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R05_M02_I10_T35紅い熱.mp4",
-      "generatedAt": "2026-06-27T05:09:55.699Z"
-    },
-    {
-      "id": "song_R04_M10_I03_T28砂に眠る月",
-      "title": "砂に眠る月",
-      "classification": {
-        "requestId": "R04",
-        "moodId": "M10",
-        "instrumentId": "I03",
-        "themeId": "T28"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R04_M10_I03_T28砂に眠る月.mp4",
-      "generatedAt": "2026-06-27T05:17:24.056Z"
-    },
-    {
-      "id": "song_R04_M10_I07_T29燃える月、銀の砂",
-      "title": "燃える月、銀の砂",
-      "classification": {
-        "requestId": "R04",
-        "moodId": "M10",
-        "instrumentId": "I07",
-        "themeId": "T29"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R04_M10_I07_T29燃える月、銀の砂.mp4",
-      "generatedAt": "2026-06-27T05:17:24.065Z"
-    },
-    {
-      "id": "song_R01_M02_I14_T03さいごのまほう",
-      "title": "さいごのまほう",
-      "classification": {
-        "requestId": "R01",
-        "moodId": "M02",
-        "instrumentId": "I14",
-        "themeId": "T03"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R01_M02_I14_T03さいごのまほう.mp4",
-      "generatedAt": "2026-06-27T05:52:51.340Z"
-    },
-    {
-      "id": "song_R03_M03_I08_T20古いお城の果実",
-      "title": "古いお城の果実",
-      "classification": {
-        "requestId": "R03",
-        "moodId": "M03",
-        "instrumentId": "I08",
-        "themeId": "T20"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R03_M03_I08_T20古いお城の果実.mp4",
-      "generatedAt": "2026-06-27T05:52:51.352Z"
-    },
-    {
-      "id": "song_R03_M04_I01_T24とけいとひみつのとびら",
-      "title": "とけいとひみつのとびら",
-      "classification": {
-        "requestId": "R03",
-        "moodId": "M04",
-        "instrumentId": "I01",
-        "themeId": "T24"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R03_M04_I01_T24とけいとひみつのとびら.mp4",
-      "generatedAt": "2026-06-27T05:52:51.364Z"
-    },
-    {
-      "id": "song_R03_M09_I08_T19砂に埋もれた約束",
-      "title": "砂に埋もれた約束",
-      "classification": {
-        "requestId": "R03",
-        "moodId": "M09",
-        "instrumentId": "I08",
-        "themeId": "T19"
-      },
-      "sourceFile": "assets_src/audio/vocalmp4/song_R03_M09_I08_T19砂に埋もれた約束.mp4",
-      "generatedAt": "2026-06-27T05:52:51.374Z"
-    }
-  ]
+  "generationHistory": []
 }

@@ -124,6 +124,7 @@
         <select id="mood"><option value="">all M</option></select>
         <select id="instrument"><option value="">all I</option></select>
         <select id="theme"><option value="">all T</option></select>
+        <select id="lyrics-filter"><option value="">all lyrics</option><option value="ok">lyrics ok</option><option value="check">lyrics check</option><option value="none">no lyrics</option></select>
         <select id="sort"><option value="id">sort id</option><option value="title">sort title</option><option value="status">sort status</option></select>
       </div>
       <div class="list-head">
@@ -302,12 +303,20 @@
         ? { text: "lyrics ok", state: "ok" }
         : { text: "lyrics check", state: "warn" };
     }
+    function lyricFilterState(track) {
+      const summary = lyricCheckSummary(track);
+      if (summary.state === "ok") return "ok";
+      if (summary.state === "warn") return "check";
+      return "none";
+    }
     const filter = () => {
       const q = document.getElementById("search").value.toLowerCase();
+      const lyricsFilter = document.getElementById("lyrics-filter").value;
       const filtered = (catalog.tracks || []).filter((track) => {
         const c = track.plannedClassification || parseId(track.id);
         if (q && !`${track.id} ${track.title || ""} ${track.sourceFile || ""}`.toLowerCase().includes(q)) return false;
         for (const [key, select] of Object.entries(selects)) if (select.value && c?.[key] !== select.value) return false;
+        if (lyricsFilter && lyricFilterState(track) !== lyricsFilter) return false;
         return true;
       });
       const sortKey = document.getElementById("sort").value;
@@ -760,6 +769,7 @@
     };
     document.getElementById("search").oninput = filter;
     document.getElementById("sort").onchange = filter;
+    document.getElementById("lyrics-filter").onchange = filter;
     for (const select of Object.values(selects)) select.onchange = filter;
     updateModeButtons();
     filter();
